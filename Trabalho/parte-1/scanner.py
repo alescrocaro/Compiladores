@@ -195,12 +195,12 @@ def main():
         tok = lexer.token()
         if not tok:
             break      # No more input
-        print(tok)
-        # print(tok.type)
+        # print(tok)
+        print(tok.type)
         # print(tok.value)
 
 
 # Build the lexer.
-lexer = lex.lex(optimize=True, debug=True)
+lexer = lex.lex(optimize=True, debug=True, debuglog=log)
 if __name__ == "__main__":
     main()
