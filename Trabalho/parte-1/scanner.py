@@ -1,8 +1,8 @@
-from ply.lex import TOKEN
 import ply.lex as lex
-
-from sys import argv, exit
 import logging
+from ply.lex import TOKEN
+from sys import argv, exit
+
 logging.basicConfig(
     level=logging.DEBUG,
     filename="log.txt",
@@ -10,6 +10,7 @@ logging.basicConfig(
     format="%(filename)10s:%(lineno)4d:%(message)s"
 )
 log = logging.getLogger()
+
 
 tokens = [
     "ID",  # identificador
@@ -200,6 +201,6 @@ def main():
 
 
 # Build the lexer.
-lexer = lex.lex(optimize=True, debug=True, debuglog=log)
+lexer = lex.lex(optimize=True, debug=True)
 if __name__ == "__main__":
     main()
