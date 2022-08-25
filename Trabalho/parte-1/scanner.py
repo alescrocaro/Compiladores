@@ -182,6 +182,19 @@ def t_error(token):
     #token.lexer.has_error = Trueb
 
 
+def imprimir_tokens():
+    while True:
+        tok = lexer.token()
+        if not tok:
+            break      # No more input
+        # print(tok)
+
+        # print para mostrar o token
+        print(tok.type)
+
+        # print(tok.value)
+
+
 def main():
     #argv[1] = 'teste.tpp'
     aux = argv[1].split('.')
@@ -193,16 +206,7 @@ def main():
     lexer.input(source_file)
 
     # Tokenize
-    while True:
-        tok = lexer.token()
-        if not tok:
-            break      # No more input
-        # print(tok)
-
-        # print para mostrar o token
-        print(tok.type)
-
-        # print(tok.value)
+    imprimir_tokens()
 
 
 # Build the lexer.
