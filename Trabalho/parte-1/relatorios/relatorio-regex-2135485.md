@@ -51,3 +51,10 @@
 | inteiro            | \d+                                                                   |
 | flutuante          | \d+[eE][-+]?\d+ \| (\\.\d+ \| \d+ . \d\*)([eE][-+]?\d+)?              |
 | notacao_cientifica | [-+]?([1-9]).\d+[eE][-+]?\d+                                          |
+
+## Tokens especiais
+
+| TOKEN           | EXPRESSÃO REGULAR |
+| --------------- | ----------------- |
+| t_COMENTARIO    | {((. \| \n)\*?)}  |
+| Quebra de linha | \n+               |
