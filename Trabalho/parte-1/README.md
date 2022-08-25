@@ -3,5 +3,5 @@
 ## Como executar
 
 ```
-python3 scanner.py estrutura-basica.tpp
+python3 scanner.py teste.tpp
 ```
