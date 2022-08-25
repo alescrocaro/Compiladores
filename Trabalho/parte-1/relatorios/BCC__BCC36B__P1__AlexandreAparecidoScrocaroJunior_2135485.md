@@ -45,25 +45,25 @@ TODO
 
 ### Especificação formal dos autômatos para a formação de cada classe de token da linguagem
 
-#### Autômato de identificador
+#### Autômato de identificador:
 
 Primeiramente, as classes mais simples:
 
 - letra = [a-zA-Z]+
 - digito = [0-9]+
 
-Agora, podemos criar um autômato de um identificador da seguinte forma:
-![Autômato de um identificador](./img/automato_id.png)
+Agora, podemos criar um autômato de um identificador da seguinte forma:\
+![Autômato de identificador](https://user-images.githubusercontent.com/37521313/186780863-d8b8cd95-7605-4dfd-b328-0e45021ce625.png)
 
-#### Autômato de número flutuante
+#### Autômato de número flutuante:
 
 Primeiramente, as classes mais simples:
 
 - sinal = [+-]\* (o sinal pode ter nada, é repassado com épsilon)
 - digito = [0-9]+
 
-Agora, podemos criar um autômato de um identificador da seguinte forma:
-![Autômato de um identificador](./img/automato_numFlutuante.png)
+Agora, podemos criar um autômato de um identificador da seguinte forma:\
+![Autômato de número flutuante](https://user-images.githubusercontent.com/37521313/186780932-0bde9c74-76a7-405e-9bc2-4e0e75414622.png)
 
 ---
 
