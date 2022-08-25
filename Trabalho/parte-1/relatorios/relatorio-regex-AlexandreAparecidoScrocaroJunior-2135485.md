@@ -7,53 +7,69 @@
 
 ### Símbolos
 
-| TOKEN             | EXPRESSÃO REGULAR |
-| ----------------- | ----------------- |
-| t_MAIS            | \+                |
-| t_MENOS           | -                 |
-| t_MULTIPLICACAO   | \*                |
-| t_DIVISAO         | /                 |
-| t_ABRE_PARENTESE  | \(                |
-| t_FECHA_PARENTESE | \)                |
-| t_ABRE_COLCHETE   | \[                |
-| t_FECHA_COLCHETE  | \]                |
-| t_VIRGULA         | ,                 |
-| t_ATRIBUICAO      | :=                |
-| t_DOIS_PONTOS     | :                 |
+| TOKEN           | EXPRESSÃO REGULAR |
+| --------------- | ----------------- |
+| MAIS            | \+                |
+| MENOS           | -                 |
+| VEZES           | \*                |
+| DIVIDE          | /                 |
+| DOIS_PONTOS     | :                 |
+| VIRGULA         | ,                 |
+| ABRE_PARENTESE  | \(                |
+| FECHA_PARENTESE | \)                |
+| ABRE_COLCHETE   | \[                |
+| FECHA_COLCHETE  | \]                |
+| ATRIBUICAO      | :=                |
 
 ### Operadores Lógicos.
 
-| TOKEN       | EXPRESSÃO REGULAR |
-| ----------- | ----------------- |
-| t_E_LOGICO  | &&                |
-| t_OU_LOGICO | \|\|              |
-| t_NEGACAO   | !                 |
+| TOKEN | EXPRESSÃO REGULAR |
+| ----- | ----------------- |
+| E     | &&                |
+| OU    | \|\|              |
+| NAO   | !                 |
 
 ### Operadores Relacionais.
 
-| TOKEN         | EXPRESSÃO REGULAR |
-| ------------- | ----------------- |
-| t_DIFERENCA   | <>                |
-| t_MENOR_IGUAL | <=                |
-| t_MAIOR_IGUAL | >=                |
-| t_MENOR       | <                 |
-| t_MAIOR       | >                 |
-| t_IGUAL       | =                 |
+| TOKEN       | EXPRESSÃO REGULAR |
+| ----------- | ----------------- |
+| MENOR       | <                 |
+| MAIOR       | >                 |
+| IGUAL       | =                 |
+| DIFERENTE   | <>                |
+| MENOR_IGUAL | <=                |
+| MAIOR_IGUAL | >=                |
 
 ## Tokens compostos
 
-| TOKEN              | EXPRESSÃO REGULAR                                                     |
-| ------------------ | --------------------------------------------------------------------- |
-| digito             | [0-9]                                                                 |
-| letra              | [a-zA-ZáÁãÃàÀéÉíÍóÓõÕ]                                                |
-| sinal              | [-+]?                                                                 |
-| id                 | (([a-zA-ZáÁãÃàÀéÉíÍóÓõÕ])(([0-9]) \| \_ \| ([a-zA-ZáÁãÃàÀéÉíÍóÓõÕ]))) |
-| inteiro            | \d+                                                                   |
-| flutuante          | \d+[eE][-+]?\d+ \| (\\.\d+ \| \d+ . \d\*)([eE][-+]?\d+)?              |
-| notacao_cientifica | [-+]?([1-9]).\d+[eE][-+]?\d+                                          |
+| TOKEN                  | EXPRESSÃO REGULAR                                                     |
+| ---------------------- | --------------------------------------------------------------------- |
+| digito                 | [0-9]                                                                 |
+| letra                  | [a-zA-ZáÁãÃàÀéÉíÍóÓõÕ]                                                |
+| sinal                  | [-+]?                                                                 |
+| ID                     | (([a-zA-ZáÁãÃàÀéÉíÍóÓõÕ])(([0-9]) \| \_ \| ([a-zA-ZáÁãÃàÀéÉíÍóÓõÕ]))) |
+| NUM_INTEIRO            | \d+                                                                   |
+| NUM_PONTO_FLUTUANTE    | \d+[eE][-+]?\d+ \| (\\.\d+ \| \d+ . \d\*)([eE][-+]?\d+)?              |
+| NUM_NOTACAO_CIENTIFICA | [-+]?([1-9]).\d+[eE][-+]?\d+                                          |
 
 ## Tokens especiais
 
 | TOKEN           | EXPRESSÃO REGULAR |
 | --------------- | ----------------- |
 | Quebra de linha | \n+               |
+
+## Tokens de palavras reservadas
+
+| TOKEN     | EXPRESSÃO REGULAR |
+| --------- | ----------------- |
+| SE        | se                |
+| ENTAO     | então             |
+| SENAO     | senão             |
+| FIM       | fim               |
+| REPITA    | repita            |
+| ATE       | até               |
+| LEIA      | leia              |
+| ESCREVA   | escreva           |
+| RETORNA   | retorna           |
+| INTEIRO   | inteiro           |
+| FLUTUANTE | flutuante         |

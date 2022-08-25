@@ -7,6 +7,20 @@
 
 ### Especificação da linguagem de programação TPP
 
+A linguagem TPP
+Tipos básicos de dados suportado: inteiro e flutuante
+• Suporte a arranjos uni e bidimensionais (arrays)
+• Exemplos:
+• tipo: identificador[dim]
+• tipo: identificador[dim][dim]
+• Variáveis locais e globais devem ter um dos tipos especificados
+• Tipos de funções podem ser omitidos (quando omitidos viram um
+procedimento e um tipo void é devolvido explicitamente
+• Linguagem quase fortemente tipificada: nem todos os erros são
+especificados mas sempre deve ocorrer avisos
+• Operadores aritméticos: +, -, \* e /
+• Operadores lógicos: e (&&), ou (||) e não (!)
+
 ### Especificação formal dos autômatos para a formação de cada classe de token da linguagem
 
 ### Detalhes da implementação da varredura na LP e ferramenta (e/ou bibliotecas) escolhidas pelo projetista
