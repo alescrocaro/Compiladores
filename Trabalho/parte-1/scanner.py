@@ -145,8 +145,8 @@ def t_NUM_INTEIRO(token):
 
 t_ignore = " \t"
 
-t_COMENTARIO = r'(\{((.|\n)*?)\})'
 # para poder contar as quebras de linha dentro dos comentarios
+t_COMENTARIO = r'(\{((.|\n)*?)\})'
 
 
 def t_COMENTARIO(token):
@@ -172,6 +172,8 @@ def t_error(token):
     message = "Caracter inválido '%s'" % token.value[0]
 
     # print(f"[{file}]:[{line},{column}]: {message}.")
+
+    # print abaixo mostra linha e coluna do erro
     # print(f"[{line},{column}]: {message}.")
 
     print(message)
@@ -197,7 +199,10 @@ def main():
         if not tok:
             break      # No more input
         # print(tok)
+
+        # print para mostrar o token
         print(tok.type)
+
         # print(tok.value)
 
 
