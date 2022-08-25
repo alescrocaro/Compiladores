@@ -92,18 +92,7 @@ ID, IGUAL, INTEIRO, MAIS, INTEIRO, VEZES, ABRE_PARENTESE, ID, MENOS, ID, FECHA_P
 #### Código para verificar valor 10:
 
 **ENTRADA:**\
-inteiro principal()\
-&nbsp;&nbsp;inteiro: a\
-&nbsp;&nbsp;a:=1\
-&nbsp;&nbsp;repita\
-&nbsp;&nbsp;&nbsp;&nbsp;se a=10\
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;escreva("valor 10")\
-&nbsp;&nbsp;&nbsp;&nbsp;fim\
-&nbsp;&nbsp;&nbsp;&nbsp;a++\
-&nbsp;&nbsp;ate a=10\
-
-&nbsp;&nbsp;reutn(0)\
-fim
+![Código para verificar valor 10](https://user-images.githubusercontent.com/37521313/186780341-c66544d5-b647-4b46-8987-1cc0538629b6.png)
 
 **SAIDA:**\
 INTEIRO\
@@ -142,20 +131,79 @@ NUM_INTEIRO\
 FECHA_PARENTESE\
 FIM
 
-#### Declaração de variável:
+#### Código de produto escalar:
 
 **ENTRADA:**\
-inteiro: a,b
+![Código de produto escalar](https://user-images.githubusercontent.com/37521313/186780450-6a1dd80e-e55e-4f00-9a01-4ffc39e74116.png)
 
 **SAIDA:**\
 INTEIRO\
+ID\
+ABRE_PARENTESE\
+INTEIRO\
 DOIS_PONTOS\
 ID\
+ABRE_COLCHETE\
+FECHA_COLCHETE\
 VIRGULA\
-ID
+INTEIRO\
+DOIS_PONTOS\
+ID\
+ABRE_COLCHETE\
+FECHA_COLCHETE\
+VIRGULA\
+INTEIRO\
+DOIS_PONTOS\
+ID\
+FECHA_PARENTESE\
+INTEIRO\
+DOIS_PONTOS\
+ID\
+ID\
+ATRIBUICAO\
+NUM_INTEIRO\
+INTEIRO\
+DOIS_PONTOS\
+ID\
+ID\
+ATRIBUICAO\
+NUM_INTEIRO\
+SE\
+ID\
+MAIOR\
+NUM_INTEIRO\
+ID\
+REPITA\
+ID\
+ATRIBUICAO\
+ID\
+MAIS\
+ID\
+ABRE_COLCHETE\
+ID\
+FECHA_COLCHETE\
+MULTIPLICACAO\
+ID\
+ABRE_COLCHETE\
+ID\
+FECHA_COLCHETE\
+ID\
+ATRIBUICAO\
+ID\
+MAIS\
+NUM_INTEIRO\
+ID\
+ID\
+IGUAL\
+ID\
+RETORNA\
+ABRE_PARENTESE\
+ID\
+FECHA_PARENTESE\
+FIM
 
 ---
 
 ### Implemente uma função que imprima a lista de tokens, não utilize a saída padrão da ferramenta de implementação de Analisadores Léxicos
 
-transformar saida que tem no main em uma função
+![Função para imprimir tokens](https://user-images.githubusercontent.com/37521313/186780246-ccf764e7-cc6e-4012-8d51-273d82de167c.png)
