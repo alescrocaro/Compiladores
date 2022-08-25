@@ -1,45 +1,33 @@
-# Relatório com as expressões regulares do trabalho de Análise Léxica
+# Projeto de Implementação de um Compilador para a Linguagem TPP: Análise Léxica (Trabalho – 1ª parte)
 
 **Autor:** Alexandre Aparecido Scrocaro Junior \
 **R.A.:** 2135485
+
+**Professor:** Rogério Aparecido Gonçalves\
+**Universidade Tecnológica Federal do Paraná (UTFPR)**
 
 ## Análise Léxica
 
 ### Resumo
 
-TODO
-TODO
-TODO
-TODO
-TODO
-TODO
-TODO
-TODO
-TODO
-**TODO**
-_TODO_
-TODO
-TODO
-TODO
-TODO
-TODO
+A primeira parte do trabalho consiste na implementação de um analisador léxico - também chamado de _scanner_ ou sistema de varredura - para a linguagem TPP, para tanto, foi utilizada a documentação da linguagem disponibilizada pelo professor. A linguagem/ferramenta utilizada foi Python/PLY, além de fazer uso de expressões regulares para analisar os _tokens_.
 
 ---
 
 ### Especificação da linguagem de programação TPP
 
-- Tipos básicos de dados suportado: **inteiro** e **flutuante**
-- Suporte a arranjos uni e bidimensionais **(arrays)**
-- Exemplos:
-  - tipo: identificador[dim]
-  - tipo: identificador[dim][dim]
+- Tipos básicos de dados suportados: **inteiro** e **flutuante**
+- Suporte a arranjos uni e bidimensionais **(_arrays_)**
+  - Exemplos:
+    - tipo: identificador[dim]
+    - tipo: identificador[dim][dim]
 - Variáveis locais e globais devem ter um dos tipos especificados
-- Tipos de funções podem ser omitidos (quando omitidos viram um procedimento e um tipo void é devolvido explicitamente
+- Tipos de funções podem ser omitidos (quando omitidos viram um procedimento e um tipo _void_ é devolvido explicitamente
 - Linguagem quase fortemente tipificada: nem todos os erros são especificados mas sempre deve ocorrer avisos
 - Operadores aritméticos: +, -, \* e /
 - Operadores lógicos: e (&&), ou (||) e não (!)
-- Operador de atribuição: recebe (:=)
-- Operadores de comparação: maior (>), maior igual (>=), menor (<), menor igual (<=), igual (=)
+- Operador de atribuição: recebe (:=).
+- Operadores de comparação: maior (>), maior igual (>=), menor (<), menor igual (<=), igual (=).
 
 ---
 
@@ -62,7 +50,7 @@ Primeiramente, as classes mais simples:
 - sinal = [+-]\* (o sinal pode ter nada, é repassado com épsilon)
 - digito = [0-9]+
 
-Agora, podemos criar um autômato de um identificador da seguinte forma:\
+Agora, podemos criar um autômato de um número flutuante da seguinte forma:\
 ![Autômato de número flutuante](https://user-images.githubusercontent.com/37521313/186780932-0bde9c74-76a7-405e-9bc2-4e0e75414622.png)
 
 ---
@@ -70,7 +58,7 @@ Agora, podemos criar um autômato de um identificador da seguinte forma:\
 ### Detalhes da implementação da varredura na LP e ferramenta (e/ou bibliotecas) escolhidas pelo projetista
 
 &nbsp;&nbsp;O sistema de varredura, ou analisador léxico, é a fase do compilador na qual se lê o código-fonte como um arquivo de caracteres e o separa em um conjunto de tokens, os quais são reconhecidos através das expressões regulares. A implementação do analisador será explicada a seguir.\
-&nbsp;&nbsp;Em primeiro lugar, define-se os tokens, palavras reservadas e operadores que serão utilizados para reconhecer as facilidades da linguagem TPP, assim como suas expressões regulares. Após isso, foram definidas as funções para reconhecer as classes (ID - que requer atenção especial para não coincidir com nenhuma palavra reservada, notação científica, número de ponto flutuante, número de ponto inteiro, comentários, novas linhas e colunas).\
+&nbsp;&nbsp;Em primeiro lugar, define-se os _tokens_, palavras reservadas e operadores que serão utilizados para reconhecer as facilidades da linguagem TPP, assim como suas expressões regulares. Após isso, foram definidas as funções para reconhecer as classes (ID - que requer atenção especial para não coincidir com nenhuma palavra reservada, notação científica, número de ponto flutuante, número inteiro, comentários, novas linhas e colunas).\
 &nbsp;&nbsp;Além disso, também são reconhecidos erros de caracteres especiais que a linguagem não contém (como $ e ç) e é mostrada sua posição no código (linha e coluna).\
 &nbsp;&nbsp;Por último, o código retorna a lista de tokens correspondentes ao arquivo escolhido por quem executa o comando para iniciá-lo, percorrendo todo o código TPP do arquivo selecionado.
 
@@ -205,5 +193,7 @@ FIM
 ---
 
 ### Implemente uma função que imprima a lista de tokens, não utilize a saída padrão da ferramenta de implementação de Analisadores Léxicos
+
+Para tanto, basta tokenizar o arquivo de entrada e imprimir todos os _tokens_ obtidos, que é feito na função a seguir.
 
 ![Função para imprimir tokens](https://user-images.githubusercontent.com/37521313/186780246-ccf764e7-cc6e-4012-8d51-273d82de167c.png)
