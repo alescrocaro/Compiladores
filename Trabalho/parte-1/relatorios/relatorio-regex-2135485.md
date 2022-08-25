@@ -40,7 +40,7 @@
 | t_MAIOR       | >                 |
 | t_IGUAL       | =                 |
 
-## Outros tokens
+## Tokens compostos
 
 | TOKEN              | EXPRESSÃO REGULAR                                                          |
 | ------------------ | -------------------------------------------------------------------------- |
