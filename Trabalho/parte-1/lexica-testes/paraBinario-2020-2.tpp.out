@@ -10,7 +10,7 @@ ID
 ABRE_COLCHETE
 NUM_INTEIRO
 FECHA_COLCHETE
-Caracter inválido ';'
+[3,19]: Caracter inválido ';'
 INTEIRO
 DOIS_PONTOS
 ID
@@ -23,7 +23,7 @@ ID
 MAIOR
 NUM_INTEIRO
 ID
-Caracter inválido 'ç'
+[7,29]: Caracter inválido 'ç'
 ID
 ID
 ABRE_COLCHETE
@@ -31,7 +31,7 @@ ID
 FECHA_COLCHETE
 ATRIBUICAO
 ID
-Caracter inválido '%'
+[9,18]: Caracter inválido '%'
 NUM_INTEIRO
 ID
 ATRIBUICAO

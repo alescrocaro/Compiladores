@@ -41,7 +41,7 @@ tokens = [
     "VIRGULA",  # ,
     "DOIS_PONTOS",  # :
     "ATRIBUICAO",  # :=
-    'COMENTARIO',  # {***}
+    # 'COMENTARIO',  # {***}
 ]
 
 reserved_words = {
@@ -146,13 +146,13 @@ def t_NUM_INTEIRO(token):
 t_ignore = " \t"
 
 # para poder contar as quebras de linha dentro dos comentarios
-t_COMENTARIO = r'(\{((.|\n)*?)\})'
+# t_COMENTARIO = r'(\{((.|\n)*?)\})'
 
 
 def t_COMENTARIO(token):
     r"(\{((.|\n)*?)\})"
     token.lexer.lineno += token.value.count("\n")
-    return token
+    # return token
 
 
 def t_newline(token):
@@ -173,10 +173,9 @@ def t_error(token):
 
     # print(f"[{file}]:[{line},{column}]: {message}.")
 
+    # print(message)
     # print abaixo mostra linha e coluna do erro
-    # print(f"[{line},{column}]: {message}.")
-
-    print(message)
+    print(f"[{line},{column}]: {message}")
 
     token.lexer.skip(1)
 

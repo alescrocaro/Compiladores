@@ -15,10 +15,10 @@ IGUAL
 NUM_INTEIRO
 ESCREVA
 ABRE_PARENTESE
-Caracter inválido '"'
+[6,12]: Caracter inválido '"'
 ID
 NUM_INTEIRO
-Caracter inválido '"'
+[6,21]: Caracter inválido '"'
 FECHA_PARENTESE
 FIM
 ID

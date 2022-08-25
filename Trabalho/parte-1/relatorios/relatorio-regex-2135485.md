@@ -56,5 +56,4 @@
 
 | TOKEN           | EXPRESSÃO REGULAR |
 | --------------- | ----------------- |
-| t_COMENTARIO    | {((. \| \n)\*?)}  |
 | Quebra de linha | \n+               |
