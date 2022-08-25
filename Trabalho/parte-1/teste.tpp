@@ -7,6 +7,10 @@ inteiro principal()
 		fim
 		a++
 	ate a=10
-
+	{' 
+	da
+	da
+	
+	d'}
 	reutn(0)
 fim
