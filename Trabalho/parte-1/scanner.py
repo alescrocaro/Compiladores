@@ -64,7 +64,7 @@ digito = r"([0-9])"
 letra = r"([a-zA-ZáÁãÃàÀéÉíÍóÓõÕ])"
 sinal = r"([\-\+]?)"
 
-""" 
+"""
     id deve começar com uma letra
 """
 id = (
@@ -166,22 +166,23 @@ def define_column(input, lexpos):
 
 
 def t_error(token):
-
     # file = token.lexer.filename
     line = token.lineno
-    # column = define_column(token.lexer.backup_data, token.lexpos)
+    column = define_column(token.lexer.lexdata, token.lexpos)
     message = "Caracter ilegal '%s'" % token.value[0]
 
     # print(f"[{file}]:[{line},{column}]: {message}.")
-    print(message)
+    print(f"[{line},{column}]: {message}.")
+
+    # print(message)
 
     token.lexer.skip(1)
 
-    # token.lexer.has_error = Trueb
+    #token.lexer.has_error = Trueb
 
 
 def main():
-    # argv[1] = 'teste.tpp'
+    #argv[1] = 'teste.tpp'
     aux = argv[1].split('.')
     if aux[-1] != 'tpp':
         raise IOError("Not a .tpp file!")
