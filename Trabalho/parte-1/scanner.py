@@ -169,12 +169,12 @@ def t_error(token):
     # file = token.lexer.filename
     line = token.lineno
     column = define_column(token.lexer.lexdata, token.lexpos)
-    message = "Caracter ilegal '%s'" % token.value[0]
+    message = "Caracter inválido '%s'" % token.value[0]
 
     # print(f"[{file}]:[{line},{column}]: {message}.")
-    print(f"[{line},{column}]: {message}.")
+    # print(f"[{line},{column}]: {message}.")
 
-    # print(message)
+    print(message)
 
     token.lexer.skip(1)
 
