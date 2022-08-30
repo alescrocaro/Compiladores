@@ -1,7 +1,7 @@
 # Projeto de Implementação de um Compilador para a Linguagem TPP: Análise Léxica (Trabalho – 1ª parte)
 
 **Autor:** Alexandre Aparecido Scrocaro Junior \
-**R.A.:** 2135485
+**email:** alescrocaro@gmail.com
 
 **Professor:** Rogério Aparecido Gonçalves\
 **Universidade Tecnológica Federal do Paraná (UTFPR)**
@@ -57,12 +57,41 @@ Agora, podemos criar um autômato de um número flutuante da seguinte forma:\
 
 ### Detalhes da implementação da varredura na LP e ferramenta (e/ou bibliotecas) escolhidas pelo projetista
 
-&nbsp;&nbsp;O sistema de varredura, ou analisador léxico, é a fase do compilador na qual se lê o código-fonte como um arquivo de caracteres e o separa em um conjunto de tokens, os quais são reconhecidos através das expressões regulares. A implementação do analisador será explicada a seguir.\
-&nbsp;&nbsp;Em primeiro lugar, define-se os _tokens_, palavras reservadas e operadores que serão utilizados para reconhecer as facilidades da linguagem TPP, assim como suas expressões regulares. Após isso, foram definidas as funções para reconhecer as classes (ID - que requer atenção especial para não coincidir com nenhuma palavra reservada, notação científica, número de ponto flutuante, número inteiro, comentários, novas linhas e colunas).\
-&nbsp;&nbsp;Além disso, também são reconhecidos erros de caracteres especiais que a linguagem não contém (como $ e ç) e é mostrada sua posição no código (linha e coluna).\
-&nbsp;&nbsp;Por último, o código retorna a lista de tokens correspondentes ao arquivo escolhido por quem executa o comando para iniciá-lo, percorrendo todo o código TPP do arquivo selecionado.
+O sistema de varredura, ou analisador léxico, é a fase do compilador na qual se lê o código-fonte como um arquivo de caracteres e o separa em um conjunto de _tokens_, os quais são reconhecidos através das expressões regulares. A implementação do analisador será explicada a seguir.\
+Em primeiro lugar, define-se os _tokens_:
 
-&nbsp;&nbsp;A ferramenta utilizada foi o Python PLY, que é uma implementação do lex e yacc e utiliza LR-parsing - que é razoavelmente eficiente. O lex possui a facilidade na tokenização de uma _string_ de entrada, por exemplo:
+![image](https://user-images.githubusercontent.com/37521313/187549769-703f9ed2-d8bc-49ec-971e-e94470db06cb.png)
+
+Também define-se as palavras reservadas:
+
+![image](https://user-images.githubusercontent.com/37521313/187549845-c14eac53-1005-4c68-ab5d-945ce54300ce.png)
+
+Assim como os símbolos e operadores que serão utilizados para reconhecer as facilidades da linguagem TPP, e suas expressões regulares:
+
+![image](https://user-images.githubusercontent.com/37521313/187550420-394c93fd-7d7a-4b89-b6a6-6707afd2772f.png)
+
+![image](https://user-images.githubusercontent.com/37521313/187550032-3ad7d105-ca56-4181-b4d6-86a5c4d4c20e.png)
+
+![image](https://user-images.githubusercontent.com/37521313/187550074-0d6f4d32-893f-4b25-96ec-64ae23db1550.png)
+
+![image](https://user-images.githubusercontent.com/37521313/187550158-d302b3b0-616a-4e1e-9bd4-005ca16be981.png)
+
+![image](https://user-images.githubusercontent.com/37521313/187550255-aaef67db-0d27-45c2-b78d-60595fb899ec.png)
+
+
+Após isso, foram definidas as funções para reconhecer as classes (ID - que requer atenção especial para não coincidir com nenhuma palavra reservada, notação científica, número de ponto flutuante, número inteiro, comentários, novas linhas e colunas):
+
+![image](https://user-images.githubusercontent.com/37521313/187550565-ab5da40d-dec5-4aa7-9511-a95a640408cf.png)
+
+Além disso, também são reconhecidos erros de caracteres especiais que a linguagem não contém (como $ e ç) e é mostrada sua posição no código (linha e coluna):
+
+![image](https://user-images.githubusercontent.com/37521313/187550641-1d024109-85a3-4d22-93b1-7826f115872d.png)
+
+Por último, o código retorna a lista de tokens correspondentes ao arquivo escolhido por quem executa o comando para iniciá-lo, percorrendo todo o código TPP do arquivo selecionado.
+
+![image](https://user-images.githubusercontent.com/37521313/187550743-d9df19e1-7174-4e0b-9879-d91d8b67f991.png)
+
+A ferramenta utilizada foi o Python PLY, que é uma implementação do lex e yacc e utiliza LR-parsing - que é razoavelmente eficiente. O lex possui a facilidade na tokenização de uma _string_ de entrada, por exemplo:
 
 **_String_ de entrada:**\
 x = 3 + 42 \* (s - t)\
