@@ -40,8 +40,8 @@ tokens = [
     "FECHA_COLCHETE",  # ]
     "VIRGULA",  # ,
     "DOIS_PONTOS",  # :
-    "ATRIBUICAO"  # :=
-    # 'COMENTARIO',  # {***}
+    "ATRIBUICAO",  # :=
+    'COMENTARIO',  # {***}
 ]
 
 reserved_words = {
@@ -146,13 +146,13 @@ def t_NUM_INTEIRO(token):
 t_ignore = " \t"
 
 # para poder contar as quebras de linha dentro dos comentarios
-# t_COMENTARIO = r'(\{((.|\n)*?)\})'
+t_COMENTARIO = r'(\{((.|\n)*?)\})'
 
 
-#def t_COMENTARIO(token):
-#    r"(\{((.|\n)*?)\})"
-#    token.lexer.lineno += token.value.count("\n")
-#    # return token
+def t_COMENTARIO(token):
+    r"(\{((.|\n)*?)\})"
+    token.lexer.lineno += token.value.count("\n")
+    return token
 
 
 def t_newline(token):
