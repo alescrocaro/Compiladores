@@ -27,6 +27,8 @@ from anytree import RenderTree, AsciiStyle
 #     /     |      \
 #   ...    ...     ...
 
+root = None
+
 def p_programa(p):
     """programa : lista_declaracoes"""
 
@@ -412,10 +414,10 @@ def p_repita(p):
     p[4].parent = pai   # expressao.
 
 
-def p_repita_error(p):
-    """repita : error corpo ATE expressao
-            | REPITA corpo error expressao
-    """
+#def p_repita_error(p):
+#   """repita : error corpo ATE expressao
+#          | REPITA corpo error expressao
+# """
 
 def p_atribuicao(p):
     """atribuicao : var ATRIBUICAO expressao"""

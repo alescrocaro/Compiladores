@@ -40,7 +40,7 @@ tokens = [
     "FECHA_COLCHETE",  # ]
     "VIRGULA",  # ,
     "DOIS_PONTOS",  # :
-    "ATRIBUICAO",  # :=
+    "ATRIBUICAO"  # :=
     # 'COMENTARIO',  # {***}
 ]
 
@@ -149,10 +149,10 @@ t_ignore = " \t"
 # t_COMENTARIO = r'(\{((.|\n)*?)\})'
 
 
-def t_COMENTARIO(token):
-    r"(\{((.|\n)*?)\})"
-    token.lexer.lineno += token.value.count("\n")
-    # return token
+#def t_COMENTARIO(token):
+#    r"(\{((.|\n)*?)\})"
+#    token.lexer.lineno += token.value.count("\n")
+#    # return token
 
 
 def t_newline(token):
