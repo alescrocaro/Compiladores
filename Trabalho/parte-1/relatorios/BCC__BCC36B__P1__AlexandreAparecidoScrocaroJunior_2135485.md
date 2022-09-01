@@ -60,7 +60,7 @@ Agora, podemos criar um autômato de um número flutuante da seguinte forma:\
 O sistema de varredura, ou analisador léxico, é a fase do compilador na qual se lê o código-fonte como um arquivo de caracteres e o separa em um conjunto de _tokens_, os quais são reconhecidos através das expressões regulares. A implementação do analisador será explicada a seguir.\
 Em primeiro lugar, define-se os _tokens_:
 
-![image](https://user-images.githubusercontent.com/37521313/187549769-703f9ed2-d8bc-49ec-971e-e94470db06cb.png)
+![image](https://user-images.githubusercontent.com/37521313/188000342-eb3ba115-b3e5-4d76-b94a-83c17837bf53.png)
 
 Também define-se as palavras reservadas:
 
