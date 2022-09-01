@@ -68,7 +68,7 @@ Também define-se as palavras reservadas:
 
 Assim como os símbolos e operadores que serão utilizados para reconhecer as facilidades da linguagem TPP, e suas expressões regulares:
 
-![image](https://user-images.githubusercontent.com/37521313/187550420-394c93fd-7d7a-4b89-b6a6-6707afd2772f.png)
+![image](https://user-images.githubusercontent.com/37521313/188000869-4680efd5-46e5-44ee-91d0-278b1201e687.png)
 
 ![image](https://user-images.githubusercontent.com/37521313/187550032-3ad7d105-ca56-4181-b4d6-86a5c4d4c20e.png)
 
