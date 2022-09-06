@@ -175,7 +175,7 @@ def t_error(token):
 
     # print(message)
     # print abaixo mostra linha e coluna do erro
-    print(f"erro: [{line},{column}]: {message}")
+    print(f"erro [{line},{column}]: {message}")
 
     token.lexer.skip(1)
 
