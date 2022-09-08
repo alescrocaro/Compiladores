@@ -41,7 +41,7 @@ tokens = [
     "VIRGULA",  # ,
     "DOIS_PONTOS",  # :
     "ATRIBUICAO",  # :=
-    'COMENTARIO',  # {***}
+    "COMENTARIO",  # {***}
 ]
 
 reserved_words = {
@@ -93,7 +93,7 @@ notacao_cientifica = (
 # Símbolos.
 t_MAIS = r'\+'
 t_MENOS = r'-'
-t_MULTIPLICACAO = r'\*'
+t_VEZES = r'\*'
 t_DIVIDE = r'/'
 t_ABRE_PARENTESE = r'\('
 t_FECHA_PARENTESE = r'\)'

@@ -184,15 +184,15 @@ def p_indice_error(p):
         "Syntax error parsing index rule at line {}".format(error_line))
     parser.errok()
     p[0] = father
-    # if len(p) == 4:
-    #     p[1] = new_node('ABRECOLCHETES', father)
-    #     p[2].parent = father
-    #     p[3] = new_node('FECHACOLCHETES', father)
-    # else:
-    #     p[1].parent = father
-    #     p[2] = new_node('ABRECOLCHETES', father)
-    #     p[3].parent = father
-    #     p[4] = new_node('FECHACOLCHETES', father)
+    if len(p) == 4:
+        p[1] = new_node('ABRECOLCHETES', father)
+        p[2].parent = father
+        p[3] = new_node('FECHACOLCHETES', father)
+    else:
+        p[1].parent = father
+        p[2] = new_node('ABRECOLCHETES', father)
+        p[3].parent = father
+        p[4] = new_node('FECHACOLCHETES', father)
 
 
 # Sub-árvore:
@@ -206,7 +206,7 @@ def p_tipo(p):
 
     pai = MyNode(name='tipo', type='TIPO')
     p[0] = pai
-    # p[1] = MyNode(name=p[1], type=p[1].upper(), parent=pai)
+    p[1] = MyNode(name=p[1], type=p[1].upper(), parent=pai)
 
     if p[1] == "inteiro":
         filho1 = MyNode(name='INTEIRO', type='INTEIRO', parent=pai)
@@ -414,10 +414,10 @@ def p_repita(p):
     p[4].parent = pai   # expressao.
 
 
-#def p_repita_error(p):
-#   """repita : error corpo ATE expressao
-#          | REPITA corpo error expressao
-# """
+def p_repita_error(p):
+    """repita : error corpo ATE expressao
+        | REPITA corpo error expressao
+    """
 
 def p_atribuicao(p):
     """atribuicao : var ATRIBUICAO expressao"""
