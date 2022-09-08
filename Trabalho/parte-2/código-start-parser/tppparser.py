@@ -206,11 +206,11 @@ def p_tipo(p):
 
     pai = MyNode(name='tipo', type='TIPO')
     p[0] = pai
-    p[1] = MyNode(name=p[1], type=p[1].upper(), parent=pai)
+    p[1] = MyNode(name=p[1], type=p[1].type.upper(), parent=pai)
 
     if p[1] == "inteiro":
         filho1 = MyNode(name='INTEIRO', type='INTEIRO', parent=pai)
-        filho_sym = MyNode(name=p[1], type=p[1].upper(), parent=filho1)
+        filho_sym = MyNode(name=p[1], type=p[1].type.upper(), parent=filho1)
         p[1] = filho1
     else:
         filho1 = MyNode(name='FLUTUANTE', type='FLUTUANTE', parent=pai)
