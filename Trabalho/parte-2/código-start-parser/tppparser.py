@@ -214,7 +214,7 @@ def p_tipo(p):
         p[1] = filho1
     else:
         filho1 = MyNode(name='FLUTUANTE', type='FLUTUANTE', parent=pai)
-        filho_sym = MyNode(name=p[1], type=p[1].upper(), parent=filho1)
+        filho_sym = MyNode(name=p[1], type=p[1].type.upper(), parent=filho1)
 
 
 def p_declaracao_funcao(p):

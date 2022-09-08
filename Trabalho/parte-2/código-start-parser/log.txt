@@ -9,7 +9,7 @@
     lex.py: 953:lex: Adding rule t_newline -> '\n+' (state 'INITIAL')
     lex.py: 959:lex: Adding rule t_OU -> '\|\|' (state 'INITIAL')
     lex.py: 959:lex: Adding rule t_MAIS -> '\+' (state 'INITIAL')
-    lex.py: 959:lex: Adding rule t_MULTIPLICACAO -> '\*' (state 'INITIAL')
+    lex.py: 959:lex: Adding rule t_VEZES -> '\*' (state 'INITIAL')
     lex.py: 959:lex: Adding rule t_ABRE_PARENTESE -> '\(' (state 'INITIAL')
     lex.py: 959:lex: Adding rule t_FECHA_PARENTESE -> '\)' (state 'INITIAL')
     lex.py: 959:lex: Adding rule t_ABRE_COLCHETE -> '\[' (state 'INITIAL')
@@ -28,4 +28,4 @@
     lex.py: 959:lex: Adding rule t_MAIOR -> '>' (state 'INITIAL')
     lex.py: 959:lex: Adding rule t_IGUAL -> '=' (state 'INITIAL')
     lex.py: 966:lex: ==== MASTER REGEXS FOLLOW ====
-    lex.py: 975:lex: state 'INITIAL' : regex[0] = '(?P<t_ID>(([a-zA-ZáÁãÃàÀéÉíÍóÓõÕ])(([0-9])+|_|([a-zA-ZáÁãÃàÀéÉíÍóÓõÕ]))*))|(?P<t_NUM_NOTACAO_CIENTIFICA>(([\-\+]?)([1-9])\.([0-9])+[eE]([\-\+]?)([0-9])+))|(?P<t_NUM_PONTO_FLUTUANTE>\d+[eE][-+]?\d+|(\.\d+|\d+\.\d*)([eE][-+]?\d+)?)|(?P<t_NUM_INTEIRO>\d+)|(?P<t_COMENTARIO>(\{((.|\n)*?)\}))|(?P<t_newline>\n+)|(?P<t_OU>\|\|)|(?P<t_MAIS>\+)|(?P<t_MULTIPLICACAO>\*)|(?P<t_ABRE_PARENTESE>\()|(?P<t_FECHA_PARENTESE>\))|(?P<t_ABRE_COLCHETE>\[)|(?P<t_FECHA_COLCHETE>\])|(?P<t_ATRIBUICAO>:=)|(?P<t_E>&&)|(?P<t_DIFERENTE><>)|(?P<t_MENOR_IGUAL><=)|(?P<t_MAIOR_IGUAL>>=)|(?P<t_MENOS>-)|(?P<t_DIVIDE>/)|(?P<t_VIRGULA>,)|(?P<t_DOIS_PONTOS>:)|(?P<t_NAO>!)|(?P<t_MENOR><)|(?P<t_MAIOR>>)|(?P<t_IGUAL>=)'
+    lex.py: 975:lex: state 'INITIAL' : regex[0] = '(?P<t_ID>(([a-zA-ZáÁãÃàÀéÉíÍóÓõÕ])(([0-9])+|_|([a-zA-ZáÁãÃàÀéÉíÍóÓõÕ]))*))|(?P<t_NUM_NOTACAO_CIENTIFICA>(([\-\+]?)([1-9])\.([0-9])+[eE]([\-\+]?)([0-9])+))|(?P<t_NUM_PONTO_FLUTUANTE>\d+[eE][-+]?\d+|(\.\d+|\d+\.\d*)([eE][-+]?\d+)?)|(?P<t_NUM_INTEIRO>\d+)|(?P<t_COMENTARIO>(\{((.|\n)*?)\}))|(?P<t_newline>\n+)|(?P<t_OU>\|\|)|(?P<t_MAIS>\+)|(?P<t_VEZES>\*)|(?P<t_ABRE_PARENTESE>\()|(?P<t_FECHA_PARENTESE>\))|(?P<t_ABRE_COLCHETE>\[)|(?P<t_FECHA_COLCHETE>\])|(?P<t_ATRIBUICAO>:=)|(?P<t_E>&&)|(?P<t_DIFERENTE><>)|(?P<t_MENOR_IGUAL><=)|(?P<t_MAIOR_IGUAL>>=)|(?P<t_MENOS>-)|(?P<t_DIVIDE>/)|(?P<t_VIRGULA>,)|(?P<t_DOIS_PONTOS>:)|(?P<t_NAO>!)|(?P<t_MENOR><)|(?P<t_MAIOR>>)|(?P<t_IGUAL>=)'

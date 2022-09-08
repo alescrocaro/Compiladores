@@ -41,7 +41,7 @@ tokens = [
     "VIRGULA",  # ,
     "DOIS_PONTOS",  # :
     "ATRIBUICAO",  # :=
-    "COMENTARIO",  # {***}
+ #   "COMENTARIO",  # {***}
 ]
 
 reserved_words = {
@@ -71,17 +71,10 @@ id = (
     r"(" + letra + r"(" + digito + r"+|_|" + letra + r")*)"
 )  # o mesmo que '((letra)(letra|_|([0-9]))*)'
 
-# inteiro = r"(" + sinal + digito + r"+)"
-# inteiro = r"(" + digito + r"+)"
 inteiro = r"\d+"
 
 flutuante = (
-    # r"(" + digito + r"+\." + digito + r"+?)"
-    # (([-\+]?)([0-9]+)\.([0-9]+))'
     r'\d+[eE][-+]?\d+|(\.\d+|\d+\.\d*)([eE][-+]?\d+)?'
-    # r'[-+]?[0-9]+(\.([0-9]+)?)'
-    # r'[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?'
-    # r"(([-\+]?)([0-9]+)\.([0-9]+))"
 )
 
 notacao_cientifica = (
@@ -146,13 +139,13 @@ def t_NUM_INTEIRO(token):
 t_ignore = " \t"
 
 # para poder contar as quebras de linha dentro dos comentarios
-t_COMENTARIO = r'(\{((.|\n)*?)\})'
+#t_COMENTARIO = r'(\{((.|\n)*?)\})'
 
 
 def t_COMENTARIO(token):
     r"(\{((.|\n)*?)\})"
     token.lexer.lineno += token.value.count("\n")
-    return token
+   # return token
 
 
 def t_newline(token):
@@ -166,20 +159,15 @@ def define_column(input, lexpos):
 
 
 def t_error(token):
-    # file = token.lexer.filename
     line = token.lineno
     column = define_column(token.lexer.lexdata, token.lexpos)
     message = "Caracter inválido '%s'" % token.value[0]
 
-    # print(f"[{file}]:[{line},{column}]: {message}.")
-
-    # print(message)
     # print abaixo mostra linha e coluna do erro
     print(f"[{line},{column}]: {message}")
 
     token.lexer.skip(1)
 
-    #token.lexer.has_error = Trueb
 
 
 def imprimir_tokens():
@@ -187,12 +175,9 @@ def imprimir_tokens():
         tok = lexer.token()
         if not tok:
             break      # No more input
-        # print(tok)
 
         # print para mostrar o token
         print(tok.type)
-
-        # print(tok.value)
 
 
 def main():
