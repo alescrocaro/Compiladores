@@ -14,9 +14,6 @@ from anytree import NodeMixin, RenderTree
 # "children": [Adjacent Nodes in tree]
 # "params_types": [If is a function, yours parameters attributes]
 
-#from anytree.exporter import DotExporter
-# from anytree import Node, RenderTree
-
 # def new_node(nodeName, parent=None, id=None, data=None, **kwargs):
 #    global nodes_count
 #    if (id):

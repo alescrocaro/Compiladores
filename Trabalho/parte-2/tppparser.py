@@ -206,7 +206,7 @@ def p_tipo(p):
 
     pai = MyNode(name='tipo', type='TIPO')
     p[0] = pai
-    p[1] = MyNode(name=p[1], type=p[1].type.upper(), parent=pai)
+    p[1] = MyNode(name=p[1], type=p[1].upper(), parent=pai)
 
     if p[1] == "inteiro":
         filho1 = MyNode(name='INTEIRO', type='INTEIRO', parent=pai)
@@ -225,9 +225,7 @@ def p_declaracao_funcao(p):
     p[0] = pai
     p[1].parent = pai
 
-    if len(p) == 3:
-        p[2].parent = pai
-
+    if len(p) == 3: directory: 'dot'
 
 def p_cabecalho(p):
     """cabecalho : ID ABRE_PARENTESE lista_parametros FECHA_PARENTESE corpo FIM"""
