@@ -19,13 +19,15 @@ from tpplex import tokens,log
 from mytree import MyNode
 from anytree.exporter import DotExporter, UniqueDotExporter
 from anytree import RenderTree, AsciiStyle
-root = None
+
 # Sub-árvore.
 #       (programa)
 #           |
 #   (lista_declaracoes)
 #     /     |      \
 #   ...    ...     ...
+
+root = None
 
 def p_programa(p):
     """programa : lista_declaracoes"""
@@ -223,9 +225,7 @@ def p_declaracao_funcao(p):
     p[0] = pai
     p[1].parent = pai
 
-    if len(p) == 3:
-        p[2].parent = pai
-
+    if len(p) == 3: directory: 'dot'
 
 def p_cabecalho(p):
     """cabecalho : ID ABRE_PARENTESE lista_parametros FECHA_PARENTESE corpo FIM"""
@@ -414,7 +414,7 @@ def p_repita(p):
 
 def p_repita_error(p):
     """repita : error corpo ATE expressao
-            | REPITA corpo error expressao
+        | REPITA corpo error expressao
     """
 
 def p_atribuicao(p):
