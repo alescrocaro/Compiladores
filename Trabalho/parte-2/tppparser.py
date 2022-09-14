@@ -1,24 +1,23 @@
+from tpplex import tokens, log
+from anytree import RenderTree, AsciiStyle
+from anytree.exporter import DotExporter, UniqueDotExporter
+from mytree import MyNode
+import ply.yacc as yacc
 from sys import argv, exit
 
 import logging
 
 logging.basicConfig(
-     level = logging.DEBUG,
-     filename = "log-parser.txt",
-     filemode = "w",
-     format = "%(filename)10s:%(lineno)4d:%(message)s"
+    level=logging.DEBUG,
+    filename="log-parser.txt",
+    filemode="w",
+    format="%(filename)10s:%(lineno)4d:%(message)s"
 )
 log = logging.getLogger()
 
 
-import ply.yacc as yacc
- 
 # Get the token map from the lexer.  This is required.
-from tpplex import tokens,log
 
-from mytree import MyNode
-from anytree.exporter import DotExporter, UniqueDotExporter
-from anytree import RenderTree, AsciiStyle
 root = None
 # Sub-árvore.
 #       (programa)
@@ -26,6 +25,7 @@ root = None
 #   (lista_declaracoes)
 #     /     |      \
 #   ...    ...     ...
+
 
 def p_programa(p):
     """programa : lista_declaracoes"""
@@ -120,7 +120,7 @@ def p_lista_variaveis(p):
         filho_sym = MyNode(name=',', type='SIMBOLO', parent=filho)
         p[3].parent = pai
     else:
-       p[1].parent = pai
+        p[1].parent = pai
 
 
 def p_var(p):
@@ -152,7 +152,8 @@ def p_indice(p):
 
         p[3].parent = pai  # expressao
 
-        filho4 = MyNode(name='fecha_colchete', type='FECHA_COLCHETE', parent=pai)
+        filho4 = MyNode(name='fecha_colchete',
+                        type='FECHA_COLCHETE', parent=pai)
         filho_sym4 = MyNode(name=p[4], type='SIMBOLO', parent=filho4)
         p[4] = filho4
     else:
@@ -162,7 +163,8 @@ def p_indice(p):
 
         p[2].parent = pai  # expressao
 
-        filho3 = MyNode(name='fecha_colchete', type='FECHA_COLCHETE', parent=pai)
+        filho3 = MyNode(name='fecha_colchete',
+                        type='FECHA_COLCHETE', parent=pai)
         filho_sym3 = MyNode(name=p[3], type='SIMBOLO', parent=filho3)
         p[3] = filho3
 
@@ -182,15 +184,6 @@ def p_indice_error(p):
         "Syntax error parsing index rule at line {}".format(error_line))
     parser.errok()
     p[0] = father
-    # if len(p) == 4:
-    #     p[1] = new_node('ABRECOLCHETES', father)
-    #     p[2].parent = father
-    #     p[3] = new_node('FECHACOLCHETES', father)
-    # else:
-    #     p[1].parent = father
-    #     p[2] = new_node('ABRECOLCHETES', father)
-    #     p[3].parent = father
-    #     p[4] = new_node('FECHACOLCHETES', father)
 
 
 # Sub-árvore:
@@ -260,6 +253,7 @@ def p_cabecalho_error(p):
                 | error ABRE_PARENTESE lista_parametros FECHA_PARENTESE corpo FIM 
     """
 
+
 def p_lista_parametros(p):
     """lista_parametros : lista_parametros VIRGULA parametro
                     | parametro
@@ -298,7 +292,8 @@ def p_parametro(p):
         filho_sym2 = MyNode(name='[', type='SIMBOLO', parent=filho2)
         p[2] = filho2
 
-        filho3 = MyNode(name='fecha_colchete', type='FECHA_COLCHETE', parent=pai)
+        filho3 = MyNode(name='fecha_colchete',
+                        type='FECHA_COLCHETE', parent=pai)
         filho_sym3 = MyNode(name=']', type='SIMBOLO', parent=filho3)
         p[3] = filho3
 
@@ -336,7 +331,6 @@ def p_acao(p):
     pai = MyNode(name='acao', type='ACAO')
     p[0] = pai
     p[1].parent = pai
-
 
 
 # Sub-árvore:
@@ -416,6 +410,7 @@ def p_repita_error(p):
     """repita : error corpo ATE expressao
             | REPITA corpo error expressao
     """
+
 
 def p_atribuicao(p):
     """atribuicao : var ATRIBUICAO expressao"""
@@ -631,10 +626,10 @@ def p_operador_soma(p):
         p[0] = MyNode(name='operador_soma',
                       type='OPERADOR_SOMA', children=[mais])
     else:
-       menos = MyNode(name='MENOS', type='MENOS')
-       menos_lexema = MyNode(name='-', type='SIMBOLO', parent=menos)
-       p[0] = MyNode(name='operador_soma',
-                     type='OPERADOR_SOMA', children=[menos])
+        menos = MyNode(name='MENOS', type='MENOS')
+        menos_lexema = MyNode(name='-', type='SIMBOLO', parent=menos)
+        p[0] = MyNode(name='operador_soma',
+                      type='OPERADOR_SOMA', children=[menos])
 
 
 def p_operador_logico(p):
@@ -673,10 +668,10 @@ def p_operador_multiplicacao(p):
         p[0] = MyNode(name='operador_multiplicacao',
                       type='OPERADOR_MULTIPLICACAO', children=[filho])
     else:
-       divide = MyNode(name='DIVIDE', type='DIVIDE')
-       divide_lexema = MyNode(name=p[1], type='SIMBOLO', parent=divide)
-       p[0] = MyNode(name='operador_multiplicacao',
-                     type='OPERADOR_MULTIPLICACAO', children=[divide])
+        divide = MyNode(name='DIVIDE', type='DIVIDE')
+        divide_lexema = MyNode(name=p[1], type='SIMBOLO', parent=divide)
+        p[0] = MyNode(name='operador_multiplicacao',
+                      type='OPERADOR_MULTIPLICACAO', children=[divide])
 
 
 def p_fator(p):
@@ -688,13 +683,15 @@ def p_fator(p):
     pai = MyNode(name='fator', type='FATOR')
     p[0] = pai
     if len(p) > 2:
-        filho1 = MyNode(name='ABRE_PARENTESE', type='ABRE_PARENTESE', parent=pai)
+        filho1 = MyNode(name='ABRE_PARENTESE',
+                        type='ABRE_PARENTESE', parent=pai)
         filho_sym1 = MyNode(name=p[1], type='SIMBOLO', parent=filho1)
         p[1] = filho1
 
         p[2].parent = pai
 
-        filho3 = MyNode(name='FECHA_PARENTESE', type='FECHA_PARENTESE', parent=pai)
+        filho3 = MyNode(name='FECHA_PARENTESE',
+                        type='FECHA_PARENTESE', parent=pai)
         filho_sym3 = MyNode(name=p[3], type='SIMBOLO', parent=filho3)
         p[3] = filho3
     else:
@@ -704,6 +701,7 @@ def p_fator(p):
 def p_fator_error(p):
     """fator : ABRE_PARENTESE error FECHA_PARENTESE
         """
+
 
 def p_numero(p):
     """numero : NUM_INTEIRO
@@ -740,13 +738,15 @@ def p_chamada_funcao(p):
         filho_id = MyNode(name=p[1], type='ID', parent=filho1)
         p[1] = filho1
 
-        filho2 = MyNode(name='ABRE_PARENTESE', type='ABRE_PARENTESE', parent=pai)
+        filho2 = MyNode(name='ABRE_PARENTESE',
+                        type='ABRE_PARENTESE', parent=pai)
         filho_sym = MyNode(name=p[2], type='SIMBOLO', parent=filho2)
         p[2] = filho2
 
         p[3].parent = pai
 
-        filho4 = MyNode(name='FECHA_PARENTESE', type='FECHA_PARENTESE', parent=pai)
+        filho4 = MyNode(name='FECHA_PARENTESE',
+                        type='FECHA_PARENTESE', parent=pai)
         filho_sym = MyNode(name=p[4], type='SIMBOLO', parent=filho4)
         p[4] = filho4
     else:
@@ -781,10 +781,9 @@ def p_vazio(p):
 
 
 def p_error(p):
-
     if p:
         token = p
-        print("Erro:[{line},{column}]: Erro próximo ao token '{token}'".format(
+        print("Erro [{line},{column}]: Erro próximo ao token '{token}'".format(
             line=token.lineno, column=token.lineno, token=token.value))
 
 # Programa principal.
@@ -794,7 +793,7 @@ def main():
     # argv[1] = 'teste.tpp'
     aux = argv[1].split('.')
     if aux[-1] != 'tpp':
-      raise IOError("Not a .tpp file!")
+        raise IOError("Not a .tpp file!")
     data = open(argv[1])
 
     source_file = data.read()
@@ -821,9 +820,8 @@ def main():
         print("Unable to generate Syntax Tree.")
     print('\n\n')
 
+
 # Build the parser.
-# __file__ = "02-compiladores-analise-sintatica-tppparser.ipynb"
-# parser = yacc.yacc(optimize=True, start='programa', debug=True, debuglog=log)
 parser = yacc.yacc(method="LALR", optimize=True, start='programa', debug=True,
                    debuglog=log, write_tables=False, tabmodule='tpp_parser_tab')
 
