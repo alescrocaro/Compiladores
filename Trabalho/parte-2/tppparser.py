@@ -15,10 +15,10 @@ logging.basicConfig(
 )
 log = logging.getLogger()
 
+root = None
 
 # Get the token map from the lexer.  This is required.
 
-root = None
 # Sub-árvore.
 #       (programa)
 #           |
@@ -822,8 +822,7 @@ def main():
 
 
 # Build the parser.
-parser = yacc.yacc(method="LALR", optimize=True, start='programa', debug=True,
-                   debuglog=log, write_tables=False, tabmodule='tpp_parser_tab')
+parser = yacc.yacc(method="LALR", optimize=True, start='programa', debug=True, debuglog=log, write_tables=False, tabmodule='tpp_parser_tab')
 
 if __name__ == "__main__":
     main()
