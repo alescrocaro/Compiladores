@@ -14,9 +14,69 @@ TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
 
 ---
 
-### Descrição da gramática (no padrão BNF?).
+### Descrição da gramática
 
-TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
+#### Regras
+
+##### programa
+
+##### declaracao
+
+##### declaracao_variaveis
+
+##### inicializacao_variaveis
+
+##### var
+
+##### tipo
+
+##### declaracao_funcao
+
+##### cabecalho
+
+##### parametro
+
+##### corpo
+
+##### acao
+
+##### se
+
+##### repita
+
+##### atribuicao
+
+##### leia
+
+##### escreva
+
+##### retorna
+
+##### expressao
+
+##### expressao_simples
+
+##### expressao_aditiva
+
+##### expressao_multiplicativa
+
+##### expressao_unaria
+
+##### operador_relacional
+
+##### operador_soma
+
+##### operador_logico
+
+##### operador_negacao
+
+##### operador_multiplicacao
+
+##### fator
+
+##### numero
+
+##### chamada_funcao
 
 ---
 
