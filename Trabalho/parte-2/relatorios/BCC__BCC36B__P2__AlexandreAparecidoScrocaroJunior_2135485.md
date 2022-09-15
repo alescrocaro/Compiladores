@@ -20,18 +20,21 @@ TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
 
 ---
 
-### Formato da análise sintática.
+### Formato da análise sintática
 
 O formato utilizado é o LALR(1), ele tem vantagem sobre o LR(1) pois diminui o número de estados e gera uma tabela consideravelmente menor. Além de que é suportado pela ferramenta utilizada, o PLY.
 
 ---
 
-### Utilização da ferramenta Yacc e implementação
+### Utilização da ferramenta Yacc e implementação do parser
 
 O Yacc é um gerador automático de Analisadores sintáticos LALR(1). Ele possui extensos recursos de depuração e relatório de erros, nós o utilizamos para construir o _parser_, como pode ser visto abaixo.
 ![Yacc build parser](https://user-images.githubusercontent.com/37521313/190282781-5931edf0-20fe-4d8d-ab6f-2ef942874786.png)
 
+Seguindo para a implementação, foi feita uma função para cada regra gramatical com seu respectivo nome, seguindo o padrão "p_regra(p)". Esse "p" passado por parâmetro corresponde a uma sequência contendo os valores de cada símbolo da gramática na regra correspondente. Além disso, os valores de p[i] (observados na imagem abaixo) são mapeados nos símbolos da gramática.
+Para exemplificar, observa-se o código abaixo da regra "se".
 
+\
 TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
 
 ---

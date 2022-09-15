@@ -386,6 +386,8 @@ def p_se_error(p):
         | SE expressao ENTAO corpo SENAO corpo
     """
 
+    print('Erro na regra se')
+
 
 def p_repita(p):
     """repita : REPITA corpo ATE expressao"""
@@ -410,6 +412,8 @@ def p_repita_error(p):
     """repita : error corpo ATE expressao
             | REPITA corpo error expressao
     """
+
+    print("Erro na regra repita")
 
 
 def p_atribuicao(p):
