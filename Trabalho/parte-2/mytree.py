@@ -14,23 +14,6 @@ from anytree import NodeMixin, RenderTree
 # "children": [Adjacent Nodes in tree]
 # "params_types": [If is a function, yours parameters attributes]
 
-# def new_node(nodeName, parent=None, id=None, data=None, **kwargs):
-#    global nodes_count
-#    if (id):
-#        node_ID = id
-#    else:
-#        node_ID = str(nodes_count) + ': ' + str(nodeName)
-#    nodes_count += 1
-#    if parent:
-#        node = Node(node_ID, parent, **kwargs)
-#    else:
-#        node = Node(node_ID, **kwargs)
-#    return node
-
-# nodes_count = 0
-# root = None
-# global node_sequence
-
 node_sequence = 0
 
 class MyNode(NodeMixin):  # Add Node feature   
@@ -45,7 +28,6 @@ class MyNode(NodeMixin):  # Add Node feature
       self.id = str(node_sequence) + ': ' + str(name)
         
     self.label = name
-    # self.name = name + '_' + str(node_sequence)
     self.name = name
     node_sequence = node_sequence + 1
     self.type = type
@@ -60,7 +42,6 @@ class MyNode(NodeMixin):  # Add Node feature
     return '%s' % (node.name)
 
   def edgeattrfunc(node, child):
-    # return 'label="%s:%s"' % (node.name, child.name)
     return ''
 
   def edgetypefunc(node, child):
