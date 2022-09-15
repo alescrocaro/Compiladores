@@ -45,12 +45,20 @@ Assim como na regra, há um comentário definindo quando a excessão será execu
 
 ---
 
-### Discussão sobre implementação da árvore sintática
+### Implementação da árvore sintática
 
-TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
+Para a árvore foi utilizada a biblioteca anytree para o auxílio da implementação de nós, extendendo uma classe python para um nó de árvore. Cada nó contém um identificador, nome, rótulo, tipo e uma referência para seu pai. As regras e cada expressão ou corpo são subárvores dentro da árvore maior que constitui o programa todo.
 
 ---
 
 ### Exemplo de Entrada e Saída. Impressão da Árvore.
 
+fazer exemplo sem e com erro
 TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
+
+---
+
+### Referências
+
+[Documentação do anytree](https://anytree.readthedocs.io/en/latest/)\
+[Documentação do PLY (e Yacc)](https://www.dabeaz.com/ply/ply.html)
