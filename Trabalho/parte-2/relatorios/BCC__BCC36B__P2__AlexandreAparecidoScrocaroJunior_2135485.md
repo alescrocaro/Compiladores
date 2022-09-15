@@ -32,7 +32,12 @@ O Yacc é um gerador automático de Analisadores sintáticos LALR(1). Ele possui
 ![Yacc build parser](https://user-images.githubusercontent.com/37521313/190282781-5931edf0-20fe-4d8d-ab6f-2ef942874786.png)
 
 Seguindo para a implementação, foi feita uma função para cada regra gramatical com seu respectivo nome, seguindo o padrão "p_regra(p)". Esse "p" passado por parâmetro corresponde a uma sequência contendo os valores de cada símbolo da gramática na regra correspondente. Além disso, os valores de p[i] (observados na imagem abaixo) são mapeados nos símbolos da gramática.
-Para exemplificar, observa-se o código abaixo da regra "se".
+Para exemplificar, observa-se o código abaixo da regra "repita".
+
+![regra repita](https://user-images.githubusercontent.com/37521313/190283852-9b4de4cb-6efc-4546-81ce-e10a2f4d0139.png)
+
+![erro regra repita](https://user-images.githubusercontent.com/37521313/190283896-0cb2d28c-70a1-4271-a632-9fd4de19fdaa.png)
+
 
 \
 TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
