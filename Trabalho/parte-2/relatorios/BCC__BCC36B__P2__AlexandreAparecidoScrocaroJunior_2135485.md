@@ -47,6 +47,11 @@ Assim como na regra, há um comentário definindo quando a excessão será execu
 
 ### Discussão sobre implementação da árvore sintática
 
+Para a árvore foi utilizada a biblioteca anytree para o auxílio da implementação de nós, extendendo uma classe python para um nó de árvore. Cada nó contém um identificador, nome, rótulo, tipo e uma referência para seu pai. As regras e cada expressão ou corpo são subárvores dentro da árvore maior que constitui o programa todo.
+
+![Implementação arvore](https://user-images.githubusercontent.com/37521313/190286658-fc62ab76-573d-4a1a-bfc9-4636dc8e214d.png)
+
+
 TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
 
 ---
