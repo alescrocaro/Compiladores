@@ -272,6 +272,14 @@ def p_lista_parametros(p):
         p[2] = filho2
         p[3].parent = pai
 
+# def p_lista_parametros_error(p):
+#     """lista_parametros : error VIRGULA parametro
+#                     | lista_parametros VIRGULA error
+#                     | error
+#     """
+
+#     print("Erro na regra lista_parametros")
+
 
 def p_parametro(p):
     """parametro : tipo DOIS_PONTOS ID
