@@ -253,6 +253,8 @@ def p_cabecalho_error(p):
                 | error ABRE_PARENTESE lista_parametros FECHA_PARENTESE corpo FIM 
     """
 
+    print("Erro na regra cabecalho")
+
 
 def p_lista_parametros(p):
     """lista_parametros : lista_parametros VIRGULA parametro
@@ -304,6 +306,8 @@ def p_parametro_error(p):
                 | parametro error FECHA_COLCHETE
                 | parametro ABRE_COLCHETE error
     """
+
+    print("erro na regra parametro")
 
 
 def p_corpo(p):
@@ -455,6 +459,8 @@ def p_leia(p):
 def p_leia_error(p):
     """leia : LEIA ABRE_PARENTESE error FECHA_PARENTESE
     """
+
+    print("Erro na regra leia")
 
 
 def p_escreva(p):
@@ -705,6 +711,8 @@ def p_fator(p):
 def p_fator_error(p):
     """fator : ABRE_PARENTESE error FECHA_PARENTESE
         """
+
+    print("Erro na regra fator")
 
 
 def p_numero(p):
