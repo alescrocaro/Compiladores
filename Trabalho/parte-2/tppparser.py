@@ -93,6 +93,14 @@ def p_declaracao_variaveis(p):
 
     p[3].parent = pai
 
+
+def p_declaracao_variaveis_error(p):
+    """declaracao_variaveis : tipo DOIS_PONTOS error
+                                | error DOIS_PONTOS lista_variaveis                                    
+    """
+
+    print('Erro na regra declaracao variaveis')
+
 # Sub-árvore.
 #   (inicializacao_variaveis)
 #              |
@@ -122,6 +130,12 @@ def p_lista_variaveis(p):
     else:
         p[1].parent = pai
 
+def p_lista_variaveis_error(p):
+    """lista_variaveis : error VIRGULA var
+                        | lista_variaveis VIRGULA error
+    """
+
+    print('Erro na regra lista variaveis')
 
 def p_var(p):
     """var : ID
@@ -176,8 +190,8 @@ def p_indice_error(p):
 
     print("Erro na definicao do indice. Expressao ou indice.")
 
-    print("Erro:p[0]:{p0}, p[1]:{p1}, p[2]:{p2}, p[3]:{p3}".format(
-        p0=p[0], p1=p[1], p2=p[2], p3=p[3]))
+    # print("Erro:p[0]:{p0}, p[1]:{p1}, p[2]:{p2}, p[3]:{p3}".format(
+    #     p0=p[0], p1=p[1], p2=p[2], p3=p[3]))
     error_line = p.lineno(2)
     father = MyNode(name='ERROR::{}'.format(error_line), type='ERROR')
     logging.error(
@@ -219,6 +233,13 @@ def p_declaracao_funcao(p):
     if len(p) == 3:
         p[2].parent = pai
 
+def p_declaracao_funcao_error(p):
+    """declaracao_funcao : error cabecalho 
+                        | tipo error
+                        | error 
+    """
+
+    print('Erro na regra declaracao funcao')
 
 def p_cabecalho(p):
     """cabecalho : ID ABRE_PARENTESE lista_parametros FECHA_PARENTESE corpo FIM"""
@@ -272,13 +293,14 @@ def p_lista_parametros(p):
         p[2] = filho2
         p[3].parent = pai
 
-# def p_lista_parametros_error(p):
-#     """lista_parametros : error VIRGULA parametro
-#                     | lista_parametros VIRGULA error
-#                     | error
-#     """
+def p_lista_parametros_error(p):
+    """lista_parametros : error VIRGULA parametro
+                    | vazio VIRGULA parametro
+                    | lista_parametros VIRGULA error
+                    | error
+    """
 
-#     print("Erro na regra lista_parametros")
+    print("Erro na regra lista_parametros")
 
 
 def p_parametro(p):
@@ -420,12 +442,12 @@ def p_repita(p):
     p[4].parent = pai   # expressao.
 
 
-def p_repita_error(p):
-    """repita : error corpo ATE expressao
-            | REPITA corpo error expressao
-    """
+# def p_repita_error(p):
+#     """repita : REPITA error ATE expressao
+#             | REPITA corpo ATE error
+#     """
 
-    print("Erro na regra repita")
+#     print("Erro na regra repita")
 
 
 def p_atribuicao(p):
@@ -442,6 +464,13 @@ def p_atribuicao(p):
 
     p[3].parent = pai
 
+
+def p_atribuicao_error(p):
+    """atribuicao : var ATRIBUICAO error
+                    | error ATRIBUICAO expressao
+    """
+
+    print('erro na regra atribuicao')
 
 def p_leia(p):
     """leia : LEIA ABRE_PARENTESE var FECHA_PARENTESE"""
@@ -491,6 +520,10 @@ def p_escreva(p):
     filho_sym4 = MyNode(name=')', type='SIMBOLO', parent=filho4)
     p[4] = filho4
 
+def p_escreva(p):
+    """escreva : ESCREVA ABRE_PARENTESE error FECHA_PARENTESE"""
+
+    print('Erro na regra escreva')
 
 def p_retorna(p):
     """retorna : RETORNA ABRE_PARENTESE expressao FECHA_PARENTESE"""
@@ -511,6 +544,11 @@ def p_retorna(p):
     filho4 = MyNode(name='FECHA_PARENTESE', type='FECHA_PARENTESE', parent=pai)
     filho_sym4 = MyNode(name=')', type='SIMBOLO', parent=filho4)
     p[4] = filho4
+
+def p_retorna(p):
+    """retorna : RETORNA ABRE_PARENTESE error FECHA_PARENTESE"""
+
+    print('Erro na regra retorna')
 
 
 def p_expressao(p):
@@ -534,6 +572,11 @@ def p_expressao_logica(p):
         p[2].parent = pai
         p[3].parent = pai
 
+def p_expressao_logica_error(p):
+    """expressao_logica : error
+    """
+
+    print('Erro na regra expressao logica')
 
 def p_expressao_simples(p):
     """expressao_simples : expressao_aditiva
@@ -771,6 +814,12 @@ def p_chamada_funcao(p):
         p[4] = filho4
     else:
         p[1].parent = pai
+
+
+def p_chamada_funcao_error(p):
+    """chamada_funcao : ID ABRE_PARENTESE error FECHA_PARENTESE"""
+
+    print('Erro na regra chamada funcao')
 
 
 def p_lista_argumentos(p):
