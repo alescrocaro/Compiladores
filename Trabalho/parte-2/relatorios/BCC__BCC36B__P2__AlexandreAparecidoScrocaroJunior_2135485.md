@@ -255,12 +255,14 @@ Para exemplificar, observa-se o código abaixo da regra "lista_variaveis".
 
 ![Regra lista_variaveis](https://user-images.githubusercontent.com/37521313/191353721-1f36f530-62c0-4598-a5db-0cf906b173df.png)
 
-Primeiro, define-se em um comentário a regra que executará a função se for encontrada (repita: REPITA corpo ATE expressao). Isso é implementado como uma árvore criando nós da classe MyNode (criada no arquivo _mytree.py_) de forma que o p[0] é a própria regra repita e se torna o pai da subárvore, o p[1] é a palavra **REPITA**, p[2] é o **corpo** dentro de repita, p[3] é a palavra **ATE** que identifica o que irá 'quebrar' a regra, enfim o p[4] será a expressão que 'quebra' a repetição.
+Primeiro, define-se em um comentário a regra que executará a função se for encontrada (lista_variaveis : lista_variaveis VIRGULA var | var). Isso é implementado como uma árvore criando nós da classe MyNode (criada no arquivo _mytree.py_) de forma que, no primeiro caso, o p[0] é a própria regra lista_variaveis e se torna o pai da subárvore, o p[1] é a palavra (_token_) **VIRGULA** e p[2] é a **var** que pode repetir na lista.\
+
+Erros:
 
 ![Erro na regra lista_variaveis](https://user-images.githubusercontent.com/37521313/191353823-0674072a-965b-420b-a886-77c667038cba.png)
 
 As regras também terão excessões, definidas em funções com o mesmo nome da regra com a adição de "\_error" ao fim. \
-Assim como na regra, há um comentário definindo quando a excessão será executada, nesse caso é quando há erro nos tokens **REPITA** ou **ATE**. Mostrando ao usuário através de um _print_ no _console_.
+Assim como na regra, há um comentário definindo quando a excessão será executada, nesse caso é quando há erro antes ou depois do _token_ **VIRGULA**. Mostrando ao usuário através de um _print_ no terminal de comandos, dessa forma identifica a posição (pela função p_error) e a regra que foi quebrada.
 
 ---
 
