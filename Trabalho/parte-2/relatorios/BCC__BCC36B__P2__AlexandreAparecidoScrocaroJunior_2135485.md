@@ -261,6 +261,9 @@ Erros:
 
 ![Erro na regra lista_variaveis](https://user-images.githubusercontent.com/37521313/191353823-0674072a-965b-420b-a886-77c667038cba.png)
 
+![Erro de programa, tratado na funçaõ p_error](https://user-images.githubusercontent.com/37521313/191355337-5673abee-e43b-44b1-8383-19bc7e1aa569.png)
+
+
 As regras também terão excessões, definidas em funções com o mesmo nome da regra com a adição de "\_error" ao fim. \
 Assim como na regra, há um comentário definindo quando a excessão será executada, nesse caso é quando há erro antes ou depois do _token_ **VIRGULA**. Mostrando ao usuário através de um _print_ no terminal de comandos, dessa forma identifica a posição (pela função p_error) e a regra que foi quebrada.
 
