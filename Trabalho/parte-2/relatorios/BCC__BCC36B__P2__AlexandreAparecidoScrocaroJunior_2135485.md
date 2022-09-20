@@ -261,7 +261,8 @@ Erros:
 
 ![Erro na regra lista_variaveis](https://user-images.githubusercontent.com/37521313/191353823-0674072a-965b-420b-a886-77c667038cba.png)
 
-![Erro de programa, tratado na funçaõ p_error](https://user-images.githubusercontent.com/37521313/191355337-5673abee-e43b-44b1-8383-19bc7e1aa569.png)
+![Erro de programa, tratado na funçaõ p_error](https://user-images.githubusercontent.com/37521313/191355591-1f7335d8-a42b-465e-b77c-200602a14768.png)
+
 
 
 As regras também terão excessões, definidas em funções com o mesmo nome da regra com a adição de "\_error" ao fim. \
