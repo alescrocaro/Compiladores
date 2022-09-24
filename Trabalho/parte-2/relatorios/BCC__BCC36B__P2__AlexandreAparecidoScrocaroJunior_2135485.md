@@ -9,8 +9,7 @@
 ## Análise Sintática
 
 ### Resumo
-
-TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
+A segunda parte do trabalho consiste na implementação de um analisador sintático para a linguagem TPP. O analisador foi desenvolvido em python e cada função se refere a uma regra ou erro sintático, a biblioteca utilizada aqui também foi o PLY. Além de utilizar, como estrutura de dados, uma árvore desenvolvida e disponibilizada pelo professor utilizando a biblioteca _anytree_. Essa mesma biblioteca foi utilizada também para exportar as imagens das árvores geradas.
 
 ---
 
