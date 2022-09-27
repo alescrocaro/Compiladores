@@ -279,11 +279,76 @@ Abaixo está a implementação do nó da árvore utilizando o NodeMixin do _Anyt
 ---
 
 ### Exemplo de Entrada e Saída. Impressão da Árvore.
+#### Exemplo de entrada e saída com erro:
+Entrada (código erro-001, disponibilizado pelo professor):
 
-QUANDO DA ERRO, O CODIGO BUGA.
+```cpp
+inteiro: a
+inteiro: b
+inteiro: c[]
+flutuante: d[10][]
+flutuante: e[1024]
 
-fazer exemplo sem e com erro IMPLEMENTAR PRINT ERRO NAS FUNÇOES
-TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
+inteiro principal()
+    leia(a)
+    escreva(b)
+fim
+
+```
+
+print
+
+
+Entrada (código que verifica número primo, disponibilizado pelo professor):
+```cpp
+inteiro: vet[10]
+inteiro: tam
+
+tam := 10
+
+{ preenche o vetor no pior caso }
+preencheVetor()
+  inteiro: i
+  inteiro: j
+  i := 0
+  j := tam
+  repita
+    vet[i] = j
+    i := i + 1
+    j := j - 1
+  até i < tam
+fim
+
+{ implementação do bubble sort }
+bubble_sort()
+  inteiro: i
+  i := 0
+  repita
+    inteiro: j
+    j := 0
+    repita
+      se vet[i] > v[j] então
+        inteiro: temp
+        temp := vet[i]
+        vet[i] := vet[j]
+        vet[j] := temp
+      fim
+      j := j + 1
+    até j < i
+    i := i + 1
+  até i < tam
+fim
+
+{ programa principal }
+inteiro principal()
+  preencheVetor()
+  bubble_sort()
+  retorna(0)
+fim
+
+```
+
+
 
 ---
 
