@@ -280,7 +280,7 @@ Abaixo está a implementação do nó da árvore utilizando o NodeMixin do _Anyt
 
 ### Exemplo de Entrada e Saída. Impressão da Árvore.
 #### Exemplo de entrada e saída com erro:
-Entrada (código erro-001, disponibilizado pelo professor):
+**Entrada (código erro-001, disponibilizado pelo professor):**
 
 ```cpp
 inteiro: a
@@ -295,14 +295,14 @@ inteiro principal()
 fim
 
 ```
-Saída:
+**Saída:**
 
 ÁRVORE:
 
 ![Arvore erro 001](erro-001.tpp.unique.ast.png)
 
 
-Entrada (código que verifica número primo, disponibilizado pelo professor):
+**Entrada (código que verifica número primo, disponibilizado pelo professor):**
 ```cpp
 inteiro: vet[10]
 inteiro: tam
@@ -351,7 +351,7 @@ fim
 
 ```
 
-Saída:
+**Saída:**
 
 TERMINAL:
 
