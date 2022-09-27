@@ -295,6 +295,9 @@ inteiro principal()
 fim
 
 ```
+Saída:
+
+ÁRVORE:
 
 ![Arvore erro 001](erro-001.tpp.unique.ast.png)
 
@@ -347,6 +350,27 @@ inteiro principal()
 fim
 
 ```
+
+Saída:
+
+TERMINAL:
+
+Generating LALR tables
+WARNING: 53 shift/reduce conflicts
+WARNING: 41 reduce/reduce conflicts
+WARNING: reduce/reduce conflict in state 63 resolved using rule (atribuicao -> var ATRIBUICAO error)
+WARNING: rejected rule (expressao_logica -> error) in state 63
+WARNING: reduce/reduce conflict in state 189 resolved using rule (expressao_logica -> error)
+WARNING: rejected rule (vazio -> <empty>) in state 189
+Erro [3,3]: Erro próximo ao token ']'
+Erro na definicao do indice. Expressao ou indice.
+Erro [4,4]: Erro próximo ao token ']'
+Erro na definicao do indice. Expressao ou indice.
+Generating Syntax Tree Graph...
+programa
+...
+
+ÁRVORE:
 
 ![Arvore bubble sort](bubble_sort.tpp.unique.ast.png)
 
