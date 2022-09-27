@@ -520,7 +520,7 @@ def p_escreva(p):
     filho_sym4 = MyNode(name=')', type='SIMBOLO', parent=filho4)
     p[4] = filho4
 
-def p_escreva(p):
+def p_escreva_error(p):
     """escreva : ESCREVA ABRE_PARENTESE error FECHA_PARENTESE"""
 
     print('Erro na regra escreva')
@@ -545,7 +545,7 @@ def p_retorna(p):
     filho_sym4 = MyNode(name=')', type='SIMBOLO', parent=filho4)
     p[4] = filho4
 
-def p_retorna(p):
+def p_retorna_error(p):
     """retorna : RETORNA ABRE_PARENTESE error FECHA_PARENTESE"""
 
     print('Erro na regra retorna')
