@@ -280,7 +280,7 @@ Abaixo está a implementação do nó da árvore utilizando o NodeMixin do _Anyt
 
 ### Exemplo de Entrada e Saída. Impressão da Árvore.
 #### Exemplo de entrada e saída com erro:
-Entrada (código erro-001, disponibilizado pelo professor):
+**Entrada (código erro-001, disponibilizado pelo professor):**
 
 ```cpp
 inteiro: a
@@ -295,11 +295,14 @@ inteiro principal()
 fim
 
 ```
+**Saída:**
 
-print
+ÁRVORE:
+
+![Arvore erro 001](erro-001.tpp.unique.ast.png)
 
 
-Entrada (código que verifica número primo, disponibilizado pelo professor):
+**Entrada (código que verifica número primo, disponibilizado pelo professor):**
 ```cpp
 inteiro: vet[10]
 inteiro: tam
@@ -348,6 +351,28 @@ fim
 
 ```
 
+**Saída:**
+
+TERMINAL:
+
+Generating LALR tables
+WARNING: 53 shift/reduce conflicts
+WARNING: 41 reduce/reduce conflicts
+WARNING: reduce/reduce conflict in state 63 resolved using rule (atribuicao -> var ATRIBUICAO error)
+WARNING: rejected rule (expressao_logica -> error) in state 63
+WARNING: reduce/reduce conflict in state 189 resolved using rule (expressao_logica -> error)
+WARNING: rejected rule (vazio -> <empty>) in state 189
+Erro [3,3]: Erro próximo ao token ']'
+Erro na definicao do indice. Expressao ou indice.
+Erro [4,4]: Erro próximo ao token ']'
+Erro na definicao do indice. Expressao ou indice.
+Generating Syntax Tree Graph...
+programa
+...
+
+ÁRVORE:
+
+![Arvore bubble sort](bubble_sort.tpp.unique.ast.png)
 
 
 ---
@@ -355,4 +380,5 @@ fim
 ### Referências
 
 [Documentação do anytree](https://anytree.readthedocs.io/en/latest/)\
-[Documentação do PLY (e Yacc)](https://www.dabeaz.com/ply/ply.html)
+[Documentação do PLY (e Yacc)](https://www.dabeaz.com/ply/ply.html)\
+Slides do professor
