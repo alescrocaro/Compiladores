@@ -296,7 +296,7 @@ fim
 
 ```
 
-print
+![Arvore erro 001](erro-001.tpp.unique.ast.png)
 
 
 Entrada (código que verifica número primo, disponibilizado pelo professor):
@@ -348,6 +348,7 @@ fim
 
 ```
 
+![Arvore bubble sort](bubble_sort.tpp.unique.ast.png)
 
 
 ---
@@ -355,4 +356,5 @@ fim
 ### Referências
 
 [Documentação do anytree](https://anytree.readthedocs.io/en/latest/)\
-[Documentação do PLY (e Yacc)](https://www.dabeaz.com/ply/ply.html)
+[Documentação do PLY (e Yacc)](https://www.dabeaz.com/ply/ply.html)\
+Slides do professor
