@@ -6308,5 +6308,3 @@
    yacc.py:3469:rejected rule (expressao_logica -> error) in state 63
    yacc.py:3468:reduce/reduce conflict in state 189 resolved using rule (expressao_logica -> error)
    yacc.py:3469:rejected rule (vazio -> <empty>) in state 189
-tppparser.py: 197:Syntax error parsing index rule at line 3
-tppparser.py: 197:Syntax error parsing index rule at line 4
