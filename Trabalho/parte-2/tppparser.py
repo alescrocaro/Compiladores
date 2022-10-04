@@ -865,29 +865,33 @@ def main():
         raise IOError("Not a .tpp file!")
     data = open(argv[1])
 
-    source_file = data.read()
-    parser.parse(source_file)
+    try:
+        source_file = data.read()
+        parser.parse(source_file)
 
-    if root and root.children != ():
-        print("Generating Syntax Tree Graph...")
-        DotExporter(root).to_picture(argv[1] + ".ast.png")
-        UniqueDotExporter(root).to_picture(argv[1] + ".unique.ast.png")
-        DotExporter(root).to_dotfile(argv[1] + ".ast.dot")
-        UniqueDotExporter(root).to_dotfile(argv[1] + ".unique.ast.dot")
-        print(RenderTree(root, style=AsciiStyle()).by_attr())
-        print("Graph was generated.\nOutput file: " + argv[1] + ".ast.png")
+        if root and root.children != ():
+            print("Generating Syntax Tree Graph...")
+            DotExporter(root).to_picture(argv[1] + ".ast.png")
+            UniqueDotExporter(root).to_picture(argv[1] + ".unique.ast.png")
+            DotExporter(root).to_dotfile(argv[1] + ".ast.dot")
+            UniqueDotExporter(root).to_dotfile(argv[1] + ".unique.ast.dot")
+            print(RenderTree(root, style=AsciiStyle()).by_attr())
+            print("Graph was generated.\nOutput file: " + argv[1] + ".ast.png")
 
-        DotExporter(root, graph="graph",
-                    nodenamefunc=MyNode.nodenamefunc,
-                    nodeattrfunc=lambda node: 'label=%s' % (node.type),
-                    edgeattrfunc=MyNode.edgeattrfunc,
-                    edgetypefunc=MyNode.edgetypefunc).to_picture(argv[1] + ".ast2.png")
+            DotExporter(root, graph="graph",
+                        nodenamefunc=MyNode.nodenamefunc,
+                        nodeattrfunc=lambda node: 'label=%s' % (node.type),
+                        edgeattrfunc=MyNode.edgeattrfunc,
+                        edgetypefunc=MyNode.edgetypefunc).to_picture(argv[1] + ".ast2.png")
 
-        # DotExporter(root, nodenamefunc=lambda node: node.label).to_picture(argv[1] + ".ast3.png")
+            # DotExporter(root, nodenamefunc=lambda node: node.label).to_picture(argv[1] + ".ast3.png")
 
-    else:
-        print("Unable to generate Syntax Tree.")
-    print('\n\n')
+        else:
+            print("Unable to generate Syntax Tree.")
+        print('\n\n')
+    
+    except: 
+        print('Não foi possível realizar a análise sintática')
 
 
 # Build the parser.
