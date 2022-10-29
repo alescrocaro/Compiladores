@@ -8,10 +8,17 @@
 
 ## Análise Semântica
 
-### Resumo
+### Definição
+
+A análise semântica é um processo realizado por um compilador no qual o código-fonte é verificado quanto a erros semânticos e reunindo as informações necessárias para o próximo estágio de compilação, geração de código de objeto. A análise semântica processa a entrada sintática e a transforma em uma representação mais simples e mais adequada para geração de código. Essa camada do compilador também é responsável por analisar o uso de identificadores e vincular cada um deles à sua declaração. Nesse caso, é verificado se o programa respeita as regras de visibilidade e portabilidade dos identificadores. Além disso, também é esperado que, durante a compilação, cada expressão definida seja verificada quanto ao tipo apropriado de acordo com as regras da própria linguagem.
+
+---
+
+### Resumo do projeto
 
 A terceira parte do trabalho consiste na implementação de um analisador semântico para a linguagem de programação TPP. O analisador foi desenvolvido em Python e conta com cinco funções principais - para fazer verificações e criar uma tabela de símbolos, além de uma função auxiliar para determinar o escopo de uma variável, e outra para podar a árvore. Para criação da tabela de símbolos foi utilizado um vetor de objetos.
 Além de utilizar, a biblioteca Anytree para auxiliar ao percorrer a árvore sintática e para gerar a árvore abstrata.
+
 
 ---
 
