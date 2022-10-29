@@ -1,7 +1,5 @@
-inteiro: a
+inteiro: a, b, c
 
-inteiro principal()
-  a := 3.2
-
-  retorna(0)
+inteiro func(inteiro: d)
+  d := 3
 fim

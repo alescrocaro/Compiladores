@@ -80,7 +80,8 @@ def create_symbols_table(root):
 
 
         # DECLARACAO DE VARIAVEIS COM DUAS VARS #    
-        if node_name == 'declaracao_variaveis' and len(node_i.children[2].children) == 3:
+        # len(node_i.children[2].children) == 3 ----> noh lista_variaveis possui mais de 1 var
+        if node_name == 'declaracao_variaveis' and len(node_i.children[2].children) == 3: 
             # PRIMEIRA VAR
             if node_i.children[2].children[0].children[0].name == 'var':
 
@@ -168,6 +169,7 @@ def create_symbols_table(root):
 
 
         # DECLARACAO DE VARIAVEIS COM MAIS DE DUAS VARS # 
+        # len(node_i.children[2].children[0].children) == 3 ----> noh lista_variaveis possui um filho que tambem eh lista_variaveis
         if node_name == 'declaracao_variaveis' and len(node_i.children[2].children[0].children) == 3:
             # atualiza o noh para percorrer toda a declaracao
             current_node = node_i.children[2].children[0]
@@ -509,6 +511,7 @@ def check_main(symbols_table):
 ##################################################################################
 ##################################################################################
 def check_functions(root, symbols_table):
+    # VERIFICA O RETORNO DAS FUNCOES
     for symbol in symbols_table:
         # se funcao eh do tipo inteiro ou flutuante
         if symbol['token'] == 'func' and (symbol['tipo'] == 'inteiro' or symbol['tipo'] == 'flutuante'):
@@ -628,13 +631,6 @@ def check_functions(root, symbols_table):
 ##################################################################################
 ##################################################################################
 def check_vars(root, symbols_table):
-    # array com parametros da funcao
-    parameters = []
-    for node in LevelOrderIter(root):
-        if node.name == 'parametro':
-            name = node.children[2].children[0].name
-            parameters.append(name)
-
     # percorre toda a árvore e procura por variáveis que tiveram atribuições e muda seu estado
     for symbol in symbols_table:
         if(symbol['token'] == 'ID'):
@@ -657,10 +653,6 @@ def check_vars(root, symbols_table):
             for symbol in symbols_table:
                 # verifica se var declarada globalmente
                 if (symbol['token'] == 'ID') and (symbol['nome'] == node.children[0].children[0].children[0].name):
-                    declared = True
-
-                # verifica se var declarada localmente como param
-                if node.children[0].children[0].children[0].name in parameters:
                     declared = True
 
             if not declared:
@@ -703,17 +695,7 @@ def check_multi_dimensional_vars(root, symbols_table):
 ##################################################################################
 ##################################################################################
 def check_assignments(root, symbols_table):
-    parameters = []
-    # array com parametros da funcao
-    for node in LevelOrderIter(root):
-        if node.name == 'parametro':
-            name = node.children[2].name
-            type = node.children[0].children[0].name
-            parameter = {}
-            parameter['nome'] = name
-            parameter['tipo'] = type
-            parameters.append(parameter)
-    
+    # VERIFICA OS TIPOS DAS VARIAVEIS UTILIZADAS EM ATRIBUICOES    
     for node in LevelOrderIter(root):
         if node.name == 'atribuicao':
             var_name = node.children[0].children[0].children[0].name
@@ -827,6 +809,7 @@ def main():
 
     if root and root.children != ():
         try:
+            print()
             print("Realizando analise semantica...")
             print()
             
@@ -837,12 +820,14 @@ def main():
             check_multi_dimensional_vars(root, symbols_table)
             check_assignments(root, symbols_table) 
             cut_tree(root)
+            print()
 
             # for symbol in symbols_table:
             #     print('symbol: ', symbol)
 
             print('Tabela de simbolos: ')
             print(symbols_table)
+            print()
 
             print("Gerando arvore sintatica reduzida...")
             UniqueDotExporter(root).to_picture(argv[1] + ".cuttedTree.png")
