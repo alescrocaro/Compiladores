@@ -185,7 +185,7 @@ fim
 **Saída:**
 
 TERMINAL:
-![image](https://user-images.githubusercontent.com/37521313/198850127-c4cb4b7a-8c2a-4703-b4d8-326d61f5c579.png)
+![image](https://user-images.githubusercontent.com/37521313/198850740-f5cf9823-cac6-4ac2-83ac-2d7fc04cb272.png)
 
 
 ÁRVORE REDUZIDA:
@@ -217,7 +217,7 @@ fim
 **Saída:**
 
 TERMINAL:
-![image](https://user-images.githubusercontent.com/37521313/198850183-91566dd3-134c-4591-81d2-71e7d2145951.png)
+![image](https://user-images.githubusercontent.com/37521313/198850752-db98e943-35fc-41b5-a253-f0c1b8fbf2aa.png)
 
 
 ÁRVORE REDUZIDA:
