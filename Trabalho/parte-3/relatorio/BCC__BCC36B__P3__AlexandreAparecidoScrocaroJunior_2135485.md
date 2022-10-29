@@ -158,6 +158,11 @@ Após a análise semântica, é gerada uma árvore abstrata por meio da função
 &nbsp;&nbsp;Percorre toda a árvore e verifica todos os nós que possuem apenas um filho e esse filho também possui filhos (assim é possível remover um nó) e então atualiza os filhos do nó.
 
 #### Exemplo de poda da árvore
+##### Entrada
+![image](https://user-images.githubusercontent.com/37521313/198850061-9b6fe767-ce6c-46bb-b640-dcf426f498e9.png)
+##### Saída
+![image](https://user-images.githubusercontent.com/37521313/198850070-68614a61-61aa-4132-ba6a-c2441212f161.png)
+
 
 ---
 
