@@ -54,28 +54,28 @@ def create_symbols_table(root):
             nameSingleVar =  node_i.children[2].children[0].children[0].children[0].name
             variable = {}
             counter += 1
-            variable['numero'] = counter
-            variable['tipo'] = typeSingleVar
-            variable['nome'] = nameSingleVar
-            variable['dimensao'] = dimensionSingleVar
-            variable['indice'] = indexSingleVar
+            variable['reference'] = counter
+            variable['type'] = typeSingleVar
+            variable['name'] = nameSingleVar
+            variable['dimension'] = dimensionSingleVar
+            variable['index'] = indexSingleVar
             variable['token'] = tokenSingleVar
-            variable['estado'] = 'declarada'
+            variable['state'] = 'declarada'
 
-            variable['escopo'] = find_scope(node_i)
+            variable['scope'] = find_scope(node_i)
 
 
             # procura pela variavel na tabela de vars, se nao existir, adiciona; senao devolve erro
             exists = 0
             for var in vars:
-                if var['nome'] == variable['nome'] and var['escopo'] == variable['escopo']:
+                if var['name'] == variable['name'] and var['scope'] == variable['scope']:
                     exists = 1
 
             if exists == 0:
                 vars.append(variable)
 
             else:
-                print("Aviso: Variavel '{}' ja declarada anteriormente".format(variable['nome']))
+                print("Aviso: Variavel '{}' ja declarada anteriormente".format(variable['name']))
 
 
 
@@ -118,20 +118,20 @@ def create_symbols_table(root):
 
                 counter += 1
                 variable = {}
-                variable['numero'] = counter
-                variable['tipo'] = type
-                variable['nome'] = name
-                variable['dimensao'] = dimensionFirstVar
-                variable['indice'] = indexFirstVar
+                variable['reference'] = counter
+                variable['type'] = type
+                variable['name'] = name
+                variable['dimension'] = dimensionFirstVar
+                variable['index'] = indexFirstVar
                 variable['token'] = token
-                variable['estado'] = state
+                variable['state'] = state
 
-                variable['escopo'] = find_scope(node_i)
+                variable['scope'] = find_scope(node_i)
 
 
                 exists = 0
                 for var in vars:
-                    if var['nome'] == name:
+                    if var['name'] == name:
                         exists = 1
 
                 if exists == 0:
@@ -148,20 +148,20 @@ def create_symbols_table(root):
                 index = 0
                 counter += 1
                 variable = {}
-                variable['numero'] = counter
-                variable['tipo'] = type
-                variable['nome'] = name
-                variable['dimensao'] = dimension
-                variable['indice'] = index
+                variable['reference'] = counter
+                variable['type'] = type
+                variable['name'] = name
+                variable['dimension'] = dimension
+                variable['index'] = index
                 variable['token'] = token
-                variable['estado'] = state
+                variable['state'] = state
 
-                variable['escopo'] = find_scope(node_i)
+                variable['scope'] = find_scope(node_i)
 
 
                 exists = 0
                 for var in vars:
-                    if var['nome'] == name:
+                    if var['name'] == name:
                         exists = 1
 
                 if exists == 0:
@@ -185,20 +185,20 @@ def create_symbols_table(root):
                 index1 = 0
                 counter += 1
                 variable = {}
-                variable['numero'] = counter
-                variable['tipo'] = type
-                variable['nome'] = name
-                variable['dimensao'] = dimension
-                variable['indice'] = index1
+                variable['reference'] = counter
+                variable['type'] = type
+                variable['name'] = name
+                variable['dimension'] = dimension
+                variable['index'] = index1
                 variable['token'] = token
-                variable['estado'] = state
+                variable['state'] = state
 
-                variable['escopo'] = find_scope(node_i) 
+                variable['scope'] = find_scope(node_i) 
 
 
                 exists = 0
                 for var in vars:
-                    if var['nome'] == variable['nome']:
+                    if var['name'] == variable['name']:
                         exists = 1
 
                 if exists == 0:
@@ -217,20 +217,20 @@ def create_symbols_table(root):
             index_n = 0
             counter += 1
             variable = {}
-            variable['numero'] = counter
-            variable['tipo'] = type_n
-            variable['nome'] = name_n
-            variable['dimensao'] = dimension_n
-            variable['indice'] = index_n
+            variable['reference'] = counter
+            variable['type'] = type_n
+            variable['name'] = name_n
+            variable['dimension'] = dimension_n
+            variable['index'] = index_n
             variable['token'] = token_n
-            variable['estado'] = state_n
+            variable['state'] = state_n
 
-            variable['escopo'] = find_scope(node_i)
+            variable['scope'] = find_scope(node_i)
 
 
             exists = 0
             for var in vars:
-                if var['nome'] == name_n:
+                if var['name'] == name_n:
                     exists = 1
 
             if exists == 0:
@@ -247,20 +247,20 @@ def create_symbols_table(root):
             index = 0
             counter += 1
             variable = {}
-            variable['numero'] = counter
-            variable['tipo'] = type
-            variable['nome'] = name
-            variable['dimensao'] = dimension
-            variable['indice'] = index
+            variable['reference'] = counter
+            variable['type'] = type
+            variable['name'] = name
+            variable['dimension'] = dimension
+            variable['index'] = index
             variable['token'] = token
-            variable['estado'] = state
+            variable['state'] = state
 
-            variable['escopo'] = find_scope(node_i)
+            variable['scope'] = find_scope(node_i)
 
 
             exists = 0
             for var in vars:
-                if var['nome'] == variable['nome']:
+                if var['name'] == variable['name']:
                     exists = 1
 
             if exists == 0:
@@ -272,15 +272,15 @@ def create_symbols_table(root):
         if node_name == 'declaracao_funcao':
             counter += 1
             func = {}
-            func['numero'] = counter
+            func['reference'] = counter
             func['token'] = 'func'
-            func['estado'] = 'declarada'
+            func['state'] = 'declarada'
 
             # se funcao tem tipo: diferente de vazio
             if len(node_i.children) == 2:
-                func['tipo'] = node_i.children[0].children[0].children[0].name
-                func['nome'] = node_i.children[1].children[0].children[0].name
-                func['estado'] = 'declarada'
+                func['type'] = node_i.children[0].children[0].children[0].name
+                func['name'] = node_i.children[1].children[0].children[0].name
+                func['state'] = 'declarada'
 
                 # define o retorno da funcao
                 for node2 in PreOrderIter(node_i):
@@ -300,23 +300,23 @@ def create_symbols_table(root):
 
                 # nao tem parametros
                 if node_i.children[1].children[2].children[0].name == 'vazio':
-                    func['parametros-formais'] = 0
+                    func['formal-params'] = 0
 
                 # tem 1 parametro
                 elif node_i.children[1].children[2].children[0].name == 'parametro':
                     func['lista-parametros'] =  node_i.children[1].children[2].children[0].children[2].children[0].name
-                    func['parametros-formais'] = 1
+                    func['formal-params'] = 1
                     # add param a lista de vars
                     param = {}
                     counter += 1
-                    param['numero'] = counter
-                    param['tipo'] = node_i.children[1].children[2].children[0].children[0].children[0].children[0].name
-                    param['nome'] = node_i.children[1].children[2].children[0].children[2].children[0].name
-                    param['dimensao'] = 0
-                    param['indice'] = 0
+                    param['reference'] = counter
+                    param['type'] = node_i.children[1].children[2].children[0].children[0].children[0].children[0].name
+                    param['name'] = node_i.children[1].children[2].children[0].children[2].children[0].name
+                    param['dimension'] = 0
+                    param['index'] = 0
                     param['token'] = 'ID'
-                    param['estado'] = 'utilizada'
-                    param['escopo'] = node_i.children[1].children[0].children[0].name
+                    param['state'] = 'utilizada'
+                    param['scope'] = node_i.children[1].children[0].children[0].name
                     vars.append(param)
 
                 # tem mais de 1 parametro
@@ -329,14 +329,14 @@ def create_symbols_table(root):
                     # add primeiro param a lista de vars
                     param = {}
                     counter += 1
-                    param['numero'] = counter
-                    param['tipo'] = aux.children[2].children[0].children[0].children[0].name
-                    param['nome'] = aux.children[2].children[2].children[0].name
-                    param['dimensao'] = 0
-                    param['indice'] = 0
+                    param['reference'] = counter
+                    param['type'] = aux.children[2].children[0].children[0].children[0].name
+                    param['name'] = aux.children[2].children[2].children[0].name
+                    param['dimension'] = 0
+                    param['index'] = 0
                     param['token'] = 'ID'
-                    param['estado'] = 'utilizada'
-                    param['escopo'] = node_i.children[1].children[0].children[0].name
+                    param['state'] = 'utilizada'
+                    param['scope'] = node_i.children[1].children[0].children[0].name
                     vars.append(param)
                     
                     # lida com o resto dos parametros
@@ -350,14 +350,14 @@ def create_symbols_table(root):
                             # add param a lista de vars
                             param = {}
                             counter += 1
-                            param['numero'] = counter
-                            param['tipo'] = aux.children[0].children[0].children[0].children[0].name
-                            param['nome'] = aux.children[0].children[2].children[0].name
-                            param['dimensao'] = 0
-                            param['indice'] = 0
+                            param['reference'] = counter
+                            param['type'] = aux.children[0].children[0].children[0].children[0].name
+                            param['name'] = aux.children[0].children[2].children[0].name
+                            param['dimension'] = 0
+                            param['index'] = 0
                             param['token'] = 'ID'
-                            param['estado'] = 'utilizada'
-                            param['escopo'] = node_i.children[1].children[0].children[0].name
+                            param['state'] = 'utilizada'
+                            param['scope'] = node_i.children[1].children[0].children[0].name
                             vars.append(param)
 
                         # acessado sempre q n for o ultimo nem o primeiro parametro
@@ -366,45 +366,45 @@ def create_symbols_table(root):
                             # add param a lista de vars
                             param = {}
                             counter += 1
-                            param['numero'] = counter
-                            param['tipo'] = aux.children[2].children[0].children[0].children[0].name
-                            param['nome'] = aux.children[2].children[2].children[0].name
-                            param['dimensao'] = 0
-                            param['indice'] = 0
+                            param['reference'] = counter
+                            param['type'] = aux.children[2].children[0].children[0].children[0].name
+                            param['name'] = aux.children[2].children[2].children[0].name
+                            param['dimension'] = 0
+                            param['index'] = 0
                             param['token'] = 'ID'
-                            param['estado'] = 'utilizada'
-                            param['escopo'] = node_i.children[1].children[0].children[0].name
+                            param['state'] = 'utilizada'
+                            param['scope'] = node_i.children[1].children[0].children[0].name
                             vars.append(param)
 
                         cont += 1
                     
-                    func['parametros-formais'] = cont
+                    func['formal-params'] = cont
 
             # se funcao eh tipo vazio
             else:
-                func['tipo'] = 'vazio'
-                func['nome'] = node_i.children[0].children[0].children[0].name
+                func['type'] = 'vazio'
+                func['name'] = node_i.children[0].children[0].children[0].name
                 
                 # n tem parametros
                 if node_i.children[0].children[2].children[0].name == 'vazio':
-                    func['parametros-formais'] = 0
+                    func['formal-params'] = 0
 
                 # tem 1 parametro
                 elif node_i.children[0].children[2].children[0].name == 'parametro':
                     aux = node_i.children[0].children[2].children[0]
                     func['lista-parametros'] =  aux.children[2].children[0].name
-                    func['parametros-formais'] = 1
+                    func['formal-params'] = 1
                     # add param a lista de vars
                     param = {}
                     counter += 1
-                    param['numero'] = counter
-                    param['tipo'] = aux.children[0].children[0].children[0].name
-                    param['nome'] = aux.children[2].children[0].name
-                    param['dimensao'] = 0
-                    param['indice'] = 0
+                    param['reference'] = counter
+                    param['type'] = aux.children[0].children[0].children[0].name
+                    param['name'] = aux.children[2].children[0].name
+                    param['dimension'] = 0
+                    param['index'] = 0
                     param['token'] = 'ID'
-                    param['estado'] = 'utilizada'
-                    param['escopo'] = node_i.children[0].children[0].children[0].name
+                    param['state'] = 'utilizada'
+                    param['scope'] = node_i.children[0].children[0].children[0].name
                     vars.append(param)
 
                 # tem mais de 1 parametro
@@ -417,14 +417,14 @@ def create_symbols_table(root):
                     # add primeiro param a lista de vars
                     param = {}
                     counter += 1
-                    param['numero'] = counter
-                    param['tipo'] = aux.children[2].children[0].children[0].children[0].name
-                    param['nome'] = aux.children[2].children[2].children[0].name
-                    param['dimensao'] = 0
-                    param['indice'] = 0
+                    param['reference'] = counter
+                    param['type'] = aux.children[2].children[0].children[0].children[0].name
+                    param['name'] = aux.children[2].children[2].children[0].name
+                    param['dimension'] = 0
+                    param['index'] = 0
                     param['token'] = 'ID'
-                    param['estado'] = 'utilizada'
-                    param['escopo'] = node_i.children[0].children[0].children[0].name
+                    param['state'] = 'utilizada'
+                    param['scope'] = node_i.children[0].children[0].children[0].name
                     vars.append(param)
                     
                     # lida com o resto dos parametros
@@ -438,14 +438,14 @@ def create_symbols_table(root):
                             # add param a lista de vars
                             param = {}
                             counter += 1
-                            param['numero'] = counter
-                            param['tipo'] = aux.children[0].children[0].children[0].children[0].name
-                            param['nome'] = aux.children[0].children[2].children[0].name
-                            param['dimensao'] = 0
-                            param['indice'] = 0
+                            param['reference'] = counter
+                            param['type'] = aux.children[0].children[0].children[0].children[0].name
+                            param['name'] = aux.children[0].children[2].children[0].name
+                            param['dimension'] = 0
+                            param['index'] = 0
                             param['token'] = 'ID'
-                            param['estado'] = 'utilizada'
-                            param['escopo'] = node_i.children[0].children[0].children[0].name
+                            param['state'] = 'utilizada'
+                            param['scope'] = node_i.children[0].children[0].children[0].name
                             vars.append(param)
 
                         # acessado sempre q n for o ultimo nem o primeiro parametro
@@ -454,29 +454,29 @@ def create_symbols_table(root):
                             # add param a lista de vars
                             param = {}
                             counter += 1
-                            param['numero'] = counter
-                            param['tipo'] = aux.children[2].children[0].children[0].children[0].name
-                            param['nome'] = aux.children[2].children[2].children[0].name
-                            param['dimensao'] = 0
-                            param['indice'] = 0
+                            param['reference'] = counter
+                            param['type'] = aux.children[2].children[0].children[0].children[0].name
+                            param['name'] = aux.children[2].children[2].children[0].name
+                            param['dimension'] = 0
+                            param['index'] = 0
                             param['token'] = 'ID'
-                            param['estado'] = 'utilizada'
-                            param['escopo'] = node_i.children[0].children[0].children[0].name
+                            param['state'] = 'utilizada'
+                            param['scope'] = node_i.children[0].children[0].children[0].name
                             vars.append(param)
 
                         cont += 1
                     
-                    func['parametros-formais'] = cont
+                    func['formal-params'] = cont
 
                 # verifica se funcao vazia tem retorno
                 for node2 in PreOrderIter(node_i):
                     if node2.name == 'retorna':
                         for node3 in PreOrderIter(node2):
                             if node3.name == 'var':
-                                print("Erro: Funcao '{}' do tipo vazio retornando '{}'".format(func['nome'], node3.children[0].children[0].name))
+                                print("Erro: Funcao '{}' do tipo vazio retornando '{}'".format(func['name'], node3.children[0].children[0].name))
                                 
                             elif node3.name == 'numero':
-                                print("Erro: Funcao '{}' do tipo vazio retornando '{}'".format(func['nome'], node3.children[0].children[0].name))
+                                print("Erro: Funcao '{}' do tipo vazio retornando '{}'".format(func['name'], node3.children[0].children[0].name))
 
 
             vars.append(func)
@@ -495,7 +495,7 @@ def create_symbols_table(root):
 def check_main(symbols_table): 
     flag = 0
     for symbol in symbols_table:
-        if symbol['nome'] == 'principal':
+        if symbol['name'] == 'principal':
             flag = 1
 
     if flag == 0:
@@ -514,19 +514,19 @@ def check_functions(root, symbols_table):
     # VERIFICA O RETORNO DAS FUNCOES
     for symbol in symbols_table:
         # se funcao eh do tipo inteiro ou flutuante
-        if symbol['token'] == 'func' and (symbol['tipo'] == 'inteiro' or symbol['tipo'] == 'flutuante'):
+        if symbol['token'] == 'func' and (symbol['type'] == 'inteiro' or symbol['type'] == 'flutuante'):
             for symbol2 in symbols_table:
                 # se funcao tiver retorno, atribui tipo da variavel ao retorno da funcao
                 if 'retorno' in symbol:
-                    if symbol2['nome'] == symbol['retorno']:
-                        symbol['retorno'] = symbol2['tipo']
+                    if symbol2['name'] == symbol['retorno']:
+                        symbol['retorno'] = symbol2['type']
 
                 # senao, devolve erro
                 else:
-                    if symbol['nome'] == 'principal':
+                    if symbol['name'] == 'principal':
                         print('Erro: Funcao principal deveria retornar inteiro, mas retorna vazio')
                     else:
-                        print("Aviso: Funcao '{}' sem retorno".format(symbol['nome']))
+                        print("Aviso: Funcao '{}' sem retorno".format(symbol['name']))
                     break
 
         if symbol['token'] == 'func':
@@ -536,8 +536,8 @@ def check_functions(root, symbols_table):
                 if symbol['retorno'] != 'inteiro' and symbol['retorno'] != 'flutuante' and symbol['retorno'] != 'NUM_INTEIRO' and symbol['retorno'] != 'NUM_PONTO_FLUTUANTE': 
                     existsVar = False 
                     for s in symbols_table:
-                        if s['nome'] == symbol['retorno']:
-                            print(s['nome'])
+                        if s['name'] == symbol['retorno']:
+                            print(s['name'])
                             existsVar = True
 
                     if not existsVar:
@@ -545,15 +545,15 @@ def check_functions(root, symbols_table):
 
                 # retorno nao eh var:
                 # funcao eh inteiro
-                elif symbol['tipo'] == 'inteiro':
+                elif symbol['type'] == 'inteiro':
                     if 'retorno' in symbol:
                         if symbol['retorno'] != 'inteiro' and symbol['retorno'] != 'NUM_INTEIRO':
-                            print("Erro: Funcao '{}' eh do tipo {}, mas retorna um {}".format(symbol['nome'], symbol['tipo'], symbol['retorno']))
+                            print("Erro: Funcao '{}' eh do tipo {}, mas retorna um {}".format(symbol['name'], symbol['type'], symbol['retorno']))
                 
                 # funcao eh flutuante
-                elif symbol['tipo'] == 'flutuante':
+                elif symbol['type'] == 'flutuante':
                     if symbol['retorno'] != 'flutuante' and symbol['retorno'] != 'NUM_PONTO_FLUTUANTE':
-                        print("Erro: Funcao '{}' eh do tipo {}, mas retorna um {}".format(symbol['nome'], symbol['tipo'], symbol['retorno']))
+                        print("Erro: Funcao '{}' eh do tipo {}, mas retorna um {}".format(symbol['name'], symbol['type'], symbol['retorno']))
     
     # VERIFICA CHAMADAS DE FUNCAO
     for node in LevelOrderIter(root):
@@ -561,7 +561,7 @@ def check_functions(root, symbols_table):
             functionCalled = node.children[0].children[0].name
             funcExists = False
             for symbol in symbols_table:
-                if functionCalled == 'principal' and symbol['nome'] == 'principal':
+                if functionCalled == 'principal' and symbol['name'] == 'principal':
                     aux = node
                     # verifica em qual funcao esta a chamada para a principal
                     while aux.name != 'cabecalho':
@@ -573,8 +573,8 @@ def check_functions(root, symbols_table):
                         print("Aviso: Chamada recursiva para a funcao principal")
                 
                 # verifica se funcao chamada existe e ja muda seu estado
-                if symbol['nome'] == functionCalled:
-                    symbol['estado'] = 'utilizada'
+                if symbol['name'] == functionCalled:
+                    symbol['state'] = 'utilizada'
                     funcExists = True
 
             if not funcExists:
@@ -601,25 +601,25 @@ def check_functions(root, symbols_table):
             # atribui o numero de parametro a funcao
             for symbol in symbols_table: 
                 func_name = node.children[0].children[0].name
-                if symbol['nome'] == func_name and symbol['token'] == 'func':
-                    symbol['parametros-reais'] = n_params
+                if symbol['name'] == func_name and symbol['token'] == 'func':
+                    symbol['real-params'] = n_params
 
             # verifica quantidade de parametros na funcao
             for symbol in symbols_table:
-                if(symbol['token'] == 'func'):
-                    if ('parametros-reais' in symbol):
-                        if (symbol['parametros-formais'] != 0) and (symbol['parametros-formais'] != symbol['parametros-reais']):
-                            print("Erro: Chamada a funcao '{}' com {} parametro(s), mas foram declarado(s) {}".format(symbol['nome'], symbol['parametros-reais'], symbol['parametros-formais']))
+                if symbol['token'] == 'func':
+                    if ('real-params' in symbol):
+                        if (symbol['formal-params'] != 0) and (symbol['formal-params'] != symbol['real-params']):
+                            print("Erro: Chamada a funcao '{}' com {} parametro(s), mas foram declarado(s) {}".format(symbol['name'], symbol['real-params'], symbol['formal-params']))
 
-                        if (symbol['parametros-formais'] == 0) and (symbol['parametros-reais'] > 0):
-                            print("Erro: Chamada a funcao '{}' com {} parametro(s), mas foram declarado(s) {}".format(symbol['nome'], symbol['parametros-reais'], symbol['parametros-formais']))
+                        if (symbol['formal-params'] == 0) and (symbol['real-params'] > 0):
+                            print("Erro: Chamada a funcao '{}' com {} parametro(s), mas foram declarado(s) {}".format(symbol['name'], symbol['real-params'], symbol['formal-params']))
 
                         break
 
     # verifica se funcao eh utilizada
     for symbol in symbols_table:
-        if (symbol['token'] == 'func') and (symbol['nome'] != 'principal') and (symbol['estado'] != 'utilizada'):
-            print("Aviso: Funcao '{}' declarada, mas nao utilizada".format(symbol['nome']))
+        if (symbol['token'] == 'func') and (symbol['name'] != 'principal') and (symbol['state'] != 'utilizada'):
+            print("Aviso: Funcao '{}' declarada, mas nao utilizada".format(symbol['name']))
 
 
 
@@ -633,26 +633,26 @@ def check_functions(root, symbols_table):
 def check_vars(root, symbols_table):
     # percorre toda a árvore e procura por variáveis que tiveram atribuições e muda seu estado
     for symbol in symbols_table:
-        if(symbol['token'] == 'ID'):
+        if symbol['token'] == 'ID':
             for node in LevelOrderIter(root):
-                if(node.name == 'atribuicao'):
+                if node.name == 'atribuicao':
                     for node2 in LevelOrderIter(node):
-                        if(node2.name == 'var'):
+                        if node2.name == 'var':
                             # if not node2.children[0]:
-                            if symbol['nome'] == node2.children[0].children[0].name:
-                                symbol['estado'] = 'utilizada'
+                            if symbol['name'] == node2.children[0].children[0].name:
+                                symbol['state'] = 'utilizada'
             
             # se estado da var nao eh 'utilizada' (nao tem atribuicao), devolve aviso
-            if(symbol['estado'] == 'declarada'):
-                print("Aviso: Variavel '{}' declarada e nao inicializada".format(symbol['nome']))
+            if symbol['state'] == 'declarada':
+                print("Aviso: Variavel '{}' declarada e nao inicializada".format(symbol['name']))
 
     # verifica se variavel foi usada sem ser declarada
     for node in LevelOrderIter(root):
-        if(node.name == 'atribuicao'):
+        if node.name == 'atribuicao':
             declared = False
             for symbol in symbols_table:
                 # verifica se var declarada globalmente
-                if (symbol['token'] == 'ID') and (symbol['nome'] == node.children[0].children[0].children[0].name):
+                if (symbol['token'] == 'ID') and (symbol['name'] == node.children[0].children[0].children[0].name):
                     declared = True
 
             if not declared:
@@ -669,20 +669,20 @@ def check_vars(root, symbols_table):
 ##################################################################################
 def check_multi_dimensional_vars(root, symbols_table):
     for node_i in LevelOrderIter(root):
-        if(node_i.name == 'atribuicao'):
+        if node_i.name == 'atribuicao':
             # verifica se tem indice (tem mais de uma dimensao)
-            if(len(node_i.children[0].children) == 2):
+            if len(node_i.children[0].children) == 2:
                 varName = node_i.children[0].children[0].children[0].name
-                if(node_i.children[0].children[1].name == 'indice'):
+                if node_i.children[0].children[1].name == 'indice':
                     # percorre toda a subarvore indice
                     for node_j in LevelOrderIter(node_i.children[0].children[1]):
-                        if(node_j.name == 'numero'):
+                        if node_j.name == 'numero':
                             indexNumber = node_j.children[0].children[0].name
-                            if(node_j.children[0].name == 'NUM_PONTO_FLUTUANTE'):
+                            if node_j.children[0].name == 'NUM_PONTO_FLUTUANTE':
                                 print("Erro: índice de array '{}' nao inteiro".format(varName))
                             else:
                                 for symbol in symbols_table:
-                                    if (symbol['nome'] == varName) and (indexNumber > symbol['indice'] or indexNumber < 0):
+                                    if (symbol['name'] == varName) and (indexNumber > symbol['index'] or indexNumber < 0):
                                         print("Erro: índice de array '{}' fora do intervalo".format(varName))
                                 
 
@@ -705,34 +705,34 @@ def check_assignments(root, symbols_table):
 
             # define o tipo da variavel
             for symbol in symbols_table:
-                if symbol['nome'] == var_name:
-                    typeAssigned = symbol['tipo']
+                if symbol['name'] == var_name:
+                    typeAssigned = symbol['type']
 
 
             for node2 in LevelOrderIter(node.children[2]):
                 # se ocorre atribuicao chamando funcao, seta o tipo usado igual o da funcao
-                if(node2.name == 'chamada_funcao'):
+                if node2.name == 'chamada_funcao':
                     functionName = node2.children[0].children[0].name
                     for s in symbols_table:
-                        if(s['nome'] == functionName):
-                            typeUsed = s['tipo']
+                        if s['name'] == functionName:
+                            typeUsed = s['type']
                             var_name2 = functionName
 
                 # se ocorre atribuicao passando numero diretamente, atribui o nome e o tipo usados
-                if(node2.name == 'numero'):
+                if node2.name == 'numero':
                     typeUsed = node2.children[0].name
                     var_name2 = node2.children[0].children[0].name
 
                 # se ocorre atribuicao passando uma variavel
-                if(node2.name == 'var'):
+                if node2.name == 'var':
                     varName = node2.children[0].children[0].name
                     existsVar = False
                     # verifica se variavel existe
                     for symbol in symbols_table:
-                        if symbol['nome'] == varName:
+                        if symbol['name'] == varName:
                             existsVar = True
                             if symbol['token'] == 'ID':
-                                typeUsed = symbol['tipo']
+                                typeUsed = symbol['type']
                                 var_name2 = varName
                     
                     if not existsVar:
@@ -744,12 +744,12 @@ def check_assignments(root, symbols_table):
             if (typeUsed == 'NUM_INTEIRO'): typeUsed = 'inteiro'
             if (typeUsed == 'NUM_PONTO_FLUTUANTE'): typeUsed = 'flutuante'
 
-            if(typeUsed == 'inteiro'):
-                if(typeAssigned == 'flutuante'):
+            if typeUsed == 'inteiro':
+                if typeAssigned == 'flutuante':
                     print("Aviso: Atribuicao de tipos distintos, '{}' eh {} e recebe '{}' do tipo {}".format(var_name, typeAssigned, var_name2, typeUsed))
                 
-            if(typeUsed == 'flutuante'):
-                if(typeAssigned == 'inteiro'):
+            if typeUsed == 'flutuante':
+                if typeAssigned == 'inteiro':
                     print("Aviso: Atribuicao de tipos distintos, '{}' eh {} e recebe '{}' do tipo {}".format(var_name, typeAssigned, var_name2, typeUsed))
 
 
