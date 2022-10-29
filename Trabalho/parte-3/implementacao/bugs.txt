@@ -1,0 +1,6 @@
+2
+11?
+12 {Aviso: Coerção implícita do valor de 'b'}
+14 {Aviso: Chamada recursiva para principal} -> Erro: Chamada para a funcao principal nao permitida
+15 tipo da var deveria mudar ao receber numero?
+16 ???? {Aviso: Chamada recursiva para a função 'principal'}
