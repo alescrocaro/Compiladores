@@ -234,9 +234,9 @@ def generate_i_code(root, symbols_table, test_file):
 
 
                                                     # se funcao que esta sendo atribuida recebe lista de argumentos 
-                                                    if node_received_in_atrib.name == 'chamada_funcao' and node_received_in_atrib.children[2].name == 'lista_argumentos':
+                                                    if node_received_in_atrib.name == 'chamada_funcao':
                                                         # funcao recebe parametros normais (como vars)
-                                                        print('funcao => corpo => repita => atribuicao => chamada_funcao => lista_argumentos')
+                                                        print('funcao => corpo => repita => atribuicao => chamada_funcao')
 
                                                         node_chamada_funcao = node_atribuicao.children[2]
 
