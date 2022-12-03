@@ -233,7 +233,7 @@ def generate_i_code(root, symbols_table, test_file):
                                                                         builder.sub(part1_var_loaded, part2_number_loaded, name='decrement', flags=())
 
 
-                                                    # se funcao que esta sendo atribuida recebe lista de argumentos 
+                                                    # se var recebe uma func
                                                     if node_received_in_atrib.name == 'chamada_funcao':
                                                         # funcao recebe parametros normais (como vars)
                                                         print('funcao => corpo => repita => atribuicao => chamada_funcao')
