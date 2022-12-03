@@ -36,23 +36,20 @@ entry:
   store i32 0, i32* %"i"
   br label %"repeat_start"
 repeat_start:
-  %".4" = load i32, i32* %"i"
-  %"atrib_expression_result" = add i32 %".4", 1
-  store i32 %"atrib_expression_result", i32* %"i"
   %"1" = alloca i32
-  %".6" = load i32, i32* %"1"
-  %".7" = load i32, i32* %"i"
-  %"increment" = add i32 %".7", %".6"
-  %".8" = load i32, i32* %"i"
-  call void @"escrevaInteiro"(i32 %".8")
+  %".4" = load i32, i32* %"1"
+  %".5" = load i32, i32* %"i"
+  %"increment" = add i32 %".5", %".4"
+  %".6" = load i32, i32* %"i"
+  call void @"escrevaInteiro"(i32 %".6")
+  %".8" = call i32 @"leiaInteiro"()
+  store i32 %".8", i32* %"b.1"
   %".10" = call i32 @"leiaInteiro"()
-  store i32 %".10", i32* %"b.1"
+  store i32 %".10", i32* %"b"
   %".12" = call i32 @"leiaInteiro"()
-  store i32 %".12", i32* %"b"
+  store i32 %".12", i32* %"a.1"
   %".14" = call i32 @"leiaInteiro"()
-  store i32 %".14", i32* %"a.1"
-  %".16" = call i32 @"leiaInteiro"()
-  store i32 %".16", i32* %"a"
+  store i32 %".14", i32* %"a"
   %"b_cmp" = load i32, i32* %"i", align 4
   %"repeat_until_check" = icmp eq i32 %"b_cmp", 5
   br i1 %"repeat_until_check", label %"repeat_start", label %"repeat_end"

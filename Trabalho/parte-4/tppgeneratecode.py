@@ -181,72 +181,42 @@ def generate_i_code(root, symbols_table, test_file):
 
                                                 # atribuicao dentro do repita
                                                 if current_node.name == 'atribuicao':
-                                                    print('funcao => corpo => repita => atribuicao')
-
                                                     node_received_in_atrib = current_node.children[2]
-                                                    
-                                                    # var recebe uma soma/sub de variaveis
-                                                    if node_received_in_atrib.name == 'expressao_aditiva':
-                                                        print('funcao => corpo => repita => atribuicao => expressao aditiva')
-                                                        # parcela 1 da soma/sub eh variavel
-                                                        if node_received_in_atrib.children[0].name == 'ID':
-                                                            for var in symbols_table:
-                                                                if var['name'] == node_received_in_atrib.children[0].children[0].name:
-                                                                    var1_loaded = builder.load(var['code'])
+                                                                          
+                                                    # se var recebe uma soma que a 
+                                                    if node_received_in_atrib.name == 'expressao_aditiva' and node_received_in_atrib.children[2].name != 'ID':
 
-                                                        # parcela 1 da soma/sub eh numero
-                                                        elif node_received_in_atrib.children[0].name == 'NUM_INTEIRO' or node_received_in_atrib.children[0].name == 'NUM_FLUTUANTE':
-                                                            var1_loaded = ir.Constant(ir.IntType(32), node_received_in_atrib.children[0].children[0].name)
+                                                        # se var recebe uma soma que a primeira parcela eh ela mesma e que a segunda parcela eh um numero (DECREMENTO, como i--)
+                                                        if node_received_in_atrib.children[1].children[0].name == '+':
+                                                            if current_node.children[0].children[0].name == node_received_in_atrib.children[0].children[0].name:
+                                                                print('funcao => corpo => repita => atribuicao => incremento')
+                                                                
+                                                                for symbol in symbols_table: 
+                                                                    if symbol['name'] == current_node.children[0].children[0].name:
+                                                                        # numero da segunda parcela da soma
+                                                                        part2_number = node_received_in_atrib.children[2].children[0].name
+                                                                        part2_number_allocated = builder.alloca(ir.IntType(32), name=part2_number)
+                                                                        part2_number_loaded = builder.load(part2_number_allocated)
 
-                                                        # parcela 2 da soma/sub eh variavel
-                                                        if node_received_in_atrib.children[2].name == 'ID':
-                                                            for var in symbols_table:
-                                                                if var['name'] == node_received_in_atrib.children[2].children[0].name:
-                                                                    var2_loaded = builder.load(var['code'])
-
-                                                        # parcela 2 da soma/sub eh numero
-                                                        elif node_received_in_atrib.children[2].name == 'NUM_INTEIRO' or node_received_in_atrib.children[2].name == 'NUM_FLUTUANTE':
-                                                            var2_loaded = ir.Constant(ir.IntType(32), node_received_in_atrib.children[2].children[0].name)
-                     
-                                                        for symbol in symbols_table: 
-                                                            if symbol['name'] == current_node.children[0].children[0].name: 
-                                                                store = symbol['code'] 
-                                            
-                                                        result = builder.add(var1_loaded, var2_loaded, name='atrib_expression_result')
-                                                        builder.store(result, store)
-                                
-                                
-                                                    # se var recebe uma soma que a primeira parcela eh ela mesma e a segunda parcela eh um numero (INCREMENTO, como i++)
-                                                    if node_received_in_atrib.name == 'expressao_aditiva' and node_received_in_atrib.children[2].name != 'ID' and node_received_in_atrib.children[1].children[0].name == '+':
-                                                        if current_node.children[0].children[0].name == node_received_in_atrib.children[0].children[0].name:
-                                                            print('funcao => corpo => repita => atribuicao => incremento')
-                                                            
-                                                            for symbol in symbols_table: 
-                                                                if symbol['name'] == current_node.children[0].children[0].name:
-                                                                    # numero da segunda parcela da soma
-                                                                    part2_number = node_received_in_atrib.children[2].children[0].name
-                                                                    part2_number_allocated = builder.alloca(ir.IntType(32), name=part2_number)
-                                                                    part2_number_loaded = builder.load(part2_number_allocated)
-
-                                                                    part1_var_loaded = builder.load(symbol['code'])
-                                                                    builder.add(part1_var_loaded, part2_number_loaded, name='increment')
-                                                                    builder.call(print_integer, [builder.load(symbol['code'])])  
+                                                                        part1_var_loaded = builder.load(symbol['code'])
+                                                                        builder.add(part1_var_loaded, part2_number_loaded, name='increment')
+                                                                        builder.call(print_integer, [builder.load(symbol['code'])])  
 
 
-                                                    # se var recebe uma subtracao que a primeira parcela eh ela mesma e que a segunda parcela eh um numero (DECREMENTO, como i--)
-                                                    if node_received_in_atrib.name == 'expressao_aditiva' and node_received_in_atrib.children[2].name != 'ID' and node_received_in_atrib.children[1].children[0].name == '-':
-                                                        if current_node.children[0].children[0].name == node_received_in_atrib.children[0].children[0].name:
-                                                            print('funcao => corpo => repita => atribuicao => decremento')
+                                                        # se var recebe uma subtracao que a primeira parcela eh ela mesma e que a segunda parcela eh um numero (DECREMENTO, como i--)
+                                                        if node_received_in_atrib.children[1].children[0].name == '-':
+                                                            if current_node.children[0].children[0].name == node_received_in_atrib.children[0].children[0].name:
+                                                                print('funcao => corpo => repita => atribuicao => decremento')
 
-                                                            for symbol in symbols_table:
-                                                                if symbol['name'] == current_node.children[0].children[0].name:
-                                                                    # numero da segunda parcela da subtracao
-                                                                    part2_number = node_received_in_atrib.children[2].children[0].name
-                                                                    part2_number_allocated = builder.alloca(ir.IntType(32), name=part2_number)
-                                                                    part2_number_loaded = builder.load(part2_number_allocated)
+                                                                for symbol in symbols_table:
+                                                                    if symbol['name'] == current_node.children[0].children[0].name:
+                                                                        # numero da segunda parcela da subtracao
+                                                                        part2_number = node_received_in_atrib.children[2].children[0].name
+                                                                        part2_number_allocated = builder.alloca(ir.IntType(32), name=part2_number)
+                                                                        part2_number_loaded = builder.load(part2_number_allocated)
 
-                                                                    part1_var_loaded = builder.load(symbol['code'])
-                                                                    builder.sub(part1_var_loaded, part2_number_loaded, name='decrement', flags=())
+                                                                        part1_var_loaded = builder.load(symbol['code'])
+                                                                        builder.sub(part1_var_loaded, part2_number_loaded, name='decrement', flags=())
 
 
                                                     # se funcao que esta sendo atribuida recebe lista de argumentos 
@@ -333,61 +303,98 @@ def generate_i_code(root, symbols_table, test_file):
                                                         builder.call(print_float, args=[builder.load(var['code'])])
 
 
-                                        ##############################################################
-                                        # se corpo atual eh atribuicao que nao recebe funcao                                       
-                                        ##############################################################
-                                        if function_body.children[1].name == 'atribuicao' and function_body.children[1].children[2].name != 'chamada_funcao':
-                                            node_atribuicao = function_body.children[1]
+                                        ###############################
+                                        # se corpo atual eh atribuicao                                       
+                                        ###############################
+                                        if function_body.children[1].name == 'atribuicao':
+                                            # se var nao recebe funcao
+                                            if function_body.children[1].children[2].name != 'chamada_funcao':
+                                                node_atribuicao = function_body.children[1]
 
-                                            # obtem infos da variavel recebendo a atribuicao na tabela de simbolos
-                                            for var in symbols_table: 
-                                                if var['token'] == 'ID':
-                                                    if var['name'] == node_atribuicao.children[0].children[0].name:
-                                                        if 'code' in var:
-                                                            var_code = var['code']  
-                                                            var_type = var['type']  
-
-                                            # var recebe numero
-                                            if node_atribuicao.children[2].name != 'ID':
-                                                print('funcao => atribuicao => numero')
-                                                number = node_atribuicao.children[2].children[0].name
-                                                if var_type == 'inteiro' and node_atribuicao.children[2].name == 'NUM_INTEIRO':
-                                                    builder.store(ir.Constant(ir.IntType(32), number), var_code)         
-
-                                            if node_atribuicao.children[2].name == 'ID':
-                                                print('funcao => atribuicao => var')
+                                                # obtem infos da variavel recebendo a atribuicao na tabela de simbolos
                                                 for var in symbols_table: 
-                                                    if var['name'] == node_atribuicao.children[2].children[0]:
-                                                        builder.store(builder.load(var['code']), var_code)
-                                       
-                                       
-                                        ##############################################################
-                                        # se corpo atual eh atribuicao que recebe funcao                                        
-                                        ##############################################################
-                                        if function_body.children[1].name == 'atribuicao' and function_body.children[1].children[2].name == 'chamada_funcao':
-                                            print('funcao => corpo => atribuicao (var := func)')
-                                            node_atribuicao = function_body.children[1]
+                                                    if var['token'] == 'ID':
+                                                        if var['name'] == node_atribuicao.children[0].children[0].name:
+                                                            if 'code' in var:
+                                                                var_code = var['code']  
+                                                                var_type = var['type']  
+     
 
-                                            if node_atribuicao.children[2].children[2].name == 'lista_argumentos':
-                                                print('funcao => corpo => atribuicao (var := func) => lista argumentos')
-                                                node_chamada_funcao = node_atribuicao.children[2]
+                                                # var recebe var
+                                                if node_atribuicao.children[2].name == 'ID':
+                                                    print('funcao => corpo => atribuicao (var := var)')
+                                                    for var in symbols_table: 
+                                                        if var['name'] == node_atribuicao.children[2].children[0]:
+                                                            builder.store(builder.load(var['code']), var_code)
 
-                                                for func in symbols_table:
-                                                    if func['token'] == 'func' and func['name'] == node_chamada_funcao.children[0].name:
-                                                        for var in symbols_table:
-                                                            if var['token'] == 'ID' and var['name'] == node_chamada_funcao.children[2].children[0].children[0].name:
-                                                                var1 = builder.load(var['code'])
+                                                # var recebe soma ou numero
+                                                else:
+                                                    # var recebe uma soma/sub de variaveis
+                                                    if node_atribuicao.children[2].name == 'expressao_aditiva':
+                                                        print('funcao => corpo => atribuicao => expressao aditiva')
+                                                        # parcela 1 da soma/sub eh variavel
+                                                        if node_atribuicao.children[2].children[0].name == 'ID':
+                                                            print('funcao => corpo => atribuicao => expressao aditivaa => parc1 => ID')
+                                                            for var in symbols_table:
+                                                                if var['name'] == node_atribuicao.children[2].children[0].children[0].name:
+                                                                    var1_loaded = builder.load(var['code'])
 
-                                                            if var['token'] == 'ID' and var['name'] == node_chamada_funcao.children[2].children[2].children[0].name:
-                                                                var2 = builder.load(var['code'])
+                                                        # parcela 1 da soma/sub eh numero
+                                                        elif node_atribuicao.children[2].children[0].name == 'NUM_INTEIRO' or node_atribuicao.children[2].children[0].name == 'NUM_FLUTUANTE':
+                                                            print('funcao => corpo => atribuicao => expressao aditivaa => parc1 => num')
+                                                            var1_loaded = ir.Constant(ir.IntType(32), node_atribuicao.children[2].children[0].children[0].name)
 
-                                                        atrib_call = builder.call(func['code'], [var1, var2])
+                                                        # parcela 2 da soma/sub eh variavel
+                                                        if node_atribuicao.children[2].children[2].name == 'ID':
+                                                            print('funcao => corpo => atribuicao => expressao aditivaa => parc2 => ID')
+                                                            for var in symbols_table:
+                                                                if var['name'] == node_atribuicao.children[2].children[2].children[0].name:
+                                                                    var2_loaded = builder.load(var['code'])
 
-                                                        for var in symbols_table:
-                                                            if var['name'] == node_atribuicao.children[0].children[0]:
-                                                                symbol_code = var['code']
+                                                        # parcela 2 da soma/sub eh numero
+                                                        elif node_atribuicao.children[2].children[2].name == 'NUM_INTEIRO' or node_atribuicao.children[2].children[2].name == 'NUM_FLUTUANTE':
+                                                            print('funcao => corpo => atribuicao => expressao aditiva => parc2 => num')
+                                                            var2_loaded = ir.Constant(ir.IntType(32), node_atribuicao.children[2].children[2].children[0].name)
+                     
+                                                        for symbol in symbols_table: 
+                                                            if symbol['name'] == node_atribuicao.children[0].children[0].name: 
+                                                                store = symbol['code'] 
 
-                                                        builder.store(atrib_call, symbol_code)
+                                                        result = builder.add(var1_loaded, var2_loaded, name='atrib_expression_result')
+                                                        builder.store(result, store)
+
+                                                    else:
+                                                        print('funcao => corpo => atribuicao (var := numero)')
+                                                        number = node_atribuicao.children[2].children[0].name
+                                                        if var_type == 'inteiro' and node_atribuicao.children[2].name == 'NUM_INTEIRO':
+                                                            builder.store(ir.Constant(ir.IntType(32), number), var_code)
+                                        
+                                        
+                                            # se var recebe funcao
+                                            if function_body.children[1].children[2].name == 'chamada_funcao':
+                                                print('funcao => corpo => atribuicao (var := func)')
+                                                node_atribuicao = function_body.children[1]
+
+                                                if node_atribuicao.children[2].children[2].name == 'lista_argumentos':
+                                                    print('funcao => corpo => atribuicao (var := func) => lista argumentos')
+                                                    node_chamada_funcao = node_atribuicao.children[2]
+
+                                                    for func in symbols_table:
+                                                        if func['token'] == 'func' and func['name'] == node_chamada_funcao.children[0].name:
+                                                            for var in symbols_table:
+                                                                if var['token'] == 'ID' and var['name'] == node_chamada_funcao.children[2].children[0].children[0].name:
+                                                                    var1 = builder.load(var['code'])
+
+                                                                if var['token'] == 'ID' and var['name'] == node_chamada_funcao.children[2].children[2].children[0].name:
+                                                                    var2 = builder.load(var['code'])
+
+                                                            atrib_call = builder.call(func['code'], [var1, var2])
+
+                                                            for var in symbols_table:
+                                                                if var['name'] == node_atribuicao.children[0].children[0]:
+                                                                    symbol_code = var['code']
+
+                                                            builder.store(atrib_call, symbol_code)
 
 
                             # sobe 1 corpo da funcao
