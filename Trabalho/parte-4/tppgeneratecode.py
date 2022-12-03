@@ -156,14 +156,45 @@ def generate_i_code(root, symbols_table, test_file):
                                         ###############################
                                         if function_body.children[1].name == 'repita':
                                             print('funcao => corpo => repita')
-                                            node_repita = function_body.children[1]
                                             repeat_start = function.append_basic_block('repeat_start')
                                             repeat_end = function.append_basic_block('repeat_end')
 
                                             builder.branch(repeat_start)
                                             builder.position_at_end(repeat_start)
 
+
+
+
+
+
+
+
+                                            node_repita = function_body.children[1]
+                                            node_repita_body = function_body.children[1].children[1]
+                                            # desce a arvore ate o ultimo corpo do repita
+                                            while node_repita_body.children[0].children[0].name != 'vazio': 
+                                                node_repita_body = node_repita_body.children[0]
+
+                                            while len(node_repita_body.children) <= 2:
+                                                print(node_repita_body.children[1].name)
+
+
+
+
+
+                                                
+                                                node_repita_body = node_repita_body.parent 
+
+
+
+
+
+
+
+                                            
+                                            # sobe a arvore de volta percorrendo o corpo do repita
                                             for current_node in LevelOrderIter(node_repita):
+                                                # print('corpo atual no REPITA: ', current_node.children[1].name)
                                                 # leia dentro do repita
                                                 if current_node.name == 'leia' and len(current_node.children) > 1:
                                                     print('funcao => corpo => repita => leia')
