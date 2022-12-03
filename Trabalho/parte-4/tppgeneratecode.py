@@ -14,10 +14,12 @@ def init_global_vars(symbols_table, module):
         if var['token'] == 'ID':
             if var['scope'] == 'global':
                 if var['type'] == 'inteiro':
+                    print('declaracao variavel => global => inteiro')
                     var['code'] = ir.GlobalVariable(module, ir.IntType(32), var['name'])
                     var['code'].initializer = ir.Constant(ir.IntType(32), 0)
 
                 if var['type'] == 'flutuante':
+                    print('declaracao variavel => global => flutuante')
                     var['code'] = ir.GlobalVariable(module, ir.FloatType(), var['name'])
                     var['code'].initializer = ir.Constant(ir.FloatType(), 0.0)
 
@@ -35,9 +37,11 @@ def alloca_local_vars(symbols_table, builder, function_name):
     for var in symbols_table:
         if var['token'] == 'ID' and var['scope'] == function_name:
             if var['type'] == 'inteiro':
+                print('declaracao variavel => scope={} => inteiro'.format(function_name))
                 var['code'] = builder.alloca(ir.IntType(32), name=var['name'])
 
             if var['type'] == 'flutuante':
+                print('declaracao variavel => scope={} => flutuante'.format(function_name))
                 var['code'] = builder.alloca(ir.FloatType(), name=var['name'])
 
             var['code'].align = 4
@@ -478,11 +482,12 @@ def generate_i_code(root, symbols_table, test_file):
                 else:
                     builder.ret(ir.Constant(ir.IntType(32), function_return))
 
-
-    file = open('generated_code.ll', 'w')
+    test_number = test_file.split('-')[-1]
+    file = open('geracao-codigo-testes/gencode-{}.ll'.format(test_number), 'w')
     file.write(str(module))
     file.close()
     print()
     print()
-    print()
+    print('----------------------------')
     print('Código intermediário gerado!')
+    print('----------------------------')

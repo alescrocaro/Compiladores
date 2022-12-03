@@ -9,4 +9,5 @@ for i in range(1, 18):
   print()
   print()
   print('executando o teste {}...'.format(file_number))
+  print()
   os.system('python3 tppsemantic.py geracao-codigo-testes/gencode-{}.tpp'.format(file_number))
