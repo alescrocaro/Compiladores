@@ -1,6 +1,6 @@
-from llvmlite import ir, binding as llvm 
+from llvmlite import ir, binding as llvm
 from anytree import LevelOrderIter
-from utils import *  
+from utils import *
 
 
 
@@ -60,7 +60,9 @@ def generate_i_code(root, symbols_table, test_file):
     llvm.initialize_native_target()
     llvm.initialize_native_asmprinter()
 
-    module = ir.Module('test.bc')
+    test_number = test_file.split('-')[-1]
+
+    module = ir.Module('test_{}.bc'.format(test_number))
     module.triple = llvm.get_process_triple()
     target = llvm.Target.from_triple(module.triple)
     target_machine = target.create_target_machine()
@@ -470,10 +472,10 @@ def generate_i_code(root, symbols_table, test_file):
                 else:
                     builder.ret(ir.Constant(ir.IntType(32), function_return))
 
-    test_number = test_file.split('-')[-1]
     file = open('geracao-codigo-testes/gencode-{}.ll'.format(test_number), 'w')
     file.write(str(module))
     file.close()
+    # print(module)
     print()
     print()
     print('----------------------------')

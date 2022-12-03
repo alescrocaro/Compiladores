@@ -30,94 +30,33 @@ O módulo representa um arquivo com código fonte ou uma unidade de tradução. 
 
 ![image](https://user-images.githubusercontent.com/37521313/205456301-c6c3f8e9-d940-417d-a12a-a6c0fe6e58f1.png)
 
-Foi utilizada a API do llvm para
+#### Utilização da API do LLVM no projeto
 
-intermediate representation
+Importação:
 
-#### Funções e Procedimentos
+```Python
+from llvmlite import ir, binding as llvm
+```
 
-- Função Principal:\
-  Todo programa escrito em TPP deve ter uma função principal declarada.
-  Caso essa função não exista, a seguinte mensagem é apresentada:
+Criando módulo
 
-  &nbsp;&nbsp;&nbsp;&nbsp;Erro: Função principal não declarada
+```Python
+module = ir.Module('test_{}.bc'.format(test_number)) # test_number = 001 ou similar
+```
 
-  A função principal é do tipo inteiro, assim é esperado que seu retorno também seja um valor inteiro, do contrário a seguinte mensagem é emitida:
+Salvando módulo
 
-  &nbsp;&nbsp;&nbsp;&nbsp;Erro: Função principal deveria retornar inteiro, mas retorna vazio
+```Python
+file = open('geracao-codigo-testes/gencode-{}.ll'.format(test_number), 'w')
+file.write(str(module))
+file.close()
+```
 
-  Uma função qualquer não pode fazer uma chamada à função principal. Deve ser verificado se existe alguma chamada para a função principal partindo de qualquer outra função do programa. Se houver, a seguinte mensagem aparece:
+Declarando função
 
-  &nbsp;&nbsp;&nbsp;&nbsp;Erro: Chamada para a função principal não permitida.
-
-  Se a função principal fizer uma chamada para ela mesma, a mensagem de aviso é emitida:
-
-  &nbsp;&nbsp;&nbsp;&nbsp;Aviso: Chamada recursiva para principal.
-
-- Parâmetros:\
-  A quantidade de parâmetros reais de uma chamada de função deve ser igual a quantidade de parâmetros formais da sua definição. Caso contrário, gera a mensagem:
-
-  &nbsp;&nbsp;&nbsp;&nbsp;Erro: Chamada à função 'exemplo' com 2 parâmetros, mas foram declarados 3
-
-- Retorno:\
-  Uma função deve retornar um valor de tipo compatível com o tipo de retorno declarado. Se a função principal que é declarada com retorno inteiro, não apresenta um retorna(0), a seguinte mensagem é gerada:
-
-  &nbsp;&nbsp;&nbsp;&nbsp;Erro: Função principal deveria retornar inteiro, mas retorna vazio.
-
-  Quando a função não é a principal, a mensagem mostrada é:
-
-  &nbsp;&nbsp;&nbsp;&nbsp;Erro: Função principal deveria retornar inteiro, mas retorna vazio.
-
-- Declaração:\
-  Funções precisam ser declaradas antes de serem chamadas. Caso contrário a seguinte mensagem de erro é emitida:
-
-  &nbsp;&nbsp;&nbsp;&nbsp;Erro: Chamada a função 'exemplo' que não foi declarada.
-
-- Utilização:\
-  Uma função pode ser declarada e não utilizada. Se isto acontecer a seguinte mensagem de aviso é emitida:
-
-  &nbsp;&nbsp;&nbsp;&nbsp;Aviso: Função ‘func’ declarada, mas não utilizada.
-
-#### Variáveis
-
-Informações da variável - como tipo, nome, escopo - são armazenadas na tabela de símbolos. Ela pode ser declarada no escopo do procedimento, como expressão ou parâmetro formal, ou no escopo global.
-
-- Utilização:\
-  Se uma variável ‘a’ for apenas declarada e não for inicializada (escrita) ou não for utilizada (não lida), o analisador gera a mensagem:
-
-  &nbsp;&nbsp;&nbsp;&nbsp;Aviso: Variável ‘a’ declarada e não utilizada.
-
-  Se houver a tentativa de leitura ou escrita de qualquer variável não declarada, a seguinte mensagem é emitida:
-
-  &nbsp;&nbsp;&nbsp;&nbsp;Erro: Variável ‘a’ não declarada.
-
-  Se uma variável ‘a’ for declarada duas vezes no mesmo escopo, o aviso é emitido:
-
-  &nbsp;&nbsp;&nbsp;&nbsp;Aviso: Variável ‘a’ já declarada anteriormente
-
-- Atribuição:\
-  Na Atribuição, é verificado se os tipos da variável que está recebendo e o que ela está recebendo são compatíveis.
-
-  Se uma variável do tipo inteiro receber uma expressão, função ou número do tipo flutuante, a seguinte mensagem é mostrada:
-
-  &nbsp;&nbsp;&nbsp;&nbsp;Aviso: Atribuição de tipos distintos, ‘a’ eh inteiro e recebe 'expressao || retorno_da_funcao || numero' do tipo flutuante
-
-  O contrário também pode acontecer, e então é mostrada a seguinte mensagem:
-
-  &nbsp;&nbsp;&nbsp;&nbsp;Aviso: Atribuição de tipos distintos, ‘a’ eh flutuante e recebe 'expressao || retorno_da_funcao || numero' do tipo inteiro
-
-#### Arranjos
-
-- Índice:\
-  Na linguagem TPP é possível declarar arranjos, pela sintaxe da linguagem o índice de um arranjo é inteiro e isso deve ser verificado - na tabela de símbolos são guardados a dimensão (0 para escalar, 1 para unidimensionais, 2 para bidimensionais e assim por diante) e o índice.
-
-  Se o índice não for inteiro, a seguinte mensagem é emitida:
-
-  &nbsp;&nbsp;&nbsp;&nbsp;Erro: Índice de array ‘X’ não inteiro.
-
-  Se o acesso ao elemento do arranjo estiver fora de sua definição, por exemplo um vetor A é declarado como tendo 10 elementos (0 a 9) e há um acesso ao A[10], a seguinte mensagem de erro é apresentada:
-
-  &nbsp;&nbsp;&nbsp;&nbsp;Erro: índice de array ‘A’ fora do intervalo
+```Python
+from llvmlite import ir, binding as llvm
+```
 
 ---
 
