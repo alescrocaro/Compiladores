@@ -10,50 +10,25 @@ declare void @"escrevaInteiro"(i32 %".1")
 
 declare void @"escrevaFlutuante"(float %".1")
 
-define i32 @"soma"(i32 %"b", i32 %"a")
+@"n" = common global i32 0, align 4
+define i32 @"fatorial"(i32 %"n", i32 %".2")
 {
 entry:
-  %"b.1" = alloca i32, align 4
-  %"a.1" = alloca i32, align 4
-  %"a.2" = alloca i32
-  %"b.2" = alloca i32
-  %".4" = load i32, i32* %"a.2"
-  %".5" = load i32, i32* %"b.2"
-  %"add" = add i32 %".4", %".5"
+  %"n.1" = alloca i32, align 4
+  %"fat" = alloca i32, align 4
   br label %"exit"
 exit:
-  %"func_soma_return" = add i32 %"b", %"a"
-  ret i32 %"func_soma_return"
+  %"func_fatorial_return" = add i32 %"n", %".2"
+  ret i32 %"func_fatorial_return"
 }
 
 define i32 @"main"()
 {
 entry:
-  %"a" = alloca i32, align 4
-  %"b" = alloca i32, align 4
-  %"c" = alloca i32, align 4
-  %"i" = alloca i32, align 4
-  store i32 0, i32* %"i"
-  br label %"repeat_start"
-repeat_start:
-  %"1" = alloca i32
-  %".4" = load i32, i32* %"1"
-  %".5" = load i32, i32* %"i"
-  %"increment" = add i32 %".5", %".4"
-  %".6" = load i32, i32* %"i"
-  call void @"escrevaInteiro"(i32 %".6")
-  %".8" = call i32 @"leiaInteiro"()
-  store i32 %".8", i32* %"b.1"
-  %".10" = call i32 @"leiaInteiro"()
-  store i32 %".10", i32* %"b"
-  %".12" = call i32 @"leiaInteiro"()
-  store i32 %".12", i32* %"a.1"
-  %".14" = call i32 @"leiaInteiro"()
-  store i32 %".14", i32* %"a"
-  %"b_cmp" = load i32, i32* %"i", align 4
-  %"repeat_until_check" = icmp eq i32 %"b_cmp", 5
-  br i1 %"repeat_until_check", label %"repeat_start", label %"repeat_end"
-repeat_end:
+  %".2" = call i32 @"leiaInteiro"()
+  store i32 %".2", i32* @"n"
+  %".4" = call i32 @"leiaInteiro"()
+  store i32 %".4", i32* %"n.1"
   br label %"exit"
 exit:
   ret i32 0

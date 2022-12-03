@@ -163,12 +163,6 @@ def generate_i_code(root, symbols_table, test_file):
                                             builder.position_at_end(repeat_start)
 
 
-
-
-
-
-
-
                                             node_repita = function_body.children[1]
                                             node_repita_body = function_body.children[1].children[1]
                                             # desce a arvore ate o ultimo corpo do repita
@@ -176,54 +170,39 @@ def generate_i_code(root, symbols_table, test_file):
                                                 node_repita_body = node_repita_body.children[0]
 
                                             while len(node_repita_body.children) <= 2:
-                                                print(node_repita_body.children[1].name)
 
-
-
-
-
-                                                
-                                                node_repita_body = node_repita_body.parent 
-
-
-
-
-
-
-
-                                            
-                                            # sobe a arvore de volta percorrendo o corpo do repita
-                                            for current_node in LevelOrderIter(node_repita):
                                                 # print('corpo atual no REPITA: ', current_node.children[1].name)
                                                 # leia dentro do repita
-                                                if current_node.name == 'leia' and len(current_node.children) > 1:
+                                                if node_repita_body.children[1].name == 'leia':
                                                     print('funcao => corpo => repita => leia')
+                                                    node_leia = node_repita_body.children[1]
                                                     for var in symbols_table: 
-                                                        if var['name'] == current_node.children[2].children[0].name:
+                                                        if var['name'] == node_leia.children[2].children[0].name:
                                                             builder.store(builder.call(read_integer, []), var['code'])
 
                                                 # escreva dentro do repita
-                                                if current_node.name == 'escreva' and len(current_node.children) > 1: 
+                                                if node_repita_body.children[1].name == 'escreva': 
                                                     print('funcao => corpo => repita => escreva')
+                                                    node_escreva = node_repita_body.children[1]
                                                     for var in symbols_table:
-                                                        if var['name'] == current_node.children[2].children[0].name:
+                                                        if var['name'] == node_escreva.children[2].children[0].name:
                                                             var_code_on_write = var['code']
 
-
                                                 # atribuicao dentro do repita
-                                                if current_node.name == 'atribuicao':
-                                                    node_received_in_atrib = current_node.children[2]
+                                                if node_repita_body.children[1].name == 'atribuicao':
+                                                    node_atribuicao = node_repita_body.children[1]
+                                                    node_received_in_atrib = node_repita_body.children[1].children[2]
                                                                           
                                                     # se var recebe uma soma que a 
                                                     if node_received_in_atrib.name == 'expressao_aditiva' and node_received_in_atrib.children[2].name != 'ID':
 
                                                         # se var recebe uma soma que a primeira parcela eh ela mesma e que a segunda parcela eh um numero (DECREMENTO, como i--)
                                                         if node_received_in_atrib.children[1].children[0].name == '+':
-                                                            if current_node.children[0].children[0].name == node_received_in_atrib.children[0].children[0].name:
+                                                            if node_atribuicao.children[0].children[0].name == node_received_in_atrib.children[0].children[0].name:
                                                                 print('funcao => corpo => repita => atribuicao => incremento')
                                                                 
                                                                 for symbol in symbols_table: 
-                                                                    if symbol['name'] == current_node.children[0].children[0].name:
+                                                                    if symbol['name'] == node_atribuicao.children[0].children[0].name:
                                                                         # numero da segunda parcela da soma
                                                                         part2_number = node_received_in_atrib.children[2].children[0].name
                                                                         part2_number_allocated = builder.alloca(ir.IntType(32), name=part2_number)
@@ -236,11 +215,11 @@ def generate_i_code(root, symbols_table, test_file):
 
                                                         # se var recebe uma subtracao que a primeira parcela eh ela mesma e que a segunda parcela eh um numero (DECREMENTO, como i--)
                                                         if node_received_in_atrib.children[1].children[0].name == '-':
-                                                            if current_node.children[0].children[0].name == node_received_in_atrib.children[0].children[0].name:
+                                                            if node_atribuicao.children[0].children[0].name == node_received_in_atrib.children[0].children[0].name:
                                                                 print('funcao => corpo => repita => atribuicao => decremento')
 
                                                                 for symbol in symbols_table:
-                                                                    if symbol['name'] == current_node.children[0].children[0].name:
+                                                                    if symbol['name'] == node_atribuicao.children[0].children[0].name:
                                                                         # numero da segunda parcela da subtracao
                                                                         part2_number = node_received_in_atrib.children[2].children[0].name
                                                                         part2_number_allocated = builder.alloca(ir.IntType(32), name=part2_number)
@@ -255,7 +234,7 @@ def generate_i_code(root, symbols_table, test_file):
                                                         # funcao recebe parametros normais (como vars)
                                                         print('funcao => corpo => repita => atribuicao => chamada_funcao => lista_argumentos')
 
-                                                        node_chamada_funcao = current_node.children[2]
+                                                        node_chamada_funcao = node_atribuicao.children[2]
 
                                                         for var in symbols_table:
                                                             if var['token'] == 'ID' and var['name'] == node_chamada_funcao.children[2].children[0].children[0].name:
@@ -268,9 +247,16 @@ def generate_i_code(root, symbols_table, test_file):
                                                             if func['token'] == 'func' and func['name'] == node_chamada_funcao.children[0].name: 
                                                                 func_code = builder.call(func['code'], [builder.load(var1_code), builder.load(var2_code)])
                                                                 for var_receiving_atrib in symbols_table: 
-                                                                    if var_receiving_atrib['name'] == current_node.children[0].children[0].name:
+                                                                    if var_receiving_atrib['name'] == node_atribuicao.children[0].children[0].name:
                                                                         builder.store(func_code, var_receiving_atrib['code']) 
                                                                         builder.call(print_integer,[builder.load(var_code_on_write)])   
+
+
+
+
+                                                node_repita_body = node_repita_body.parent 
+
+                                            
 
 
 

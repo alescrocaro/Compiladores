@@ -21,5 +21,5 @@ inteiro principal()
 	
 	escreva(maiorde4(A,B,C,D))	
 
-  	retorna(0)
+	retorna(0)
 fim
