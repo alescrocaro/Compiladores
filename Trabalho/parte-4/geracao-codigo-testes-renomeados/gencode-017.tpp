@@ -12,6 +12,6 @@ inteiro principal()
 	escreva(x)
 	escreva(y)
 	
-    retorna(0)
+	retorna(0)
 fim
 
