@@ -18,13 +18,19 @@ A quarta parte do trabalho consiste na implementação de um gerador de código 
 
 A Geração de Código é a tarefa final de um compilador, o código executável para uma máquina - que deve representar fielmente a semântica do código-fonte. Esta fase é uma das mais complexas de um compilador, porque não depende apenas da linguagem de programação usada no código fonte, mas também de detalhes da arquitetura, da estrutura do ambiente de execução e do Sistema Operacional da máquina na qual o código será executado. A geração de código envolve tentativas de aplicar melhorias no código: velocidade, tamanho e ajustes de acordo com a arquitetura-alvo (como registradores, modos de endereçamento e memória).
 
-Devido à complexidade desta fase, o compilador a divide em alguns passos que vão necessitar de um tipo de código abstrato, chamado de código intermediário - que é o objetivo deste trabalho, para tanto precisa-se do LLVM.
+Devido à complexidade desta fase, o compilador a divide em alguns passos que vão necessitar de um tipo de código abstrato, chamado de código intermediário - que é o objetivo deste trabalho, para tanto precisa-se do llvm.
 
 ---
 
 ### LLVM
 
-As regras semânticas irão identificar os erros semânticos, o ideal seria utilizar o _raise Exception_ ao encontrar algum erro e parar a execução do programa, entretanto, foi utilizado o _print_, assim é possivel visualizar todos os erros do código. Essas regras foram definidas no documento de requisitos disponibilizado pelo professor e geram saídas de erro ou aviso. São elas:
+O Projeto LLVM é uma infraestrutura para o desenvolvimento de ferramentas de compilação. Um código LLVM-IR (IR = Intermediate Representation) é organizado em containers, os principais componentes são: módulo, função, bloco básico e instrução.
+
+O módulo representa um arquivo com código fonte ou uma unidade de tradução. Todo o restante do código deve estar dentro de um módulo. As funções estão contidadas em um módulo e irão conter partes do código, elas são declaradas com seus nomes e seus argumentos, uma função é um container de BasicBlocks. O bloco básico é um pedaço contíguo de instruções (como um bloco de código). Uma instrução é uma operação única expressa em um código. Podendo ser uma opção como uma adição de inteiros, ou uma instrução de load/store da/para memória.
+
+Foi utilizada a API do llvm para
+
+intermediate representation
 
 #### Funções e Procedimentos
 
