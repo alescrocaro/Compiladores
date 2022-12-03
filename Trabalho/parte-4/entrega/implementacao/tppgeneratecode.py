@@ -89,6 +89,7 @@ def generate_i_code(root, symbols_table, test_file):
         # verifica se o simbolo (function_in_table) eh funcao
         if function_in_table['token'] == 'func':
 
+
             ################################################
             # checa se funcao tem parametros e os aloca
             ################################################
@@ -103,6 +104,9 @@ def generate_i_code(root, symbols_table, test_file):
                     function.args[i].name = param
                     i += 1
 
+                entry_block = function.append_basic_block('entry')  
+                builder = ir.IRBuilder(entry_block) 
+
             else:
                 if function_in_table['name'] != 'principal':
                     print('funcao => sem parametros => !=principal')
@@ -114,8 +118,8 @@ def generate_i_code(root, symbols_table, test_file):
 
                 function_in_table['code'] = function 
 
-            entry_block = function.append_basic_block('entry')  
-            builder = ir.IRBuilder(entry_block)
+                entry_block = function.append_basic_block('entry')  
+                builder = ir.IRBuilder(entry_block)
 
 
 
