@@ -328,6 +328,7 @@ def generate_i_code(root, symbols_table, test_file):
                                         # se corpo atual eh atribuicao                                       
                                         ###############################
                                         if function_body.children[1].name == 'atribuicao':
+                                            print('funcao => corpo => atribuicao')
                                             # se var nao recebe funcao
                                             if function_body.children[1].children[2].name != 'chamada_funcao':
                                                 node_atribuicao = function_body.children[1]
@@ -360,22 +361,12 @@ def generate_i_code(root, symbols_table, test_file):
                                                                 if var['name'] == node_atribuicao.children[2].children[0].children[0].name:
                                                                     var1_loaded = builder.load(var['code'])
 
-                                                        # parcela 1 da soma/sub eh numero
-                                                        elif node_atribuicao.children[2].children[0].name == 'NUM_INTEIRO' or node_atribuicao.children[2].children[0].name == 'NUM_FLUTUANTE':
-                                                            print('funcao => corpo => atribuicao => expressao aditivaa => parc1 => num')
-                                                            var1_loaded = ir.Constant(ir.IntType(32), node_atribuicao.children[2].children[0].children[0].name)
-
                                                         # parcela 2 da soma/sub eh variavel
                                                         if node_atribuicao.children[2].children[2].name == 'ID':
                                                             print('funcao => corpo => atribuicao => expressao aditivaa => parc2 => ID')
                                                             for var in symbols_table:
                                                                 if var['name'] == node_atribuicao.children[2].children[2].children[0].name:
                                                                     var2_loaded = builder.load(var['code'])
-
-                                                        # parcela 2 da soma/sub eh numero
-                                                        elif node_atribuicao.children[2].children[2].name == 'NUM_INTEIRO' or node_atribuicao.children[2].children[2].name == 'NUM_FLUTUANTE':
-                                                            print('funcao => corpo => atribuicao => expressao aditiva => parc2 => num')
-                                                            var2_loaded = ir.Constant(ir.IntType(32), node_atribuicao.children[2].children[2].children[0].name)
                      
                                                         for symbol in symbols_table: 
                                                             if symbol['name'] == node_atribuicao.children[0].children[0].name: 
@@ -395,27 +386,24 @@ def generate_i_code(root, symbols_table, test_file):
                                             if function_body.children[1].children[2].name == 'chamada_funcao':
                                                 print('funcao => corpo => atribuicao (var := func)')
                                                 node_atribuicao = function_body.children[1]
+                                                node_chamada_funcao = node_atribuicao.children[2]
 
-                                                if node_atribuicao.children[2].children[2].name == 'lista_argumentos':
-                                                    print('funcao => corpo => atribuicao (var := func) => lista argumentos')
-                                                    node_chamada_funcao = node_atribuicao.children[2]
+                                                for func in symbols_table:
+                                                    if func['token'] == 'func' and func['name'] == node_chamada_funcao.children[0].name:
+                                                        for var in symbols_table:
+                                                            if var['token'] == 'ID' and var['name'] == node_chamada_funcao.children[2].children[0].children[0].name:
+                                                                var1 = builder.load(var['code'])
 
-                                                    for func in symbols_table:
-                                                        if func['token'] == 'func' and func['name'] == node_chamada_funcao.children[0].name:
-                                                            for var in symbols_table:
-                                                                if var['token'] == 'ID' and var['name'] == node_chamada_funcao.children[2].children[0].children[0].name:
-                                                                    var1 = builder.load(var['code'])
+                                                            if var['token'] == 'ID' and var['name'] == node_chamada_funcao.children[2].children[2].children[0].name:
+                                                                var2 = builder.load(var['code'])
 
-                                                                if var['token'] == 'ID' and var['name'] == node_chamada_funcao.children[2].children[2].children[0].name:
-                                                                    var2 = builder.load(var['code'])
+                                                        atrib_call = builder.call(func['code'], [var1, var2])
 
-                                                            atrib_call = builder.call(func['code'], [var1, var2])
+                                                        for var in symbols_table:
+                                                            if var['name'] == node_atribuicao.children[0].children[0]:
+                                                                symbol_code = var['code']
 
-                                                            for var in symbols_table:
-                                                                if var['name'] == node_atribuicao.children[0].children[0]:
-                                                                    symbol_code = var['code']
-
-                                                            builder.store(atrib_call, symbol_code)
+                                                        builder.store(atrib_call, symbol_code)
 
 
                             # sobe 1 corpo da funcao
