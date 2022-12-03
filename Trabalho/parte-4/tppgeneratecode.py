@@ -15,16 +15,16 @@ def init_global_vars(symbols_table, module):
             if var['scope'] == 'global':
                 if var['type'] == 'inteiro':
                     print('declaracao variavel => global => inteiro')
-                    var['code'] = ir.GlobalVariable(module, ir.IntType(32), var['name'])
-                    var['code'].initializer = ir.Constant(ir.IntType(32), 0)
+                    var['i_code'] = ir.GlobalVariable(module, ir.IntType(32), var['name'])
+                    var['i_code'].initializer = ir.Constant(ir.IntType(32), 0)
 
                 if var['type'] == 'flutuante':
                     print('declaracao variavel => global => flutuante')
-                    var['code'] = ir.GlobalVariable(module, ir.FloatType(), var['name'])
-                    var['code'].initializer = ir.Constant(ir.FloatType(), 0.0)
+                    var['i_code'] = ir.GlobalVariable(module, ir.FloatType(), var['name'])
+                    var['i_code'].initializer = ir.Constant(ir.FloatType(), 0.0)
 
-                var['code'].linkage = "common"
-                var['code'].align = 4
+                var['i_code'].linkage = "common"
+                var['i_code'].align = 4
 
 
 
@@ -38,13 +38,13 @@ def alloca_local_vars(symbols_table, builder, function_name):
         if var['token'] == 'ID' and var['scope'] == function_name:
             if var['type'] == 'inteiro':
                 print('declaracao variavel => scope={} => inteiro'.format(function_name))
-                var['code'] = builder.alloca(ir.IntType(32), name=var['name'])
+                var['i_code'] = builder.alloca(ir.IntType(32), name=var['name'])
 
             if var['type'] == 'flutuante':
                 print('declaracao variavel => scope={} => flutuante'.format(function_name))
-                var['code'] = builder.alloca(ir.FloatType(), name=var['name'])
+                var['i_code'] = builder.alloca(ir.FloatType(), name=var['name'])
 
-            var['code'].align = 4
+            var['i_code'].align = 4
 
 
 
@@ -96,7 +96,7 @@ def generate_i_code(root, symbols_table, test_file):
                 print('funcao => lista parametros')
                 t_func_with_params = ir.FunctionType(ir.IntType(32), [ir.IntType(32), ir.IntType(32)])
                 function = ir.Function(module, t_func_with_params, function_in_table['name']) 
-                function_in_table['code'] = function
+                function_in_table['i_code'] = function
 
                 i = 0
                 for param in function_in_table['params_list']:
@@ -112,7 +112,7 @@ def generate_i_code(root, symbols_table, test_file):
                     print('funcao => sem parametros => principal')
                     function = ir.Function(module, ir.FunctionType(ir.IntType(32), []), name='main') 
 
-                function_in_table['code'] = function 
+                function_in_table['i_code'] = function 
 
             entry_block = function.append_basic_block('entry')  
             builder = ir.IRBuilder(entry_block)
@@ -178,7 +178,7 @@ def generate_i_code(root, symbols_table, test_file):
                                                     node_leia = node_repita_body.children[1]
                                                     for var in symbols_table: 
                                                         if var['name'] == node_leia.children[2].children[0].name:
-                                                            builder.store(builder.call(read_integer, []), var['code'])
+                                                            builder.store(builder.call(read_integer, []), var['i_code'])
 
                                                 # escreva dentro do repita
                                                 if node_repita_body.children[1].name == 'escreva': 
@@ -186,7 +186,7 @@ def generate_i_code(root, symbols_table, test_file):
                                                     node_escreva = node_repita_body.children[1]
                                                     for var in symbols_table:
                                                         if var['name'] == node_escreva.children[2].children[0].name:
-                                                            var_code_on_write = var['code']
+                                                            var_code_on_write = var['i_code']
 
                                                 # atribuicao dentro do repita
                                                 if node_repita_body.children[1].name == 'atribuicao':
@@ -208,9 +208,9 @@ def generate_i_code(root, symbols_table, test_file):
                                                                         part2_number_allocated = builder.alloca(ir.IntType(32), name=part2_number)
                                                                         part2_number_loaded = builder.load(part2_number_allocated)
 
-                                                                        part1_var_loaded = builder.load(symbol['code'])
+                                                                        part1_var_loaded = builder.load(symbol['i_code'])
                                                                         builder.add(part1_var_loaded, part2_number_loaded, name='increment')
-                                                                        builder.call(print_integer, [builder.load(symbol['code'])])  
+                                                                        builder.call(print_integer, [builder.load(symbol['i_code'])])  
 
 
                                                         # se var recebe uma subtracao que a primeira parcela eh ela mesma e que a segunda parcela eh um numero (DECREMENTO, como i--)
@@ -225,7 +225,7 @@ def generate_i_code(root, symbols_table, test_file):
                                                                         part2_number_allocated = builder.alloca(ir.IntType(32), name=part2_number)
                                                                         part2_number_loaded = builder.load(part2_number_allocated)
 
-                                                                        part1_var_loaded = builder.load(symbol['code'])
+                                                                        part1_var_loaded = builder.load(symbol['i_code'])
                                                                         builder.sub(part1_var_loaded, part2_number_loaded, name='decrement', flags=())
 
 
@@ -238,17 +238,17 @@ def generate_i_code(root, symbols_table, test_file):
 
                                                         for var in symbols_table:
                                                             if var['token'] == 'ID' and var['name'] == node_chamada_funcao.children[2].children[0].children[0].name:
-                                                                var1_code = var['code']
+                                                                var1_code = var['i_code']
 
                                                             if var['token'] == 'ID' and var['name'] == node_chamada_funcao.children[2].children[2].children[0].name:
-                                                                var2_code = var['code']
+                                                                var2_code = var['i_code']
 
                                                         for func in symbols_table:
                                                             if func['token'] == 'func' and func['name'] == node_chamada_funcao.children[0].name: 
-                                                                func_code = builder.call(func['code'], [builder.load(var1_code), builder.load(var2_code)])
+                                                                func_code = builder.call(func['i_code'], [builder.load(var1_code), builder.load(var2_code)])
                                                                 for var_receiving_atrib in symbols_table: 
                                                                     if var_receiving_atrib['name'] == node_atribuicao.children[0].children[0].name:
-                                                                        builder.store(func_code, var_receiving_atrib['code']) 
+                                                                        builder.store(func_code, var_receiving_atrib['i_code']) 
                                                                         builder.call(print_integer,[builder.load(var_code_on_write)])   
 
 
@@ -268,7 +268,7 @@ def generate_i_code(root, symbols_table, test_file):
                                                 node_repita_expressao_simples = node_repita.children[3]
                                                 for var in symbols_table: 
                                                     if var['name'] == node_repita_expressao_simples.children[0].children[0].name: 
-                                                        var_code = var['code']
+                                                        var_code = var['i_code']
                                                         var1_code = builder.load(var_code, 'b_cmp', align=4) 
 
 
@@ -298,11 +298,11 @@ def generate_i_code(root, symbols_table, test_file):
                                             for symbol in symbols_table: 
                                                 if symbol['type'] == 'inteiro' and symbol['name'] == node_leia.children[2].children[0].name:
                                                     print('funcao => corpo => leia => inteiro')
-                                                    builder.store(builder.call(read_integer, []), symbol['code'])  
+                                                    builder.store(builder.call(read_integer, []), symbol['i_code'])  
 
                                                 if symbol['type'] == 'flutuante' and symbol['name'] == node_leia.children[2].children[0].name:
                                                     print('funcao => corpo => leia => flutuante')
-                                                    builder.store(builder.call(read_float, []), symbol['code'])  
+                                                    builder.store(builder.call(read_float, []), symbol['i_code'])  
 
 
                                         ###############################
@@ -314,10 +314,10 @@ def generate_i_code(root, symbols_table, test_file):
                                             for var in symbols_table: 
                                                 if var['name'] == function_body.children[1].children[2].children[0].name:
                                                     if var['type'] == 'inteiro':
-                                                        builder.call(print_integer, args=[builder.load(var['code'])])  
+                                                        builder.call(print_integer, args=[builder.load(var['i_code'])])  
 
                                                     if var['type'] == 'flutuante':
-                                                        builder.call(print_float, args=[builder.load(var['code'])])
+                                                        builder.call(print_float, args=[builder.load(var['i_code'])])
 
 
                                         ###############################
@@ -333,8 +333,8 @@ def generate_i_code(root, symbols_table, test_file):
                                                 for var in symbols_table: 
                                                     if var['token'] == 'ID':
                                                         if var['name'] == node_atribuicao.children[0].children[0].name:
-                                                            if 'code' in var:
-                                                                var_code = var['code']  
+                                                            if 'i_code' in var:
+                                                                var_code = var['i_code']  
                                                                 var_type = var['type']  
      
 
@@ -343,7 +343,7 @@ def generate_i_code(root, symbols_table, test_file):
                                                     print('funcao => corpo => atribuicao (var := var)')
                                                     for var in symbols_table: 
                                                         if var['name'] == node_atribuicao.children[2].children[0]:
-                                                            builder.store(builder.load(var['code']), var_code)
+                                                            builder.store(builder.load(var['i_code']), var_code)
 
                                                 # var recebe soma ou numero
                                                 else:
@@ -355,18 +355,18 @@ def generate_i_code(root, symbols_table, test_file):
                                                             print('funcao => corpo => atribuicao => expressao aditivaa => parc1 => ID')
                                                             for var in symbols_table:
                                                                 if var['name'] == node_atribuicao.children[2].children[0].children[0].name:
-                                                                    var1_loaded = builder.load(var['code'])
+                                                                    var1_loaded = builder.load(var['i_code'])
 
                                                         # parcela 2 da soma/sub eh variavel
                                                         if node_atribuicao.children[2].children[2].name == 'ID':
                                                             print('funcao => corpo => atribuicao => expressao aditivaa => parc2 => ID')
                                                             for var in symbols_table:
                                                                 if var['name'] == node_atribuicao.children[2].children[2].children[0].name:
-                                                                    var2_loaded = builder.load(var['code'])
+                                                                    var2_loaded = builder.load(var['i_code'])
                      
                                                         for symbol in symbols_table: 
                                                             if symbol['name'] == node_atribuicao.children[0].children[0].name: 
-                                                                store = symbol['code'] 
+                                                                store = symbol['i_code'] 
 
                                                         result = builder.add(var1_loaded, var2_loaded, name='atrib_expression_result')
                                                         builder.store(result, store)
@@ -388,16 +388,16 @@ def generate_i_code(root, symbols_table, test_file):
                                                     if func['token'] == 'func' and func['name'] == node_chamada_funcao.children[0].name:
                                                         for var in symbols_table:
                                                             if var['token'] == 'ID' and var['name'] == node_chamada_funcao.children[2].children[0].children[0].name:
-                                                                var1 = builder.load(var['code'])
+                                                                var1 = builder.load(var['i_code'])
 
                                                             if var['token'] == 'ID' and var['name'] == node_chamada_funcao.children[2].children[2].children[0].name:
-                                                                var2 = builder.load(var['code'])
+                                                                var2 = builder.load(var['i_code'])
 
-                                                        atrib_call = builder.call(func['code'], [var1, var2])
+                                                        atrib_call = builder.call(func['i_code'], [var1, var2])
 
                                                         for var in symbols_table:
                                                             if var['name'] == node_atribuicao.children[0].children[0]:
-                                                                symbol_code = var['code']
+                                                                symbol_code = var['i_code']
 
                                                         builder.store(atrib_call, symbol_code)
 
@@ -418,7 +418,7 @@ def generate_i_code(root, symbols_table, test_file):
 
                                     for func_in_table in symbols_table: 
                                         if func_in_table['name'] == function_return_node.children[2].children[0].name: 
-                                            if 'code' in func_in_table:
+                                            if 'i_code' in func_in_table:
                                                 function_return = func_in_table['name'] 
 
                                             else:  
@@ -454,7 +454,7 @@ def generate_i_code(root, symbols_table, test_file):
             find_func_return = False
             for func_return in symbols_table:
                 if func_return['name'] == function_return and func_return['token'] == 'ID' and func_return['type'] == 'inteiro':
-                    var_returned = builder.load(func_return['code'], name='func_return', align=4)
+                    var_returned = builder.load(func_return['i_code'], name='func_return', align=4)
                     builder.ret(var_returned)
                     find_func_return = True
 
