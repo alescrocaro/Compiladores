@@ -28,6 +28,8 @@ O Projeto LLVM é uma infraestrutura para o desenvolvimento de ferramentas de co
 
 O módulo representa um arquivo com código fonte ou uma unidade de tradução. Todo o restante do código deve estar dentro de um módulo. As funções estão contidadas em um módulo e irão conter partes do código, elas são declaradas com seus nomes e seus argumentos, uma função é um container de BasicBlocks. O bloco básico é um pedaço contíguo de instruções (como um bloco de código). Uma instrução é uma operação única expressa em um código. Podendo ser uma opção como uma adição de inteiros, ou uma instrução de load/store da/para memória.
 
+![image](https://user-images.githubusercontent.com/37521313/205456301-c6c3f8e9-d940-417d-a12a-a6c0fe6e58f1.png)
+
 Foi utilizada a API do llvm para
 
 intermediate representation
