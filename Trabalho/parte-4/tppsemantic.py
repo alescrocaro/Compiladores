@@ -305,7 +305,7 @@ def create_symbols_table(root):
 
                 # tem 1 parametro
                 elif node_i.children[1].children[2].children[0].name == 'parametro':
-                    func['lista-parametros'] =  node_i.children[1].children[2].children[0].children[2].children[0].name
+                    func['params_list'] =  node_i.children[1].children[2].children[0].children[2].children[0].name
                     func['formal-params'] = 1
                     # add param a lista de vars
                     param = {}
@@ -325,8 +325,8 @@ def create_symbols_table(root):
                     cont = 1
                     # aux = node do lista parametros
                     aux = node_i.children[1].children[2]
-                    func['lista-parametros'] = []
-                    func['lista-parametros'].append(aux.children[2].children[2].children[0].name)
+                    func['params_list'] = []
+                    func['params_list'].append(aux.children[2].children[2].children[0].name)
                     # add primeiro param a lista de vars
                     param = {}
                     counter += 1
@@ -347,7 +347,7 @@ def create_symbols_table(root):
 
                         # ultimo parametro
                         if len(aux.children) == 1:
-                            func['lista-parametros'].append(aux.children[0].children[2].children[0].name)
+                            func['params_list'].append(aux.children[0].children[2].children[0].name)
                             # add param a lista de vars
                             param = {}
                             counter += 1
@@ -363,7 +363,7 @@ def create_symbols_table(root):
 
                         # acessado sempre q n for o ultimo nem o primeiro parametro
                         else:
-                            func['lista-parametros'].append(aux.children[2].children[2].children[0].name)
+                            func['params_list'].append(aux.children[2].children[2].children[0].name)
                             # add param a lista de vars
                             param = {}
                             counter += 1
@@ -393,7 +393,7 @@ def create_symbols_table(root):
                 # tem 1 parametro
                 elif node_i.children[0].children[2].children[0].name == 'parametro':
                     aux = node_i.children[0].children[2].children[0]
-                    func['lista-parametros'] =  aux.children[2].children[0].name
+                    func['params_list'] =  aux.children[2].children[0].name
                     func['formal-params'] = 1
                     # add param a lista de vars
                     param = {}
@@ -413,8 +413,8 @@ def create_symbols_table(root):
                     cont = 1
                     # aux = node do lista parametros
                     aux = node_i.children[0].children[2]
-                    func['lista-parametros'] = []
-                    func['lista-parametros'].append(aux.children[2].children[2].children[0].name)
+                    func['params_list'] = []
+                    func['params_list'].append(aux.children[2].children[2].children[0].name)
                     # add primeiro param a lista de vars
                     param = {}
                     counter += 1
@@ -435,7 +435,7 @@ def create_symbols_table(root):
 
                         # ultimo parametro
                         if len(aux.children) == 1:
-                            func['lista-parametros'].append(aux.children[0].children[2].children[0].name)
+                            func['params_list'].append(aux.children[0].children[2].children[0].name)
                             # add param a lista de vars
                             param = {}
                             counter += 1
@@ -451,7 +451,7 @@ def create_symbols_table(root):
 
                         # acessado sempre q n for o ultimo nem o primeiro parametro
                         else:
-                            func['lista-parametros'].append(aux.children[2].children[2].children[0].name)
+                            func['params_list'].append(aux.children[2].children[2].children[0].name)
                             # add param a lista de vars
                             param = {}
                             counter += 1
@@ -840,7 +840,7 @@ def main():
         print('\n\n')
         
         try: 
-            generate_i_code(root, symbols_table)
+            generate_i_code(root, symbols_table, aux[0])
 
         except:
             print("Não foi possível gerar o código")

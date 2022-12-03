@@ -1,7 +1,8 @@
-from llvmlite import ir 
-from utils import *  
-from llvmlite import binding as llvm 
+from llvmlite import ir, binding as llvm 
 from anytree import LevelOrderIter
+from utils import *  
+
+
 
 
 
@@ -10,8 +11,8 @@ from anytree import LevelOrderIter
 #####################################
 def init_global_vars(symbolsTable, module):
     for var in symbolsTable:
-        if(var['token'] == 'ID'):
-            if(var['scope'] == 'global'):
+        if var['token'] == 'ID':
+            if var['scope'] == 'global':
                 if var['type'] == 'inteiro':
                     var['code'] = ir.GlobalVariable(module, ir.IntType(32), var['name'])
                     var['code'].initializer = ir.Constant(ir.IntType(32), 0)
@@ -26,16 +27,17 @@ def init_global_vars(symbolsTable, module):
 
 
 
+
 ###################################################
 # aloca variaveis locais (que estao em funcoes)
 ###################################################
 def alloca_local_vars(symbolsTable, builder, function_name):
     for var in symbolsTable:
         if var['token'] == 'ID' and var['scope'] == function_name:
-            if(var['type'] == 'inteiro'):
+            if var['type'] == 'inteiro':
                 var['code'] = builder.alloca(ir.IntType(32), name=var['name'])
 
-            if(var['type'] == 'flutuante'):
+            if var['type'] == 'flutuante':
                 var['code'] = builder.alloca(ir.FloatType(), name=var['name'])
 
             var['code'].align = 4
@@ -54,8 +56,8 @@ def generate_i_code(root, symbolsTable):
     llvm.initialize_native_target()
     llvm.initialize_native_asmprinter()
 
-    module = ir.Module()
-    module.triple = llvm.get_default_triple()
+    module = ir.Module('test.bc')
+    module.triple = llvm.get_process_triple()
     target = llvm.Target.from_triple(module.triple)
     target_machine = target.create_target_machine()
     module.data_layout = target_machine.target_data
@@ -67,6 +69,7 @@ def generate_i_code(root, symbolsTable):
     print_float = ir.Function(module, ir.FunctionType(ir.VoidType(), [ir.FloatType()]), 'escrevaFlutuante')
 
     
+
     ########################################
 
     init_global_vars(symbolsTable, module)
@@ -80,19 +83,20 @@ def generate_i_code(root, symbolsTable):
     ##################################
     for function_in_table in symbolsTable:
         # verifica se o simbolo (function_in_table) eh funcao
-        if(function_in_table['token'] == 'func'):
+        if function_in_table['token'] == 'func':
 
-            ############################################
-            # checa se funcao tem parametros
-            ############################################
-            if('lista-parametros' in function_in_table):
-                print('funcao => lista_parametros')
+
+            ################################################
+            # checa se funcao tem parametros e os aloca
+            ################################################
+            if 'params_list' in function_in_table:
+                print('funcao => lista parametros')
                 t_func_with_params = ir.FunctionType(ir.IntType(32), [ir.IntType(32), ir.IntType(32)])
                 function = ir.Function(module, t_func_with_params, function_in_table['name']) 
                 function_in_table['code'] = function
 
                 i = 0
-                for param in function_in_table['lista-parametros']:
+                for param in function_in_table['params_list']:
                     function.args[i].name = param
                     i += 1
 
@@ -131,62 +135,17 @@ def generate_i_code(root, symbolsTable):
                 if node.name == 'cabecalho':
                     # encontrar na arvore a funcao correspondente na tabela
                     if node.children[0].children[0].name == function_in_table['name']:
-                        # obtem o retorno da funcao
-                        for function_return_node in LevelOrderIter(node): 
-
-                            ############################################
-                            # checa o retorno da funcao 
-                            ############################################      
-                            if function_return_node.name == 'retorna' and function_return_node.children:
-                                # checa os tipos de retorno (var, numero ou soma/subtracao)
-                                if function_return_node.children[2].name == 'ID': # se retorna var
-                                    print('funcao => retorno => var')
-
-                                    # da pra trocar isso simplesmente por function_return = function_return_node.children[2].children[0].name ??????
-                                    for func_in_table in symbolsTable: 
-                                        if func_in_table['name'] == function_return_node.children[2].children[0].name: 
-                                            if 'code' in func_in_table:
-                                                function_return = func_in_table['name'] 
-
-                                            else:  
-                                                function_return = 0  
-                                                            
-                                if function_return_node.children[2].name == 'NUM_INTEIRO':
-                                    print('funcao => retorno => inteiro')
-                                    function_return = function_return_node.children[2].children[0].name
-
-                                if function_return_node.children[2].name == 'expressao_aditiva':
-                                    if function_return_node.children[2].children[1].children[0].name == '+':
-                                        print('funcao => retorno => expressao aditiva => soma')
-                                        return1 = builder.alloca(ir.IntType(32), name=function_return_node.children[2].children[0].children[0].name) 
-                                        return2 = builder.alloca(ir.IntType(32), name=function_return_node.children[2].children[2].children[0].name) 
-                                        return1_load = builder.load(return1) 
-                                        return2_load = builder.load(return2)
-                                        function_return = builder.add(return1_load, return2_load, name='add') 
-
-                                    if function_return_node.children[2].children[1].children[0].name == '-':
-                                        print('funcao => retorno => expressao aditiva => subtracao')
-                                        return1 = builder.alloca(ir.IntType(32), name=function_return_node.children[2].children[0].children[0].name) 
-                                        return2 = builder.alloca(ir.IntType(32), name=function_return_node.children[2].children[2].children[0].name) 
-                                        return1_load = builder.load(return1) 
-                                        return2_load = builder.load(return2)
-                                        function_return = builder.sub(return1_load, return2_load, name='add')      
-
-
-
 
                         ############################################
                         # checa o corpo da funcao
                         ############################################
-
-                        # (corpo eh como uma linha no codigo)
                         function_body = node.children[4]
-                        # vai ate o ultimo corpo da funcao e depois volta pra cima
+                        # desce a arvore ate o ultimo corpo da funcao
                         while len(function_body.children) != 0: 
                             function_body = function_body.children[0] 
                         
                         # aqui nao se verifica o noh declaracao_variaveis pois isso ja eh feito na funcao alloca_local_vars
-
+                        # sobe a arvore de volta percorrendo o corpo da funcao 
                         while function_body.parent.name != 'cabecalho': 
                             if function_body.name == 'corpo':
                                 if function_body.children:
@@ -224,32 +183,65 @@ def generate_i_code(root, symbolsTable):
                                                 if current_node.name == 'atribuicao':
                                                     print('funcao => corpo => repita => atribuicao')
 
+                                                    node_received_in_atrib = current_node.children[2]
+                                                    
+                                                    # var recebe uma soma/sub de variaveis
+                                                    if node_received_in_atrib.name == 'expressao_aditiva':
+                                                        print('funcao => corpo => repita => atribuicao => expressao aditiva')
+                                                        # parcela 1 da soma/sub eh variavel
+                                                        if node_received_in_atrib.children[0].name == 'ID':
+                                                            for var in symbolsTable:
+                                                                if var['name'] == node_received_in_atrib.children[0].children[0].name:
+                                                                    var1_loaded = builder.load(var['code'])
+
+                                                        # parcela 1 da soma/sub eh numero
+                                                        elif node_received_in_atrib.children[0].name == 'NUM_INTEIRO' or node_received_in_atrib.children[0].name == 'NUM_FLUTUANTE':
+                                                            var1_loaded = ir.Constant(ir.IntType(32), node_received_in_atrib.children[0].children[0].name)
+
+                                                        # parcela 2 da soma/sub eh variavel
+                                                        if node_received_in_atrib.children[2].name == 'ID':
+                                                            for var in symbolsTable:
+                                                                if var['name'] == node_received_in_atrib.children[2].children[0].name:
+                                                                    var2_loaded = builder.load(var['code'])
+
+                                                        # parcela 2 da soma/sub eh numero
+                                                        elif node_received_in_atrib.children[2].name == 'NUM_INTEIRO' or node_received_in_atrib.children[2].name == 'NUM_FLUTUANTE':
+                                                            var2_loaded = ir.Constant(ir.IntType(32), node_received_in_atrib.children[2].children[0].name)
+                     
+                                                        for symbol in symbolsTable: 
+                                                            if symbol['name'] == current_node.children[0].children[0].name: 
+                                                                store = symbol['code'] 
+                                            
+                                                        result = builder.add(var1_loaded, var2_loaded, name='atrib_expression_result')
+                                                        builder.store(result, store)
+                                
+                                
                                                     # se var recebe uma soma que a primeira parcela eh ela mesma e a segunda parcela eh um numero (INCREMENTO, como i++)
-                                                    if current_node.children[2].name == 'expressao_aditiva' and current_node.children[2].children[2].name != 'ID' and current_node.children[2].children[1].children[0].name == '+':
-                                                        if current_node.children[0].children[0].name == current_node.children[2].children[0].children[0].name:
+                                                    if node_received_in_atrib.name == 'expressao_aditiva' and node_received_in_atrib.children[2].name != 'ID' and node_received_in_atrib.children[1].children[0].name == '+':
+                                                        if current_node.children[0].children[0].name == node_received_in_atrib.children[0].children[0].name:
                                                             print('funcao => corpo => repita => atribuicao => incremento')
                                                             
                                                             for symbol in symbolsTable: 
                                                                 if symbol['name'] == current_node.children[0].children[0].name:
                                                                     # numero da segunda parcela da soma
-                                                                    part2_number = current_node.children[2].children[2].children[0].name
+                                                                    part2_number = node_received_in_atrib.children[2].children[0].name
                                                                     part2_number_allocated = builder.alloca(ir.IntType(32), name=part2_number)
                                                                     part2_number_loaded = builder.load(part2_number_allocated)
 
                                                                     part1_var_loaded = builder.load(symbol['code'])
-                                                                    builder.add(part1_var_loaded, part2_number_loaded, name='increment', flags=())
+                                                                    builder.add(part1_var_loaded, part2_number_loaded, name='increment')
                                                                     builder.call(print_integer, [builder.load(symbol['code'])])  
 
 
                                                     # se var recebe uma subtracao que a primeira parcela eh ela mesma e que a segunda parcela eh um numero (DECREMENTO, como i--)
-                                                    if current_node.children[2].name == 'expressao_aditiva' and current_node.children[2].children[2].name != 'ID' and current_node.children[2].children[1].children[0].name == '-':
-                                                        if current_node.children[0].children[0].name == current_node.children[2].children[0].children[0].name:
+                                                    if node_received_in_atrib.name == 'expressao_aditiva' and node_received_in_atrib.children[2].name != 'ID' and node_received_in_atrib.children[1].children[0].name == '-':
+                                                        if current_node.children[0].children[0].name == node_received_in_atrib.children[0].children[0].name:
                                                             print('funcao => corpo => repita => atribuicao => decremento')
 
                                                             for symbol in symbolsTable:
                                                                 if symbol['name'] == current_node.children[0].children[0].name:
                                                                     # numero da segunda parcela da subtracao
-                                                                    part2_number = current_node.children[2].children[2].children[0].name
+                                                                    part2_number = node_received_in_atrib.children[2].children[0].name
                                                                     part2_number_allocated = builder.alloca(ir.IntType(32), name=part2_number)
                                                                     part2_number_loaded = builder.load(part2_number_allocated)
 
@@ -258,7 +250,7 @@ def generate_i_code(root, symbolsTable):
 
 
                                                     # se funcao que esta sendo atribuida recebe lista de argumentos 
-                                                    if current_node.children[2].name == 'chamada_funcao' and current_node.children[2].children[2].name == 'lista_argumentos':
+                                                    if node_received_in_atrib.name == 'chamada_funcao' and node_received_in_atrib.children[2].name == 'lista_argumentos':
                                                         # funcao recebe parametros normais (como vars)
                                                         print('funcao => corpo => repita => atribuicao => chamada_funcao => lista_argumentos')
 
@@ -280,35 +272,7 @@ def generate_i_code(root, symbolsTable):
                                                                         builder.call(print_integer,[builder.load(var_code_on_write)])   
 
 
-                                                    # var recebe uma soma/sub de variaveis
-                                                    if current_node.children[2].name == 'expressao_aditiva':
-                                                        print('funcao => corpo => repita => atribuicao => expressao aditiva')
-                                                        # parcela 1 da soma/sub eh variavel
-                                                        if current_node.children[2].children[0].name == 'ID':
-                                                            for var in symbolsTable:
-                                                                if var['name'] == current_node.children[2].children[0].children[0].name:
-                                                                    var1_loaded = builder.load(var['code'])
 
-                                                        # parcela 1 da soma/sub eh numero
-                                                        elif current_node.children[2].children[0].name == 'NUM_INTEIRO' or current_node.children[2].children[0].name == 'NUM_FLUTUANTE':
-                                                            var1_loaded = ir.Constant(ir.IntType(32), current_node.children[2].children[0].children[0].name)
-
-                                                        # parcela 2 da soma/sub eh variavel
-                                                        if current_node.children[2].children[2].name == 'ID':
-                                                            for var in symbolsTable:
-                                                                if var['name'] == current_node.children[2].children[2].children[0].name:
-                                                                    var2_loaded = builder.load(var['code'])
-
-                                                        # parcela 2 da soma/sub eh numero
-                                                        elif current_node.children[2].children[2].name == 'NUM_INTEIRO' or current_node.children[2].children[2].name == 'NUM_FLUTUANTE':
-                                                            var2_loaded = ir.Constant(ir.IntType(32), current_node.children[2].children[2].children[0].name)
-                     
-                                                        for symbol in symbolsTable: 
-                                                            if symbol['name'] == current_node.children[0].children[0].name: 
-                                                                store = symbol['code'] 
-                                            
-                                                        result = builder.add(var1_loaded , var2_loaded , name='atrib_expression_result', flags=())
-                                                        builder.store(result, store)
 
 
                                             # expressao do 'ate'/'until'
@@ -347,11 +311,11 @@ def generate_i_code(root, symbolsTable):
                                             for symbol in symbolsTable: 
                                                 if symbol['type'] == 'inteiro' and symbol['name'] == node_leia.children[2].children[0].name:
                                                     print('funcao => corpo => leia => inteiro')
-                                                    builder.store(builder.call(read_integer, ()), symbol['code'])  
+                                                    builder.store(builder.call(read_integer, []), symbol['code'])  
 
                                                 if symbol['type'] == 'flutuante' and symbol['name'] == node_leia.children[2].children[0].name:
                                                     print('funcao => corpo => leia => flutuante')
-                                                    builder.store(builder.call(read_float, ()), symbol['code'])  
+                                                    builder.store(builder.call(read_float, []), symbol['code'])  
 
 
                                         ###############################
@@ -387,7 +351,7 @@ def generate_i_code(root, symbolsTable):
                                             if node_atribuicao.children[2].name != 'ID':
                                                 print('funcao => atribuicao => numero')
                                                 number = node_atribuicao.children[2].children[0].name
-                                                if(var_type == 'inteiro' and node_atribuicao.children[2].name == 'NUM_INTEIRO'):
+                                                if var_type == 'inteiro' and node_atribuicao.children[2].name == 'NUM_INTEIRO':
                                                     builder.store(ir.Constant(ir.IntType(32), number), var_code)         
 
                                             if node_atribuicao.children[2].name == 'ID':
@@ -431,6 +395,45 @@ def generate_i_code(root, symbolsTable):
 
 
 
+                        ############################################
+                        # checa o retorno da funcao
+                        ############################################
+                        for function_return_node in LevelOrderIter(node):      
+                            if function_return_node.name == 'retorna' and function_return_node.children:
+                                # checa os tipos de retorno (var, numero ou soma/subtracao)
+                                if function_return_node.children[2].name == 'ID': # se retorna var
+                                    print('funcao => retorno => var')
+
+                                    for func_in_table in symbolsTable: 
+                                        if func_in_table['name'] == function_return_node.children[2].children[0].name: 
+                                            if 'code' in func_in_table:
+                                                function_return = func_in_table['name'] 
+
+                                            else:  
+                                                function_return = 0  
+                                                            
+                                if function_return_node.children[2].name == 'NUM_INTEIRO':
+                                    print('funcao => retorno => inteiro')
+                                    function_return = function_return_node.children[2].children[0].name
+
+                                if function_return_node.children[2].name == 'expressao_aditiva':
+                                    if function_return_node.children[2].children[1].children[0].name == '+':
+                                        print('funcao => retorno => expressao aditiva => soma')
+                                        return1 = builder.alloca(ir.IntType(32), name=function_return_node.children[2].children[0].children[0].name) 
+                                        return2 = builder.alloca(ir.IntType(32), name=function_return_node.children[2].children[2].children[0].name) 
+                                        return1_load = builder.load(return1) 
+                                        return2_load = builder.load(return2)
+                                        function_return = builder.add(return1_load, return2_load, name='add') 
+
+                                    if function_return_node.children[2].children[1].children[0].name == '-':
+                                        print('funcao => retorno => expressao aditiva => subtracao')
+                                        return1 = builder.alloca(ir.IntType(32), name=function_return_node.children[2].children[0].children[0].name) 
+                                        return2 = builder.alloca(ir.IntType(32), name=function_return_node.children[2].children[2].children[0].name) 
+                                        return1_load = builder.load(return1) 
+                                        return2_load = builder.load(return2)
+                                        function_return = builder.sub(return1_load, return2_load, name='add')      
+
+
             exitBasicBlock = function.append_basic_block('exit')
             builder.branch(exitBasicBlock)
             builder = ir.IRBuilder(exitBasicBlock)
@@ -445,7 +448,7 @@ def generate_i_code(root, symbolsTable):
 
             if find_func_return == False:
                 if len(function.args) != 0:
-                    res = builder.add(function.args[0], function.args[1])
+                    res = builder.add(function.args[0], function.args[1], name='func_{}_return'.format(function.name))
                     builder.ret(res)
 
                 else:
@@ -455,5 +458,7 @@ def generate_i_code(root, symbolsTable):
     file = open('generated_code.ll', 'w')
     file.write(str(module))
     file.close()
+    print()
+    print()
     print()
     print('Código intermediário gerado!')
