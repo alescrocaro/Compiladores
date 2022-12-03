@@ -30,86 +30,400 @@ O módulo representa um arquivo com código fonte ou uma unidade de tradução. 
 
 ![image](https://user-images.githubusercontent.com/37521313/205456301-c6c3f8e9-d940-417d-a12a-a6c0fe6e58f1.png)
 
+### Detalhes da implementação
+
+#### Bibliotecas
+
+A biblioteca utilizada para fazer as chamadas à api do LLVM foi a llvmlite (biblioteca que vincula Python a LLVM). Além disso, para percorrer a árvore foi utilizada a biblioteca Anytree, mais especificamente seu método LevelOrderIter, que percorre a árvore aplicando a estratégia level-order (por nível) e começa no nó passado.
+
 #### Utilização da API do LLVM no projeto
 
-Importação:
-
 ```Python
+# Importação
 from llvmlite import ir, binding as llvm
-```
 
-Criando módulo
+# Inicialização do LLVM
+llvm.initialize()
+llvm.initialize_all_targets()
+llvm.initialize_native_target()
+llvm.initialize_native_asmprinter()
 
-```Python
+# Criando e inicializando o módulo
 module = ir.Module('test_{}.bc'.format(test_number)) # test_number = 001 ou similar
-```
+module.triple = llvm.get_process_triple()
+target = llvm.Target.from_triple(module.triple)
+target_machine = target.create_target_machine()
+module.data_layout = target_machine.target_data
 
-Salvando módulo
+# Declarando variavel global inteira com nome a
+# para uma var do tipo flutuante basta trocar ir.IntType(32) por ir.FloarType()
+var = ir.GlobalVariable(module, ir.IntType(32), 'a')
+var.initializer = ir.Constant(ir.IntType(32), 0) # Definindo constante 0 para inicialização da var
+var.linkage = "common"
+var.align = 4 # Definindo alinhamento
 
-```Python
+
+# Declarando função
+function = ir.Function(module, ir.FunctionType(ir.IntType(32), []), name=function_name)
+# se a funcao for a principal basta trocar function_name por 'main'
+
+# Declarando bloco de entrada
+entry_block = function.append_basic_block('entry')
+
+# Adicionando bloco de entrada
+builder = ir.IRBuilder(entry_block)
+
+# Criando variável inteira (local)
+var_local = builder.alloca(ir.IntType(32), name=var_name)
+var.align = 4
+
+# Atribuindo number à variavel a
+builder.store(ir.Constant(ir.IntType(32), number), var_code)
+# Atribuindo var2 à var1
+builder.store(builder.load(var2), var1)
+
+# escrevendo inteiro
+print_integer = ir.Function(module, ir.FunctionType(ir.VoidType(), [ir.IntType(32)]), 'escrevaInteiro')
+
+builder.call(print_integer, args=[builder.load(var)])
+
+# escrevendo flutuante
+print_float = ir.Function(module, ir.FunctionType(ir.VoidType(), [ir.FloatType()]), 'escrevaFlutuante')
+builder.call(print_float, args=[builder.load(var)])
+
+# Declarando inicio do repita
+repeat_start = function.append_basic_block('repeat_start')
+builder.branch(repeat_start)
+builder.position_at_end(repeat_start)
+
+# Declarando fim do repita
+repeat_end = function.append_basic_block('repeat_end')
+builder.cbranch(check_repeat, repeat_start, repeat_end)
+builder.position_at_end(repeat_end)
+
+
+# Declarando bloco de saida
+exit_block = function.append_basic_block('exit')
+
+# Adicionando bloco de saida
+builder.branch(exit_block)
+builder = ir.IRBuilder(exit_block)
+
+# Salvando módulo
 file = open('geracao-codigo-testes/gencode-{}.ll'.format(test_number), 'w')
 file.write(str(module))
 file.close()
 ```
 
-Declarando função
+---
+
+#### Código e explicações
+
+importações:
 
 ```Python
 from llvmlite import ir, binding as llvm
+from anytree import LevelOrderIter
+from utils import *
 ```
 
----
+##### Função init_global_vars:
 
-### Detalhes da implementação
+Esta função percorre todas as variáveis globais da tabela de símbolos e as inicializa, sendo assim inicializa todas variáveis globais do código. É chamada dentro da função generate_i_code
 
-Como o código está todo comentado, para facilitar a compreensão, e algumas funções possuem muitas linhas, nesta seção não irei utilizar capturas de tela.
+Parâmetros:
 
-#### Bibliotecas
+- symbols_table: tabela de símbolos gerada na análise semântica.
+- module: módulo inicializado na função generate_i_code
 
-Para percorrer a árvore foi utilizada a biblioteca Anytree, mais especificamente seus métodos LevelOrderIter, que percorre a árvore aplicando a estratégia level-order (por nível) e começa no nó passado, PreOrderIter, que percorre a árvore aplicando a estratégia de pre-order (percorre verticalmente até chegar na folha, quando encontrar folha volta e procura pelas próximas folhas) e começa no nó passado, além do UniqueDotExporter, do Anytree.exporter que foi utilizado para gerar a árvore abstrata. Também foram utilizados a análise sintática desenvolvida na parte dois do trabalho e o arquivo utils, que possui uma função para encontrar o escopo de uma variável.
+```Python
+def init_global_vars(symbols_table, module):
+    for var in symbols_table:
+        if var['token'] == 'ID':
+            if var['scope'] == 'global':
+                if var['type'] == 'inteiro':
+                    print('declaracao variavel => global => inteiro')
+                    var['code'] = ir.GlobalVariable(module, ir.IntType(32), var['name'])
+                    var['code'].initializer = ir.Constant(ir.IntType(32), 0)
 
-#### Tabela de símbolos
+                if var['type'] == 'flutuante':
+                    print('declaracao variavel => global => flutuante')
+                    var['code'] = ir.GlobalVariable(module, ir.FloatType(), var['name'])
+                    var['code'].initializer = ir.Constant(ir.FloatType(), 0.0)
 
-&nbsp;&nbsp;A tabela de símbolos é um vetor de objetos (que possuem todas informações de variáveis ou funções), para preenchê-lo, é utilizida a PreOrderIter para iterar a árvore gerada na análise sintática.
+                var['code'].linkage = "common"
+                var['code'].align = 4
+```
 
-&nbsp;&nbsp;Para encontrar declarações de variáveis com somente uma variável, é analisado se o nó atual da iteração possui o nome 'declaracao_variaveis' e possui apenas um filho e então define-se qual variavel é na contagem (1, 2, 3...), tipo, nome, dimensão, índice, token, estado e escopo, então adiciona-se um objeto com essas informações em um vetor que contém todas variáveis (se ela já não existe no vetor). Já para declarações com duas variáveis, analisa-se se o nó atual da iteração possui o nome 'declaracao_variaveis' e seu filho 'lista_variaveis' possui mais de uma variável, e então define-se as mesmas informações anteriores para as duas variáveis. Para declarações com mais de 2 variáveis, é verificado se o nó atual da iteração possui o nome 'declaracao_variaveis' e se seu filho 'lista_variaveis' possui outro filho 'lista_variaveis' e então são definidas as mesmas informações anteriores para todas variáveis.
+##### Função alloca_local_vars:
 
-&nbsp;&nbsp;Já para encontrar funções, é verificado se o nó atual da iteração possui o nome 'declaracao_funcao', se for são definidas informações como qual objeto é na contagem (1, 2, 3...), token, estado, tipo do retorno, quantidade de parâmetros formais (e quais são esses parâmetros), além de inserir cada um dos parâmetros na lista de variáveis.
+Esta função percorre todas as variáveis locais (pela tabela de símbolos) da função passada e as inicializa, sendo assim inicializa todas variáveis locais da função, menos os parâmetros. É chamada dentro da função generate_i_code
 
-#### Funções de checagem
+Parâmetros:\
 
-Essas funções irão informar os erros e alertas definidos na seção de regras do presente documento. Mas é importante informar que, além dos erros ou avisos lançados nessas funções, alguns são emitidos já na construção da tabela de símbolos.
+- symbols_table: tabela de símbolos gerada na análise semântica;
+- builder: builder inicializado na função generate_i_code;
+- function_name: nome da função que será tratada no momento.
 
-&nbsp;&nbsp;check_main:\
-&nbsp;&nbsp;Percorre toda a tabela de símbolos em busca da função principal.
+```Python
+def alloca_local_vars(symbols_table, builder, function_name):
+    for var in symbols_table:
+        if var['token'] == 'ID' and var['scope'] == function_name:
+            if var['type'] == 'inteiro':
+                print('declaracao variavel => scope={} => inteiro'.format(function_name))
+                var['code'] = builder.alloca(ir.IntType(32), name=var['name'])
 
-&nbsp;&nbsp;check_functions:\
-&nbsp;&nbsp;Percorre toda a tabela de símbolos e verifica o retorno das funções - se tem retorno, se retorna o tipo correto e se a variável que está sendo retornada existe. Além disso, percorre toda a árvore em busca de chamadas de função e verifica se há chamadas para função principal, se a função chamada existe e se a quantidade de parâmetros reais coincide com os parâmetros formais. Ao fim da função, percorre a tabela de símbolos e verifica se a função foi utilizada.
+            if var['type'] == 'flutuante':
+                print('declaracao variavel => scope={} => flutuante'.format(function_name))
+                var['code'] = builder.alloca(ir.FloatType(), name=var['name'])
 
-&nbsp;&nbsp;check_vars:\
-&nbsp;&nbsp;Percorre a tabela de símbolos atualizando o estado das variáveis que participam de atribuições - verifica variáveis que não são utilizadas. Além de percorrer a árvore buscando por variáveis que são utilizadas sem serem definidas.
+            var['code'].align = 4
+```
 
-&nbsp;&nbsp;check_multi_dimensional_vars:\
-&nbsp;&nbsp;Percorre a árvore e busca por variáveis que são vetores ou matrizes, verifica se está sendo utilizado um índice com valor em ponto flutuante e se o índice utilizado está fora do intervalo permitido.
+##### Função generate_i_code:
 
-&nbsp;&nbsp;check_assignments:\
-&nbsp;&nbsp;Percorre a árvore e busca por variáveis. Verifica se a variável está recebendo um valor compatível com seu tipo e se a variável existe (assim como a variável que a está sendo atribuída)
+Esta é a função principal do código. Além de inicializar o llvm e o módulo, ela chama as duas funções acima e lida com todas funções do código-fonte. Como o código é muito grande, vou comentar apenas seus detalhes e lógica abaixo.
+
+Parâmetros:
+
+- root: Nó da árvore a passado de
+- symbols_table: tabela de símbolos gerada na análise semântica;
+- builder: builder inicializado na função generate_i_code;
+- function_name: nome da função que será tratada no momento.
+
+Primeiramente, inicializei o llvm e o módulo, assim como defini o código para o leia inteiro e flutuante e escreva inteiro e flutuante.
+
+Após isso chamei a função init_global_vars para inicializar todas as funções globais do código. Com isso feito, parti para a checagem das funções do código-fonte. Para tanto, percorri a tabela de símbolos, checando se o símbolo é função.
+
+Em primeiro plano, checo se a função tem parâmetros e faço os devidos tratamentos para iniciar ela e seus params (se possuir), iniciando seu bloco de entrada (utilizando builder). E então é possível alocar suas variáveis locais.
+
+Agora checo a árvore em busca do nó 'cabecalho' que indica o início de uma função. Então verifico se o nome da função encontrada existe na tabela de símbolos para evitar inconsistências. Com isso, é possível checar o corpo da função, para isso percorro o corpo até chegar no último nó de corpo e depois percorro esses corpos de baixo pra cima na árvore, isso é feito pois na árvore os corpos aparecem na ordem inversa ao código fonte, ou seja, a primeira linha de corpo no código fonte é o último nó de corpo na árvore. Para checar o corpo da função, checo qual é o nó de corpo atual, cada um deles é tratado individualmente, como apresentado abaixo:
+
+- repita:\
+  Primeiro inicio o bloco de entrada, e, para percorrer o corpo do repita, preciso realizar o mesmo procedimento feito para percorrer o corpo da função (percorrer de baixo pra cima). Então verifico cada corpo do repita e vejo se é 'leia' e utilizo o builder.store para fazer seu tratamento; 'escreva' e utilizo o builder.call e builder.load para fazer seu tratamento; 'atribuicao' checo se variável recebe um incremento ou decremento e faço seu tratamento com builder.add ou builder.sub e builder.call dando builder.load no numero do incremento/decremento, checo se a variável recebe uma chamada de função e uso builder.store, builder.call e builder.load. Por último verifico a expressao contida no 'até'
+
+- declaracao_variaveis
+
+```Python
+                                            # expressao do 'ate'/'until'
+                                            if node_repita.children[3].name == 'expressao_simples':
+                                                print('funcao => corpo => repita => expressao simples (ate)')
+                                                node_repita_expressao_simples = node_repita.children[3]
+                                                for var in symbols_table:
+                                                    if var['name'] == node_repita_expressao_simples.children[0].children[0].name:
+                                                        var_code = var['code']
+                                                        var1_code = builder.load(var_code, 'b_cmp', align=4)
+
+
+                                                if node_repita_expressao_simples.children[2].name == 'NUM_INTEIRO' or node_repita_expressao_simples.children[2].name == 'NUM_FLUTUANTE':
+                                                    number2_code = ir.Constant(ir.IntType(32), node_repita_expressao_simples.children[2].children[0].name)
+
+                                                node_relacional = node_repita_expressao_simples.children[1].children[0]
+
+                                                if node_relacional.name == '=':
+                                                    relacional = '=='
+                                                    check_repeat = builder.icmp_signed(relacional, var1_code, number2_code, name='repeat_until_check')
+
+                                                else:
+                                                    check_repeat = builder.icmp_signed(node_relacional.name, var1_code, number2_code, name='repeat_until_check')
+
+                                                builder.cbranch(check_repeat, repeat_start, repeat_end)
+                                                builder.position_at_end(repeat_end)
+
+
+                                        ###############################
+                                        # se corpo atual eh leia
+                                        ###############################
+                                        if function_body.children[1].name == 'leia':
+                                            print('funcao => corpo => leia')
+                                            node_leia = function_body.children[1]
+
+                                            for symbol in symbols_table:
+                                                if symbol['type'] == 'inteiro' and symbol['name'] == node_leia.children[2].children[0].name:
+                                                    print('funcao => corpo => leia => inteiro')
+                                                    builder.store(builder.call(read_integer, []), symbol['code'])
+
+                                                if symbol['type'] == 'flutuante' and symbol['name'] == node_leia.children[2].children[0].name:
+                                                    print('funcao => corpo => leia => flutuante')
+                                                    builder.store(builder.call(read_float, []), symbol['code'])
+
+
+                                        ###############################
+                                        # se corpo atual eh escreva
+                                        ###############################
+                                        if function_body.children[1].name == 'escreva':
+                                            print('funcao => corpo => escreva')
+
+                                            for var in symbols_table:
+                                                if var['name'] == function_body.children[1].children[2].children[0].name:
+                                                    if var['type'] == 'inteiro':
+                                                        builder.call(print_integer, args=[builder.load(var['code'])])
+
+                                                    if var['type'] == 'flutuante':
+                                                        builder.call(print_float, args=[builder.load(var['code'])])
+
+
+                                        ###############################
+                                        # se corpo atual eh atribuicao
+                                        ###############################
+                                        if function_body.children[1].name == 'atribuicao':
+                                            print('funcao => corpo => atribuicao')
+                                            # se var nao recebe funcao
+                                            if function_body.children[1].children[2].name != 'chamada_funcao':
+                                                node_atribuicao = function_body.children[1]
+
+                                                # obtem infos da variavel recebendo a atribuicao na tabela de simbolos
+                                                for var in symbols_table:
+                                                    if var['token'] == 'ID':
+                                                        if var['name'] == node_atribuicao.children[0].children[0].name:
+                                                            if 'code' in var:
+                                                                var_code = var['code']
+                                                                var_type = var['type']
+
+
+                                                # var recebe var
+                                                if node_atribuicao.children[2].name == 'ID':
+                                                    print('funcao => corpo => atribuicao (var := var)')
+                                                    for var in symbols_table:
+                                                        if var['name'] == node_atribuicao.children[2].children[0]:
+                                                            builder.store(builder.load(var['code']), var_code)
+
+                                                # var recebe soma ou numero
+                                                else:
+                                                    # var recebe uma soma/sub de variaveis
+                                                    if node_atribuicao.children[2].name == 'expressao_aditiva':
+                                                        print('funcao => corpo => atribuicao => expressao aditiva')
+                                                        # parcela 1 da soma/sub eh variavel
+                                                        if node_atribuicao.children[2].children[0].name == 'ID':
+                                                            print('funcao => corpo => atribuicao => expressao aditivaa => parc1 => ID')
+                                                            for var in symbols_table:
+                                                                if var['name'] == node_atribuicao.children[2].children[0].children[0].name:
+                                                                    var1_loaded = builder.load(var['code'])
+
+                                                        # parcela 2 da soma/sub eh variavel
+                                                        if node_atribuicao.children[2].children[2].name == 'ID':
+                                                            print('funcao => corpo => atribuicao => expressao aditivaa => parc2 => ID')
+                                                            for var in symbols_table:
+                                                                if var['name'] == node_atribuicao.children[2].children[2].children[0].name:
+                                                                    var2_loaded = builder.load(var['code'])
+
+                                                        for symbol in symbols_table:
+                                                            if symbol['name'] == node_atribuicao.children[0].children[0].name:
+                                                                store = symbol['code']
+
+                                                        result = builder.add(var1_loaded, var2_loaded, name='atrib_expression_result')
+                                                        builder.store(result, store)
+
+                                                    else:
+                                                        print('funcao => corpo => atribuicao (var := numero)')
+                                                        number = node_atribuicao.children[2].children[0].name
+                                                        if var_type == 'inteiro' and node_atribuicao.children[2].name == 'NUM_INTEIRO':
+                                                            builder.store(ir.Constant(ir.IntType(32), number), var_code)
+
+
+                                            # se var recebe funcao
+                                            if function_body.children[1].children[2].name == 'chamada_funcao':
+                                                print('funcao => corpo => atribuicao (var := func)')
+                                                node_atribuicao = function_body.children[1]
+                                                node_chamada_funcao = node_atribuicao.children[2]
+
+                                                for func in symbols_table:
+                                                    if func['token'] == 'func' and func['name'] == node_chamada_funcao.children[0].name:
+                                                        for var in symbols_table:
+                                                            if var['token'] == 'ID' and var['name'] == node_chamada_funcao.children[2].children[0].children[0].name:
+                                                                var1 = builder.load(var['code'])
+
+                                                            if var['token'] == 'ID' and var['name'] == node_chamada_funcao.children[2].children[2].children[0].name:
+                                                                var2 = builder.load(var['code'])
+
+                                                        atrib_call = builder.call(func['code'], [var1, var2])
+
+                                                        for var in symbols_table:
+                                                            if var['name'] == node_atribuicao.children[0].children[0]:
+                                                                symbol_code = var['code']
+
+                                                        builder.store(atrib_call, symbol_code)
+
+
+                            # sobe 1 corpo da funcao
+                            function_body = function_body.parent
+
+
+
+                        ############################################
+                        # checa o retorno da funcao
+                        ############################################
+                        for function_return_node in LevelOrderIter(node):
+                            if function_return_node.name == 'retorna' and function_return_node.children:
+                                # checa os tipos de retorno (var, numero ou soma/subtracao)
+                                if function_return_node.children[2].name == 'ID': # se retorna var
+                                    print('funcao => retorno => var')
+
+                                    for func_in_table in symbols_table:
+                                        if func_in_table['name'] == function_return_node.children[2].children[0].name:
+                                            if 'code' in func_in_table:
+                                                function_return = func_in_table['name']
+
+                                            else:
+                                                function_return = 0
+
+                                if function_return_node.children[2].name == 'NUM_INTEIRO':
+                                    print('funcao => retorno => inteiro')
+                                    function_return = function_return_node.children[2].children[0].name
+
+                                if function_return_node.children[2].name == 'expressao_aditiva':
+                                    if function_return_node.children[2].children[1].children[0].name == '+':
+                                        print('funcao => retorno => expressao aditiva => soma')
+                                        return1 = builder.alloca(ir.IntType(32), name=function_return_node.children[2].children[0].children[0].name)
+                                        return2 = builder.alloca(ir.IntType(32), name=function_return_node.children[2].children[2].children[0].name)
+                                        return1_load = builder.load(return1)
+                                        return2_load = builder.load(return2)
+                                        function_return = builder.add(return1_load, return2_load, name='add')
+
+                                    if function_return_node.children[2].children[1].children[0].name == '-':
+                                        print('funcao => retorno => expressao aditiva => subtracao')
+                                        return1 = builder.alloca(ir.IntType(32), name=function_return_node.children[2].children[0].children[0].name)
+                                        return2 = builder.alloca(ir.IntType(32), name=function_return_node.children[2].children[2].children[0].name)
+                                        return1_load = builder.load(return1)
+                                        return2_load = builder.load(return2)
+                                        function_return = builder.sub(return1_load, return2_load, name='add')
+
+
+            exit_block = function.append_basic_block('exit')
+            builder.branch(exit_block)
+            builder = ir.IRBuilder(exit_block)
+
+            # build retorno de funcoes
+            find_func_return = False
+            for func_return in symbols_table:
+                if func_return['name'] == function_return and func_return['token'] == 'ID' and func_return['type'] == 'inteiro':
+                    var_returned = builder.load(func_return['code'], name='func_return', align=4)
+                    builder.ret(var_returned)
+                    find_func_return = True
+
+            if find_func_return == False:
+                if len(function.args) != 0:
+                    res = builder.add(function.args[0], function.args[1], name='func_{}_return'.format(function.name))
+                    builder.ret(res)
+
+                else:
+                    builder.ret(ir.Constant(ir.IntType(32), function_return))
+
+    file = open('geracao-codigo-testes/gencode-{}.ll'.format(test_number), 'w')
+    file.write(str(module))
+    file.close()
+    # print(module)
+    print()
+    print()
+    print('----------------------------')
+    print('Código intermediário gerado!')
+    print('----------------------------')
+
+```
+
+##### Funções
 
 #### Funções auxiliares
-
-Encontradas no arquivo utils.py, são partes do código que se repetem e são transformadas em métodos. Por conta da falta de tempo só fiz isso para uma função, mas acredito que seria possível fazer para outras partes, como a verificação do índex ou dimensão da variável.
-
-&nbsp;&nbsp;find_scope:\
-&nbsp;&nbsp;Verifica se o pai do nó atual é 'declaracao', se for o tipo é global, senão a variável se encontra dentro de uma função, então percorre a árvore verticalmente para cima até chegar ao cabeçalho da função e atribui o escopo da variável como o nome da função.
-
----
-
-### Árvore Sintática Abstrata
-
-Após a análise semântica, é gerada uma árvore abstrata por meio da função 'cut_tree'. Essa árvore consiste em uma árvore simplificada da árvore gerada na análise sintática. Abaixo podem ser observadas imagens que exemplificam essa simplificação.
-
-&nbsp;&nbsp;cut_tree:\
-&nbsp;&nbsp;Percorre toda a árvore e verifica todos os nós que possuem apenas um filho e esse filho também possui filhos (assim é possível remover um nó) e então atualiza os filhos do nó.
 
 #### Exemplo de poda da árvore
 

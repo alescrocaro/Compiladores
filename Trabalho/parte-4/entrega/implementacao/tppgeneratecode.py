@@ -91,7 +91,6 @@ def generate_i_code(root, symbols_table, test_file):
         # verifica se o simbolo (function_in_table) eh funcao
         if function_in_table['token'] == 'func':
 
-
             ################################################
             # checa se funcao tem parametros e os aloca
             ################################################
@@ -168,8 +167,7 @@ def generate_i_code(root, symbols_table, test_file):
                                             builder.branch(repeat_start)
                                             builder.position_at_end(repeat_start)
 
-
-                                            node_repita = function_body.children[1]
+                                            node_ate_expressao = function_body.children[1].children[3]
                                             node_repita_body = function_body.children[1].children[1]
                                             # desce a arvore ate o ultimo corpo do repita
                                             while node_repita_body.children[0].children[0].name != 'vazio': 
@@ -255,43 +253,43 @@ def generate_i_code(root, symbols_table, test_file):
                                                                 for var_receiving_atrib in symbols_table: 
                                                                     if var_receiving_atrib['name'] == node_atribuicao.children[0].children[0].name:
                                                                         builder.store(func_code, var_receiving_atrib['code']) 
-                                                                        builder.call(print_integer,[builder.load(var_code_on_write)])   
-
+                                                                        builder.call(print_integer,[builder.load(var_code_on_write)])
+                                                                        print('ta aqui')   
 
 
 
                                                 node_repita_body = node_repita_body.parent 
+                                            # 'ate'/'until'
+                                            print('tira o if')
+                                            if node_ate_expressao.name == 'expressao_simples': 
+                                                print('funcao => corpo => repita => expressao simples (ate)')
+
+                                                for var in symbols_table: 
+                                                    if var['name'] == node_ate_expressao.children[0].children[0].name: 
+                                                        var_code = var['code']
+                                                        var1_code = builder.load(var_code, 'var_for_compare', align=4) 
+
+                                                if node_ate_expressao.children[2].name == 'NUM_INTEIRO': 
+                                                    number2_code = ir.Constant(ir.IntType(32), node_ate_expressao.children[2].children[0].name)       
+
+                                                node_relacional = node_ate_expressao.children[1].children[0]
+
+                                                if node_relacional.name == '=':
+                                                    check_repeat = builder.icmp_signed('==', var1_code, number2_code, name='check_repeat')
+
+                                                else:
+                                                    check_repeat = builder.icmp_signed(node_relacional.name, var1_code, number2_code, name='check_repeat')
+
+                                                print(module)
+
+                                                builder.cbranch(check_repeat, repeat_start, repeat_end) 
+                                                print('teste')
+                                                builder.position_at_end(repeat_end)
+
 
                                             
 
 
-
-
-
-                                            # expressao do 'ate'/'until'
-                                            if node_repita.children[3].name == 'expressao_simples': 
-                                                print('funcao => corpo => repita => expressao simples (ate)')
-                                                node_repita_expressao_simples = node_repita.children[3]
-                                                for var in symbols_table: 
-                                                    if var['name'] == node_repita_expressao_simples.children[0].children[0].name: 
-                                                        var_code = var['code']
-                                                        var1_code = builder.load(var_code, 'b_cmp', align=4) 
-
-
-                                                if node_repita_expressao_simples.children[2].name == 'NUM_INTEIRO' or node_repita_expressao_simples.children[2].name == 'NUM_FLUTUANTE': 
-                                                    number2_code = ir.Constant(ir.IntType(32), node_repita_expressao_simples.children[2].children[0].name)       
-
-                                                node_relacional = node_repita_expressao_simples.children[1].children[0]
-
-                                                if node_relacional.name == '=': 
-                                                    relacional = '=='
-                                                    check_repeat = builder.icmp_signed(relacional, var1_code, number2_code, name='repeat_until_check')
-
-                                                else:
-                                                    check_repeat = builder.icmp_signed(node_relacional.name, var1_code, number2_code, name='repeat_until_check')
-
-                                                builder.cbranch(check_repeat, repeat_start, repeat_end) 
-                                                builder.position_at_end(repeat_end)
 
 
                                         ###############################
@@ -452,9 +450,9 @@ def generate_i_code(root, symbols_table, test_file):
                                         function_return = builder.sub(return1_load, return2_load, name='add')      
 
 
-            exitBasicBlock = function.append_basic_block('exit')
-            builder.branch(exitBasicBlock)
-            builder = ir.IRBuilder(exitBasicBlock)
+            exit_block = function.append_basic_block('exit')
+            builder.branch(exit_block)
+            builder = ir.IRBuilder(exit_block)
 
             # build retorno de funcoes
             find_func_return = False
