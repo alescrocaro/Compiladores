@@ -23,9 +23,9 @@ repeat_start:
   %".5" = load i32, i32* %"1"
   %".6" = load i32, i32* @"n"
   %"decrement" = sub i32 %".6", %".5"
-  %"b_cmp" = load i32, i32* @"n", align 4
-  %"repeat_until_check" = icmp eq i32 %"b_cmp", 0
-  br i1 %"repeat_until_check", label %"repeat_start", label %"repeat_end"
+  %"var_for_compare" = load i32, i32* @"n", align 4
+  %"check_repeat" = icmp eq i32 %"var_for_compare", 0
+  br i1 %"check_repeat", label %"repeat_start", label %"repeat_end"
 repeat_end:
   %".8" = load i32, i32* @"soma"
   call void @"escrevaInteiro"(i32 %".8")

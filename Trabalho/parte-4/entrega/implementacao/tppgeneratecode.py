@@ -259,32 +259,28 @@ def generate_i_code(root, symbols_table, test_file):
 
 
                                                 node_repita_body = node_repita_body.parent 
+                                            
                                             # 'ate'/'until'
-                                            print('tira o if')
-                                            if node_ate_expressao.name == 'expressao_simples': 
-                                                print('funcao => corpo => repita => expressao simples (ate)')
+                                            print('funcao => corpo => repita => expressao simples (ate)')
 
-                                                for var in symbols_table: 
-                                                    if var['name'] == node_ate_expressao.children[0].children[0].name: 
-                                                        var_code = var['code']
-                                                        var1_code = builder.load(var_code, 'var_for_compare', align=4) 
+                                            for var in symbols_table: 
+                                                if var['name'] == node_ate_expressao.children[0].children[0].name: 
+                                                    var_code = var['code']
+                                                    var1_code = builder.load(var_code, 'var_for_compare', align=4) 
 
-                                                if node_ate_expressao.children[2].name == 'NUM_INTEIRO': 
-                                                    number2_code = ir.Constant(ir.IntType(32), node_ate_expressao.children[2].children[0].name)       
+                                            if node_ate_expressao.children[2].name == 'NUM_INTEIRO': 
+                                                number2_code = ir.Constant(ir.IntType(32), node_ate_expressao.children[2].children[0].name)       
 
-                                                node_relacional = node_ate_expressao.children[1].children[0]
+                                            node_relacional = node_ate_expressao.children[1].children[0]
 
-                                                if node_relacional.name == '=':
-                                                    check_repeat = builder.icmp_signed('==', var1_code, number2_code, name='check_repeat')
+                                            if node_relacional.name == '=':
+                                                check_repeat = builder.icmp_signed('==', var1_code, number2_code, name='check_repeat')
 
-                                                else:
-                                                    check_repeat = builder.icmp_signed(node_relacional.name, var1_code, number2_code, name='check_repeat')
+                                            else:
+                                                check_repeat = builder.icmp_signed(node_relacional.name, var1_code, number2_code, name='check_repeat')
 
-                                                print(module)
-
-                                                builder.cbranch(check_repeat, repeat_start, repeat_end) 
-                                                print('teste')
-                                                builder.position_at_end(repeat_end)
+                                            builder.cbranch(check_repeat, repeat_start, repeat_end) 
+                                            builder.position_at_end(repeat_end)
 
 
                                             
@@ -462,6 +458,7 @@ def generate_i_code(root, symbols_table, test_file):
                     builder.ret(var_returned)
                     find_func_return = True
 
+            # se o retorno não é uma var do tipo
             if find_func_return == False:
                 if len(function.args) != 0:
                     res = builder.add(function.args[0], function.args[1], name='func_{}_return'.format(function.name))

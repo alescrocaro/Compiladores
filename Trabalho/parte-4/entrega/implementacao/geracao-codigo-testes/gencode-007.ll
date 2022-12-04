@@ -62,9 +62,9 @@ repeat_start:
   %"increment" = add i32 %".9", %".8"
   %".10" = load i32, i32* %"i"
   call void @"escrevaInteiro"(i32 %".10")
-  %"b_cmp" = load i32, i32* %"i", align 4
-  %"repeat_until_check" = icmp eq i32 %"b_cmp", 5
-  br i1 %"repeat_until_check", label %"repeat_start", label %"repeat_end"
+  %"var_for_compare" = load i32, i32* %"i", align 4
+  %"check_repeat" = icmp eq i32 %"var_for_compare", 5
+  br i1 %"check_repeat", label %"repeat_start", label %"repeat_end"
 repeat_end:
   br label %"exit"
 exit:
