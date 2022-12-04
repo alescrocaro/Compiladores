@@ -56,12 +56,14 @@ repeat_start:
   store i32 %".4", i32* %"a"
   %".6" = call i32 @"leiaInteiro"()
   store i32 %".6", i32* %"b"
+  %".8" = load i32, i32* %"c"
+  call void @"escrevaInteiro"(i32 %".8")
   %"1" = alloca i32
-  %".8" = load i32, i32* %"1"
-  %".9" = load i32, i32* %"i"
-  %"increment" = add i32 %".9", %".8"
-  %".10" = load i32, i32* %"i"
-  call void @"escrevaInteiro"(i32 %".10")
+  %".10" = load i32, i32* %"1"
+  %".11" = load i32, i32* %"i"
+  %"increment" = add i32 %".11", %".10"
+  %".12" = load i32, i32* %"i"
+  call void @"escrevaInteiro"(i32 %".12")
   %"var_for_compare" = load i32, i32* %"i", align 4
   %"check_repeat" = icmp eq i32 %"var_for_compare", 5
   br i1 %"check_repeat", label %"repeat_start", label %"repeat_end"

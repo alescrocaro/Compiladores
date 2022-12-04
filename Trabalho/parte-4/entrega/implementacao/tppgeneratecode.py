@@ -190,7 +190,11 @@ def generate_i_code(root, symbols_table, test_file):
                                                     node_escreva = node_repita_body.children[1]
                                                     for var in symbols_table:
                                                         if var['name'] == node_escreva.children[2].children[0].name:
-                                                            var_code_on_write = var['code']
+                                                            if var['type'] == 'inteiro':
+                                                                builder.call(print_integer, args=[builder.load(var['code'])])  
+
+                                                            if var['type'] == 'flutuante':
+                                                                builder.call(print_float, args=[builder.load(var['code'])])
 
                                                 # atribuicao dentro do repita
                                                 if node_repita_body.children[1].name == 'atribuicao':
@@ -213,8 +217,8 @@ def generate_i_code(root, symbols_table, test_file):
                                                                         part2_number_loaded = builder.load(part2_number_allocated)
 
                                                                         part1_var_loaded = builder.load(symbol['code'])
-                                                                        builder.add(part1_var_loaded, part2_number_loaded, name='increment')
-                                                                        builder.call(print_integer, [builder.load(symbol['code'])])  
+                                                                        result = builder.add(part1_var_loaded, part2_number_loaded, name='increment')
+                                                                        builder.store(result, part1_var_loaded)  
 
 
                                                         # se var recebe uma subtracao que a primeira parcela eh ela mesma e que a segunda parcela eh um numero (DECREMENTO, como i--)
@@ -230,7 +234,8 @@ def generate_i_code(root, symbols_table, test_file):
                                                                         part2_number_loaded = builder.load(part2_number_allocated)
 
                                                                         part1_var_loaded = builder.load(symbol['code'])
-                                                                        builder.sub(part1_var_loaded, part2_number_loaded, name='decrement', flags=())
+                                                                        result = builder.sub(part1_var_loaded, part2_number_loaded, name='decrement', flags=())
+                                                                        builder.store(result, part1_var_loaded)  
 
 
                                                     # se var recebe uma func
@@ -253,8 +258,6 @@ def generate_i_code(root, symbols_table, test_file):
                                                                 for var_receiving_atrib in symbols_table: 
                                                                     if var_receiving_atrib['name'] == node_atribuicao.children[0].children[0].name:
                                                                         builder.store(func_code, var_receiving_atrib['code']) 
-                                                                        builder.call(print_integer,[builder.load(var_code_on_write)])
-                                                                        print('ta aqui')   
 
 
 
