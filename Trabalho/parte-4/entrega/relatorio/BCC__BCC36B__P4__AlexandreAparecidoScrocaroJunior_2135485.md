@@ -124,7 +124,6 @@ importações:
 ```Python
 from llvmlite import ir, binding as llvm
 from anytree import LevelOrderIter
-from utils import *
 ```
 
 ##### Função init_global_vars:
@@ -222,9 +221,9 @@ Por último o módulo gerado é escrito em um arquivo e pode ser visualizado nor
 
 ---
 
-### Exemplos de Entrada e Saída
+### Exemplo de Entrada e Saída
 
-#### sema-004.tpp (código de teste)
+#### gencode-006.tpp (código de teste)
 
 **Entrada:**
 
@@ -240,52 +239,78 @@ fim
 
 **Saída:**
 
-TERMINAL:
-![image](https://user-images.githubusercontent.com/37521313/198850740-f5cf9823-cac6-4ac2-83ac-2d7fc04cb272.png)
-
-ÁRVORE REDUZIDA:
-![image](https://user-images.githubusercontent.com/37521313/198850157-a8fafee9-3258-4641-80c7-f1b8834d2a19.png)
-
-#### sema-013.tpp (código de teste)
-
-**Entrada:**
-
-```cpp
-flutuante: a
-inteiro: b
-
-inteiro func()
-  a := 10
-  principal()
-  retorna(a)
-fim
-
-inteiro principal()
-	b := 18
-	a := func()
-fim
-
-
 ```
+; ModuleID = "test_006.bc"
+target triple = "x86_64-unknown-linux-gnu"
+target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
 
-**Saída:**
+declare i32 @"leiaInteiro"()
 
-TERMINAL:
-![image](https://user-images.githubusercontent.com/37521313/198850752-db98e943-35fc-41b5-a253-f0c1b8fbf2aa.png)
+declare float @"leiaFlutuante"()
 
-ÁRVORE REDUZIDA:
-![image](https://user-images.githubusercontent.com/37521313/198850192-7a7f55a1-1c9b-4b02-ac05-03dcff4393a4.png)
+declare void @"escrevaInteiro"(i32 %".1")
 
----
+declare void @"escrevaFlutuante"(float %".1")
 
-### Tabela de símbolos
+define i32 @"soma"(i32 %"b", i32 %"a")
+{
+entry:
+  %"b.1" = alloca i32, align 4
+  %"a.1" = alloca i32, align 4
+  %"a.2" = alloca i32
+  %"b.2" = alloca i32
+  %".4" = load i32, i32* %"a.2"
+  %".5" = load i32, i32* %"b.2"
+  %"add" = add i32 %".4", %".5"
+  br label %"exit"
+exit:
+  %"func_soma_return" = add i32 %"b", %"a"
+  ret i32 %"func_soma_return"
+}
 
-A tabela de símbolos consiste em um vetor de objetos, os quais contém todas informações necessárias (para a análise semântica) de vetores e funções. Sua implementação foi explanada na seção 'Detalhes da implementação' do presente documento. Essa tabela é usada para descobrir erros ou inconsistências (alertas)
+define i32 @"main"()
+{
+entry:
+  %"a" = alloca i32, align 4
+  %"b" = alloca i32, align 4
+  %"c" = alloca i32, align 4
+  %"i" = alloca i32, align 4
+  store i32 0, i32* %"i"
+  br label %"repeat_start"
+repeat_start:
+  %".4" = call i32 @"leiaInteiro"()
+  store i32 %".4", i32* %"a.1"
+  %".6" = call i32 @"leiaInteiro"()
+  store i32 %".6", i32* %"a"
+  %".8" = call i32 @"leiaInteiro"()
+  store i32 %".8", i32* %"b.1"
+  %".10" = call i32 @"leiaInteiro"()
+  store i32 %".10", i32* %"b"
+  %".12" = load i32, i32* %"c"
+  call void @"escrevaInteiro"(i32 %".12")
+  %"1" = alloca i32
+  %".14" = load i32, i32* %"1"
+  %".15" = load i32, i32* %"i"
+  %"increment" = add i32 %".15", %".14"
+  %".16" = load i32, i32* %"i"
+  call void @"escrevaInteiro"(i32 %".16")
+  %"var_for_compare" = load i32, i32* %"i", align 4
+  %"check_repeat" = icmp eq i32 %"var_for_compare", 5
+  br i1 %"check_repeat", label %"repeat_start", label %"repeat_end"
+repeat_end:
+  br label %"exit"
+exit:
+  ret i32 0
+}
+```
 
 ---
 
 ### Referências
 
-[Documentação do anytree](https://anytree.readthedocs.io/en/latest/)\
 Slides do professor Rogério Aparecido Gonçalves ministrados na matéria de Compiladores;\
 Além de seu repositório [llvm-gencode-samples](https://github.com/rogerioag/llvm-gencode-samples], que contém exemplos da utilização do llvm em Python.
+
+```
+
+```

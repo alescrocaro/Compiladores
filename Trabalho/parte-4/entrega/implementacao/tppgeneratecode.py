@@ -1,6 +1,5 @@
 from llvmlite import ir, binding as llvm
 from anytree import LevelOrderIter
-from utils import *
 
 
 
